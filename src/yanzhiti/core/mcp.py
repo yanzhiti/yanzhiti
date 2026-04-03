@@ -296,8 +296,8 @@ class MCPManager:
 
 def create_mcp_tool_wrapper(mcp_manager: MCPManager, tool: MCPTool):
     """Create a Tool wrapper for an MCP tool"""
-    from claude_code.core.tool import Tool, ToolContext, ToolResult
-    from claude_code.types import ToolResultStatus
+    from yanzhiti.core.tool import Tool, ToolContext, ToolResult
+    from yanzhiti.types import ToolResultStatus
 
     class MCPToolWrapper(Tool):
         """Wrapper for MCP tool"""

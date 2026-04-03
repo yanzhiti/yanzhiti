@@ -7,8 +7,8 @@ import os
 import subprocess
 from typing import Any, Dict, Optional
 
-from claude_code.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
-from claude_code.types import PermissionResult, ToolResultStatus
+from yanzhiti.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
+from yanzhiti.types import PermissionResult, ToolResultStatus
 
 
 class BashTool(Tool):

@@ -2,6 +2,6 @@
 CLI module
 """
 
-from claude_code.cli.main import main
+from yanzhiti.cli.main import main
 
 __all__ = ["main"]

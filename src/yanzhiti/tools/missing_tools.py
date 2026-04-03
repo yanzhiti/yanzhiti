@@ -9,8 +9,8 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 from enum import Enum
 
-from claude_code.core.tool import Tool, ToolContext, ToolResult
-from claude_code.types import ToolResultStatus
+from yanzhiti.core.tool import Tool, ToolContext, ToolResult
+from yanzhiti.types import ToolResultStatus
 
 
 class PlanMode(str, Enum):

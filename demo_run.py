@@ -10,15 +10,15 @@ from pathlib import Path
 # 添加源代码路径
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from claude_code.core import QueryEngine, QueryEngineConfig, ToolRegistry
-from claude_code.tools import (
+from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
+from yanzhiti.tools import (
     FileReadTool, FileWriteTool, FileEditTool, GlobTool, GrepTool,
     BashTool, PowerShellTool, TaskTool,
     WebFetchTool, WebSearchTool, WebScrapeTool, APITestTool,
     GitTool, GitStatusTool, GitDiffTool, GitLogTool, GitBranchTool,
     TaskCreateTool, TaskListTool, TaskGetTool, TaskUpdateTool, TaskDeleteTool, TodoWriteTool,
 )
-from claude_code.types import ToolResultStatus
+from yanzhiti.types import ToolResultStatus
 
 
 class DemoRunner:

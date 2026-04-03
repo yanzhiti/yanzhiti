@@ -9,8 +9,8 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from claude_code.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
-from claude_code.types import (
+from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
+from yanzhiti.types import (
     AssistantMessage,
     Message,
     Usage,
@@ -48,7 +48,7 @@ class LocalQueryEngine:
 
         # Initialize client based on backend
         if config.backend == "lm_studio":
-            from claude_code.core.lm_studio_client import SimpleLMStudioClient
+            from yanzhiti.core.lm_studio_client import SimpleLMStudioClient
             print(f"🚀 Initializing LM Studio client: {config.base_url}")
             self.client = SimpleLMStudioClient(
                 base_url=config.base_url,
@@ -56,7 +56,7 @@ class LocalQueryEngine:
             )
             self._backend_type = "lm_studio"
         else:
-            from claude_code.core.mlx_client import SimpleMLXClient
+            from yanzhiti.core.mlx_client import SimpleMLXClient
             print(f"🚀 Initializing MLX model: {config.model_name}")
             self.client = SimpleMLXClient(model_name=config.model_name)
             self._backend_type = "mlx"

@@ -6,7 +6,7 @@ import asyncio
 from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass
 
-from claude_code.types import Message, AssistantMessage, UserMessage
+from yanzhiti.types import Message, AssistantMessage, UserMessage
 
 
 @dataclass

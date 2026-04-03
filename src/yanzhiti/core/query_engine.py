@@ -10,8 +10,8 @@ from anthropic import Anthropic, AsyncAnthropic
 from anthropic.types import Message as AnthropicMessage
 from pydantic import BaseModel, Field
 
-from claude_code.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
-from claude_code.types import (
+from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
+from yanzhiti.types import (
     AssistantMessage,
     Config,
     Message,

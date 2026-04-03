@@ -4,8 +4,8 @@ Tests for core functionality
 
 import pytest
 
-from claude_code.core import Tool, ToolContext, ToolInputSchema, ToolResult
-from claude_code.tools import FileReadTool, GlobTool, BashTool
+from yanzhiti.core import Tool, ToolContext, ToolInputSchema, ToolResult
+from yanzhiti.tools import FileReadTool, GlobTool, BashTool
 
 
 class TestToolSystem:
@@ -48,7 +48,7 @@ class TestToolRegistry:
 
     def test_register_tool(self):
         """Test tool registration"""
-        from claude_code.core import ToolRegistry
+        from yanzhiti.core import ToolRegistry
 
         registry = ToolRegistry()
         tool = FileReadTool()
@@ -60,7 +60,7 @@ class TestToolRegistry:
 
     def test_get_tool(self):
         """Test getting tool from registry"""
-        from claude_code.core import ToolRegistry
+        from yanzhiti.core import ToolRegistry
 
         registry = ToolRegistry()
         tool = FileReadTool()
@@ -71,7 +71,7 @@ class TestToolRegistry:
 
     def test_list_tools(self):
         """Test listing tools"""
-        from claude_code.core import ToolRegistry
+        from yanzhiti.core import ToolRegistry
 
         registry = ToolRegistry()
         registry.register(FileReadTool())

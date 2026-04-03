@@ -14,11 +14,11 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.theme import Theme
 
-from claude_code import __version__
-from claude_code.core import ToolRegistry
-from claude_code.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
-from claude_code.core.agent import AgentTool, ForkTool
-from claude_code.tools import (
+from yanzhiti import __version__
+from yanzhiti.core import ToolRegistry
+from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
+from yanzhiti.core.agent import AgentTool, ForkTool
+from yanzhiti.tools import (
     # File tools
     FileReadTool, FileWriteTool, FileEditTool, GlobTool, GrepTool,
     # Shell tools

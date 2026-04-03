@@ -13,16 +13,16 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 from pydantic import BaseModel
 
-from claude_code.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
-from claude_code.core import ToolRegistry
-from claude_code.tools import (
+from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
+from yanzhiti.core import ToolRegistry
+from yanzhiti.tools import (
     FileReadTool, FileWriteTool, FileEditTool, GlobTool, GrepTool,
     BashTool, PowerShellTool, TaskTool,
     WebFetchTool, WebSearchTool, WebScrapeTool, APITestTool,
     GitTool, GitStatusTool, GitDiffTool, GitLogTool, GitBranchTool,
     TaskCreateTool, TaskListTool, TaskGetTool, TaskUpdateTool, TaskDeleteTool, TodoWriteTool,
 )
-from claude_code import __version__
+from yanzhiti import __version__
 
 
 # Create FastAPI app
@@ -122,7 +122,7 @@ async def root():
 @app.get("/api/models")
 async def get_models():
     """Get available models from LM Studio"""
-    from claude_code.core.lm_studio_client import LMStudioClient
+    from yanzhiti.core.lm_studio_client import LMStudioClient
 
     client = LMStudioClient()
     try:

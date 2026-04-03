@@ -7,8 +7,8 @@ import json
 from typing import Any, Dict, List, Optional
 from pathlib import Path
 
-from claude_code.core.tool import Tool, ToolContext, ToolResult
-from claude_code.types import ToolResultStatus
+from yanzhiti.core.tool import Tool, ToolContext, ToolResult
+from yanzhiti.types import ToolResultStatus
 
 
 class NotebookEditTool(Tool):

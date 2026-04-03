@@ -19,7 +19,7 @@ def setup_logging(
     """Setup logging with Rich handler"""
 
     # Create logger
-    logger = logging.getLogger("claude_code")
+    logger = logging.getLogger("yanzhiti")
     logger.setLevel(getattr(logging, level.upper()))
 
     # Remove existing handlers
@@ -54,8 +54,8 @@ def setup_logging(
 def get_logger(name: Optional[str] = None) -> logging.Logger:
     """Get logger instance"""
     if name:
-        return logging.getLogger(f"claude_code.{name}")
-    return logging.getLogger("claude_code")
+        return logging.getLogger(f"yanzhiti.{name}")
+    return logging.getLogger("yanzhiti")
 
 
 class LoggerMixin:

@@ -2,8 +2,8 @@
 Core functionality for Claude Code
 """
 
-from claude_code.core.query_engine import QueryEngine, QueryEngineConfig
-from claude_code.core.tool import (
+from yanzhiti.core.query_engine import QueryEngine, QueryEngineConfig
+from yanzhiti.core.tool import (
     Tool,
     ToolContext,
     ToolInputSchema,

@@ -11,7 +11,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from claude_code.types import Message, AssistantMessage, UserMessage
+from yanzhiti.types import Message, AssistantMessage, UserMessage
 
 
 class SessionMetadata(BaseModel):

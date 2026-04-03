@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from claude_code.types import (
+from yanzhiti.types import (
     PermissionResult,
     ToolProgress,
     ToolResultBlock,

@@ -9,8 +9,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from claude_code.core.tool import Tool, ToolContext, ToolResult
-from claude_code.types import AssistantMessage, Message, UserMessage
+from yanzhiti.core.tool import Tool, ToolContext, ToolResult
+from yanzhiti.types import AssistantMessage, Message, UserMessage
 
 
 class AgentState(str, Enum):
@@ -168,7 +168,7 @@ class AgentTool(Tool):
         input_data: Dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
-        from claude_code.types import ToolResultStatus
+        from yanzhiti.types import ToolResultStatus
         
         action = input_data["action"]
         
@@ -302,7 +302,7 @@ class ForkTool(Tool):
         input_data: Dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
-        from claude_code.types import ToolResultStatus
+        from yanzhiti.types import ToolResultStatus
         
         task = input_data["task"]
         additional_context = input_data.get("context", "")

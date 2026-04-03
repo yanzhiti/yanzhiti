@@ -6,7 +6,7 @@ import click
 import uvicorn
 from rich.console import Console
 
-from claude_code import __version__
+from yanzhiti import __version__
 
 
 console = Console()
@@ -44,7 +44,7 @@ def main(host: str, port: int, reload: bool):
     console.print()
 
     uvicorn.run(
-        "claude_code.web.server:app",
+        "yanzhiti.web.server:app",
         host=host,
         port=port,
         reload=reload,

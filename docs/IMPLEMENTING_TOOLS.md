@@ -15,8 +15,8 @@ Every tool must:
 
 ```python
 from typing import Any, Dict
-from claude_code.core import Tool, ToolContext, ToolInputSchema, ToolResult
-from claude_code.types import ToolResultStatus
+from yanzhiti.core import Tool, ToolContext, ToolInputSchema, ToolResult
+from yanzhiti.types import ToolResultStatus
 
 class MyCustomTool(Tool):
     """Description of what this tool does"""
@@ -304,7 +304,7 @@ class DatabaseQueryTool(Tool):
 Add your tool to the registry:
 
 ```python
-from claude_code.core import ToolRegistry
+from yanzhiti.core import ToolRegistry
 
 registry = ToolRegistry()
 registry.register(MyCustomTool())
@@ -313,7 +313,7 @@ registry.register(MyCustomTool())
 Or in the CLI:
 
 ```python
-# In src/claude_code/cli/main.py
+# In src/yanzhiti/cli/main.py
 
 def create_tool_registry() -> ToolRegistry:
     registry = ToolRegistry()
@@ -334,7 +334,7 @@ Write tests for your tools:
 
 ```python
 import pytest
-from claude_code.core import ToolContext
+from yanzhiti.core import ToolContext
 
 @pytest.mark.asyncio
 async def test_my_custom_tool():

@@ -14,9 +14,9 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.theme import Theme
 
-from claude_code import __version__
-from claude_code.core import QueryEngine, QueryEngineConfig, ToolRegistry
-from claude_code.tools import (
+from yanzhiti import __version__
+from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
+from yanzhiti.tools import (
     # File tools
     FileReadTool,
     FileWriteTool,

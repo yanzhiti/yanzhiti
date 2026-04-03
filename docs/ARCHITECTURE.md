@@ -7,8 +7,8 @@ Claude Code Python is a complete refactoring of Anthropic's Claude Code CLI from
 ## Project Structure
 
 ```
-claude-code-python/
-├── src/claude_code/
+yanzhiti-python/
+├── src/yanzhiti/
 │   ├── __init__.py              # Package initialization
 │   ├── cli/                     # Command-line interface
 │   │   ├── __init__.py

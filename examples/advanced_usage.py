@@ -6,9 +6,9 @@ import asyncio
 import os
 from typing import Any, Dict
 
-from claude_code import QueryEngine
-from claude_code.core import QueryEngineConfig, Tool, ToolContext, ToolInputSchema, ToolResult
-from claude_code.tools import (
+from yanzhiti import QueryEngine
+from yanzhiti.core import QueryEngineConfig, Tool, ToolContext, ToolInputSchema, ToolResult
+from yanzhiti.tools import (
     BashTool,
     FileEditTool,
     FileReadTool,
@@ -16,7 +16,7 @@ from claude_code.tools import (
     GlobTool,
     GrepTool,
 )
-from claude_code.types import ToolResultStatus
+from yanzhiti.types import ToolResultStatus
 
 
 # Custom tool example

@@ -9,9 +9,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from claude_code.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
-from claude_code.core import ToolRegistry
-from claude_code.tools import (
+from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
+from yanzhiti.core import ToolRegistry
+from yanzhiti.tools import (
     FileReadTool, GlobTool, GrepTool, BashTool,
     TaskCreateTool, TaskListTool, TodoWriteTool,
 )

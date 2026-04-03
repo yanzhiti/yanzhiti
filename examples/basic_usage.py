@@ -5,9 +5,9 @@ Example: Basic usage of Claude Code Python
 import asyncio
 import os
 
-from claude_code import QueryEngine
-from claude_code.core import QueryEngineConfig
-from claude_code.tools import (
+from yanzhiti import QueryEngine
+from yanzhiti.core import QueryEngineConfig
+from yanzhiti.tools import (
     BashTool,
     FileEditTool,
     FileReadTool,

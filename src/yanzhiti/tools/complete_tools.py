@@ -9,8 +9,8 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Callable
 from pathlib import Path
 
-from claude_code.core.tool import Tool, ToolContext, ToolResult
-from claude_code.types import ToolResultStatus
+from yanzhiti.core.tool import Tool, ToolContext, ToolResult
+from yanzhiti.types import ToolResultStatus
 
 
 class TeamCreateTool(Tool):

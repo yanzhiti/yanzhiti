@@ -11,8 +11,8 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from claude_code.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
-from claude_code.types import ToolResultStatus
+from yanzhiti.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
+from yanzhiti.types import ToolResultStatus
 
 
 class Task(BaseModel):
