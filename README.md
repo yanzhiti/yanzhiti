@@ -1,27 +1,63 @@
-# 衍智体 (YANZHITI)
+# 🚀 衍智体 (YANZHITI)
 
-> AI-Powered Intelligent Code Assistant - Python Implementation
+> **开源 AI 智能编程助手 - Python 实现**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/yanzhiti/yanzhiti?style=social)](https://github.com/yanzhiti/yanzhiti)
 
-## 项目简介
+---
 
-衍智体（YANZHITI）是一个基于 Python 实现的 AI 智能编程助手，提供强大的代码生成、重构和开发辅助功能。
+## 🌟 为什么选择衍智体？
 
-**本项目是在深入研究全球领先的 AI 编程助手技术理念后，采用 Python 语言独立设计并实现的智能化开发工具。** 项目架构、代码实现及功能设计均为原创，旨在为开发者提供高效、智能的编程辅助体验。
+衍智体（YANZHITI）是一个**完全开源免费**的 AI 智能编程助手，基于 Python 实现。与闭源的 Claude Code 不同，我们提供：
 
-## 核心特性
+- ✅ **完全开源** (MIT 许可证) - 可自由查看、修改、分发
+- ✅ **永久免费** - 无订阅费用，个人和企业均可使用
+- ✅ **本地部署** - 代码不上传云端，保护隐私安全
+- ✅ **Python 原生** - 无缝集成 Python 生态系统
+- ✅ **可定制扩展** - 根据需求自由修改源码
 
-- **40+ 工具集**: 涵盖文件操作、代码编辑、Shell 执行、Git 操作等
-- **智能查询引擎**: 高级查询处理和执行系统
-- **桥接通信系统**: 支持远程操作和会话管理
-- **权限控制系统**: 细粒度的权限管理
-- **会话管理**: 持久化会话存储和历史记录
-- **MCP 支持**: Model Context Protocol 集成
-- **多智能体支持**: 基于智能体的任务执行
+---
 
-## 安装
+## 📊 与 Claude Code 对比
+
+| 特性 | 衍智体 (YANZHITI) | Claude Code |
+|------|------------------|-------------|
+| **开源许可** | ✅ 完全开源 (MIT) | ❌ 闭源商业软件 |
+| **使用成本** | ✅ 永久免费 | ❌ 需要付费订阅 |
+| **自托管支持** | ✅ 支持本地部署 | ❌ 仅云服务 |
+| **自定义扩展** | ✅ 可自由修改源码 | ❌ 无法修改 |
+| **数据隐私** | ✅ 代码完全本地 | ❌ 需上传云端 |
+| **模型选择** | ✅ 支持多种模型 | ❌ 仅限 Claude |
+| **社区支持** | ✅ 开放社区贡献 | ❌ 官方支持 |
+| **Python 生态** | ✅ 原生 Python | ❌ 基于 TypeScript |
+| **离线使用** | ✅ 支持离线模式 | ❌ 需要网络 |
+
+---
+
+## ✨ 核心特性
+
+### 🔧 40+ 开发工具集
+
+- **📁 文件操作工具**: 读写、编辑、Glob 匹配、Grep 搜索、文件监控
+- **⚡ Shell 执行工具**: Bash/PowerShell 支持，内置权限控制
+- **🔀 Git 操作工具**: 状态查看、提交、分支管理
+- **🌐 Web 操作工具**: 网页获取、搜索、API 调用
+- **📋 任务管理工具**: 任务创建、分配、跟踪、子任务分解
+- **🔒 权限控制系统**: 细粒度权限管理，安全可控
+
+### 🏗️ 技术架构
+
+- **⚙️ 智能查询引擎**: 高级查询处理和执行系统
+- **🧩 模块化工具系统**: 支持动态注册和扩展
+- **🌉 桥接通信系统**: 支持远程操作和会话管理
+- **📡 MCP 支持**: Model Context Protocol 集成，支持多种 AI 模型
+- **👥 多智能体支持**: 基于智能体的任务执行
+
+---
+
+## 🚀 快速开始
 
 ### 从源码安装
 
@@ -34,17 +70,11 @@ cd yanzhiti
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# 开发模式安装
+# 安装依赖
 pip install -e ".[dev]"
 ```
 
-### 使用 pip 安装
-
-```bash
-pip install yanzhiti
-```
-
-## 快速开始
+### 运行衍智体
 
 ```bash
 # 设置 API 密钥
@@ -57,7 +87,9 @@ yanzhiti
 yzt
 ```
 
-## 项目结构
+---
+
+## 📁 项目结构
 
 ```
 yanzhiti/
@@ -66,40 +98,17 @@ yanzhiti/
 │       ├── cli/           # 命令行接口
 │       ├── core/          # 核心功能（查询引擎、工具系统）
 │       ├── tools/         # 40+ 工具实现
-│       ├── bridge/        # 通信和桥接系统
+│       ├── web/           # Web 服务
 │       ├── utils/         # 工具函数
-│       ├── services/      # 外部服务（API、MCP 等）
-│       ├── types/         # 类型定义
-│       └── commands/      # 斜杠命令
+│       └── types/         # 类型定义
 ├── tests/                 # 测试套件
 ├── docs/                  # 文档
 └── examples/              # 示例用法
 ```
 
-## 核心组件
+---
 
-### 查询引擎 (QueryEngine)
-
-衍智体的核心 - 处理查询并协调工具执行。
-
-### 工具系统 (Tool System)
-
-40+ 工具包括:
-- 文件操作 (Read, Write, Edit, Glob, Grep)
-- Shell 执行 (Bash, PowerShell)
-- Git 操作
-- 任务管理
-- Web 操作 (Fetch, Search)
-- 更多...
-
-### 桥接系统 (Bridge System)
-
-通信层支持:
-- 远程控制
-- 会话管理
-- 事件传输
-
-## 开发
+## 🛠️ 开发
 
 ### 运行测试
 
@@ -120,7 +129,22 @@ ruff check src tests
 mypy src
 ```
 
-## 配置
+---
+
+## 🎯 核心优势
+
+| 优势 | 说明 |
+|------|------|
+| 🎁 **完全免费** | MIT 许可证，个人和企业均可免费使用 |
+| 🔓 **源码开放** | 可查看、修改、定制源代码 |
+| 🏠 **本地部署** | 代码不上传云端，保护隐私安全 |
+| 🐍 **Python 原生** | 无缝集成 Python 生态系统 |
+| 🔧 **易于扩展** | 简单 API 即可添加自定义工具 |
+| 🚀 **轻量快速** | 低资源占用，响应迅速 |
+
+---
+
+## ⚙️ 配置
 
 配置通过以下方式管理:
 - 环境变量
@@ -128,24 +152,34 @@ mypy src
 - 配置文件 (TOML/YAML)
 - 命令行参数
 
-详见 [配置指南](docs/configuration.md)。
+---
 
-## API 参考
+## 🤝 参与贡献
 
-完整 API 文档: [https://yanzhiti.github.io/yanzhiti](https://yanzhiti.github.io/yanzhiti)
+衍智体是一个开源项目，欢迎社区贡献！
 
-## 贡献
+- 🐛 [提交 Issue](https://github.com/yanzhiti/yanzhiti/issues)
+- 🔀 [提交 Pull Request](https://github.com/yanzhiti/yanzhiti/pulls)
+- ⭐ 给项目点个 Star 支持我们！
 
-欢迎贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解指南。
+---
 
-## 许可证
+## 📄 许可证
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE)。
+本项目采用 [MIT](LICENSE) 许可证 - 详见 LICENSE 文件。
 
-## 致谢
+---
+
+## 🙏 致谢
 
 感谢 Python 社区提供的优秀库和工具支持。
 
 ---
 
-**衍智体** - 让 AI 助力您的编程之旅
+<div align="center">
+
+**衍智体 (YANZHITI)** - 让 AI 助力您的编程之旅
+
+⭐ 如果这个项目对您有帮助，请给我们一个 Star！
+
+</div>
