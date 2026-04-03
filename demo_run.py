@@ -147,7 +147,7 @@ class DemoRunner:
         print("衍智体 (YANZHITI) 运行演示完成！")
         print("🎉 " * 20)
 
-        print("\n要使用完整AI功能，请设置 ANTHROPIC_API_KEY 环境变量")
+        print("\n要使用完整AI功能，请设置 YANZHITI_API_KEY 环境变量")
         print("然后运行: yanzhiti")
         print("\n感谢使用 衍智体 (YANZHITI)！")
 

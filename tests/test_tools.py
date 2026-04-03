@@ -20,14 +20,14 @@ class TestToolSystem:
         assert "file_path" in schema.properties
         assert "file_path" in schema.required
 
-    def test_tool_to_anthropic_format(self):
-        """Test tool conversion to Anthropic format"""
+    def test_tool_to_api_format(self):
+        """Test tool conversion to API format"""
         tool = FileReadTool()
-        anthropic_format = tool.to_anthropic_format()
+        api_format = tool.to_api_format()
 
-        assert anthropic_format["name"] == "file_read"
-        assert "description" in anthropic_format
-        assert "input_schema" in anthropic_format
+        assert api_format["name"] == "file_read"
+        assert "description" in api_format
+        assert "input_schema" in api_format
 
     def test_tool_validation(self):
         """Test tool input validation"""

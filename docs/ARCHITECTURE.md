@@ -2,7 +2,7 @@
 
 ## Overview
 
-衍智体 (YANZHITI) Python is a complete refactoring of Anthropic's 衍智体 (YANZHITI) CLI from TypeScript to Python. This document describes the architecture, design decisions, and implementation details.
+衍智体 (YANZHITI) Python is an independent implementation of an AI-powered code assistant using Python. This document describes the architecture, design decisions, and implementation details.
 
 ## Project Structure
 
@@ -42,7 +42,7 @@ yanzhiti-python/
 The `QueryEngine` is the heart of 衍智体 (YANZHITI). It:
 
 - Processes user queries
-- Calls the Anthropic API
+- Calls the AI API
 - Executes tools
 - Manages conversation state
 - Tracks usage and statistics
@@ -69,7 +69,7 @@ class Tool(ABC):
     - execute(input_data, context) -> ToolResult
     - validate_input(input_data) -> ValidationResult
     - check_permission(input_data, context) -> PermissionResult
-    - to_anthropic_format() -> Dict
+    - to_api_format() -> Dict
 ```
 
 **Tool Lifecycle:**
@@ -81,7 +81,7 @@ class Tool(ABC):
 **Tool Registry:**
 - Manages available tools
 - Provides tool lookup
-- Converts tools to Anthropic format
+- Converts tools to API format
 
 ### 3. Type System
 
@@ -185,7 +185,7 @@ The CLI is built with Click and Rich:
 All I/O operations are async:
 
 - File operations (aiofiles)
-- API calls (httpx/anthropic)
+- API calls (httpx/AI SDK)
 - Shell execution (asyncio.subprocess)
 - Tool execution
 

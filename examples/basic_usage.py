@@ -19,15 +19,15 @@ from yanzhiti.tools import (
 
 async def main():
     # Get API key
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("YANZHITI_API_KEY")
     if not api_key:
-        print("Please set ANTHROPIC_API_KEY environment variable")
+        print("Please set YANZHITI_API_KEY environment variable")
         return
 
     # Create configuration
     config = QueryEngineConfig(
         cwd=".",
-        model="anthropic/claude-3-5-sonnet-20241022",
+        model="default-model",
         max_tokens=4096,
         tools=[
             FileReadTool(),

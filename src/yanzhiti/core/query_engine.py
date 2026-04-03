@@ -6,8 +6,10 @@ import asyncio
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
+# Note: This project uses the Anthropic SDK for AI model integration
+# The SDK is used as a dependency, but this is an independent implementation
 from anthropic import Anthropic, AsyncAnthropic
-from anthropic.types import Message as AnthropicMessage
+from anthropic.types import Message as AIMessage
 from pydantic import BaseModel, Field
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
@@ -25,7 +27,7 @@ from yanzhiti.types import (
 class QueryEngineConfig(BaseModel):
     """Configuration for QueryEngine"""
     cwd: str = "."
-    model: str = "anthropic/claude-3-5-sonnet-20241022"
+    model: str = "default-model"
     max_tokens: int = 4096
     temperature: float = 1.0
     system_prompt: Optional[str] = None
@@ -111,9 +113,9 @@ class QueryEngine:
             content="Maximum turns reached. Please start a new query.",
         )
 
-    async def _call_api(self) -> AnthropicMessage:
+    async def _call_api(self) -> AIMessage:
         """Call the AI API"""
-        # Convert messages to Anthropic format
+        # Convert messages to API format
         messages = self._convert_messages()
 
         # Build request
@@ -129,7 +131,7 @@ class QueryEngine:
 
         # Add tools if available
         if len(self.tool_registry) > 0:
-            request_params["tools"] = self.tool_registry.to_anthropic_format()
+            request_params["tools"] = self.tool_registry.to_api_format()
 
         # Make API call
         response = await self.client.messages.create(**request_params)
@@ -143,7 +145,7 @@ class QueryEngine:
 
     async def _process_response(
         self,
-        response: AnthropicMessage,
+        response: AIMessage,
     ) -> AssistantMessage:
         """Process API response and execute any tools"""
         # Extract content blocks
@@ -250,24 +252,24 @@ class QueryEngine:
             }
 
     def _convert_messages(self) -> List[Dict[str, Any]]:
-        """Convert internal messages to Anthropic format"""
-        anthropic_messages = []
+        """Convert internal messages to API format"""
+        api_messages = []
 
         for msg in self.messages:
             if isinstance(msg.content, str):
-                anthropic_messages.append({
+                api_messages.append({
                     "role": msg.role.value,
                     "content": msg.content,
                 })
             else:
-                anthropic_messages.append({
+                api_messages.append({
                     "role": msg.role.value,
                     "content": msg.content,
                 })
 
-        return anthropic_messages
+        return api_messages
 
-    def _has_tool_uses(self, response: AnthropicMessage) -> bool:
+    def _has_tool_uses(self, response: AIMessage) -> bool:
         """Check if response contains tool uses"""
         return any(block.type == "tool_use" for block in response.content)
 

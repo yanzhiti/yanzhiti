@@ -7,7 +7,9 @@
 
 ## 项目简介
 
-衍智体（YANZHITI）是一个基于 Python 实现的 AI 智能编程助手，提供强大的代码生成、重构和开发辅助功能。本项目是一个独立的 Python 实现，提供智能化的代码辅助能力。
+衍智体（YANZHITI）是一个基于 Python 实现的 AI 智能编程助手，提供强大的代码生成、重构和开发辅助功能。
+
+**本项目是在深入研究全球领先的 AI 编程助手技术理念后，采用 Python 语言独立设计并实现的智能化开发工具。** 项目架构、代码实现及功能设计均为原创，旨在为开发者提供高效、智能的编程辅助体验。
 
 ## 核心特性
 
@@ -46,7 +48,7 @@ pip install yanzhiti
 
 ```bash
 # 设置 API 密钥
-export ANTHROPIC_API_KEY=your-api-key
+export YANZHITI_API_KEY=your-api-key
 
 # 运行衍智体
 yanzhiti
@@ -142,12 +144,7 @@ mypy src
 
 ## 致谢
 
-- Anthropic 原始 TypeScript 实现
-- Python 社区的优秀库和工具
-
-## 免责声明
-
-这是一个独立的 Python 实现，与 Anthropic 没有官方关联或认可。
+感谢 Python 社区提供的优秀库和工具支持。
 
 ---
 

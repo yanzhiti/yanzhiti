@@ -16,11 +16,11 @@ class AppConfig(BaseSettings):
     """Application configuration with environment variable support"""
 
     # API settings
-    api_key: Optional[str] = Field(default=None, env="ANTHROPIC_API_KEY")
-    api_base_url: str = Field(default="https://api.anthropic.com", env="ANTHROPIC_BASE_URL")
+    api_key: Optional[str] = Field(default=None, env="YANZHITI_API_KEY")
+    api_base_url: str = Field(default="https://api.example.com", env="YANZHITI_BASE_URL")
 
     # Model settings
-    model: str = Field(default="anthropic/claude-3-5-sonnet-20241022", env="YANZHITI_MODEL")
+    model: str = Field(default="default-model", env="YANZHITI_MODEL")
     max_tokens: int = Field(default=4096, env="YANZHITI_MAX_TOKENS")
     temperature: float = Field(default=1.0, env="YANZHITI_TEMPERATURE")
 

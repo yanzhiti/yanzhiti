@@ -135,12 +135,12 @@ class Tool(ABC):
         # Override in subclasses for permission checks
         return PermissionResult(granted=True)
 
-    def to_anthropic_format(self) -> Dict[str, Any]:
+    def to_api_format(self) -> Dict[str, Any]:
         """
-        Convert tool to Anthropic API format
+        Convert tool to AI API format
 
         Returns:
-            Dictionary in Anthropic tool format
+            Dictionary in API tool format
         """
         return {
             "name": self.name,
@@ -171,9 +171,9 @@ class ToolRegistry:
         """List all registered tools"""
         return list(self._tools.values())
 
-    def to_anthropic_format(self) -> List[Dict[str, Any]]:
-        """Convert all tools to Anthropic API format"""
-        return [tool.to_anthropic_format() for tool in self._tools.values()]
+    def to_api_format(self) -> List[Dict[str, Any]]:
+        """Convert all tools to AI API format"""
+        return [tool.to_api_format() for tool in self._tools.values()]
 
     def __contains__(self, name: str) -> bool:
         return name in self._tools

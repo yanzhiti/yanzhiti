@@ -122,7 +122,7 @@ class AppState(BaseModel):
 class Config(BaseModel):
     """Application configuration"""
     api_key: Optional[str] = None
-    model: str = "anthropic/claude-3-5-sonnet-20241022"
+    model: str = "default-model"
     max_tokens: int = 4096
     temperature: float = 1.0
     timeout: int = 120

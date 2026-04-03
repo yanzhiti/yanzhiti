@@ -64,7 +64,7 @@ console = Console(theme=custom_theme)
 def get_api_key() -> Optional[str]:
     """Get API key from environment or config"""
     # Try environment variable
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("YANZHITI_API_KEY")
     if api_key:
         return api_key
 
@@ -209,13 +209,13 @@ def show_help() -> None:
 @click.option(
     "--api-key",
     "-k",
-    envvar="ANTHROPIC_API_KEY",
-    help="Anthropic API key",
+    envvar="YANZHITI_API_KEY",
+    help="AI API key",
 )
 @click.option(
     "--model",
     "-m",
-    default="anthropic/claude-3-5-sonnet-20241022",
+    default="default-model",
     help="Model to use",
 )
 @click.option(
@@ -267,7 +267,7 @@ def main(
 
     if not api_key:
         console.print("[error]Error: No API key provided[/error]")
-        console.print("Set ANTHROPIC_API_KEY environment variable or use --api-key option")
+        console.print("Set YANZHITI_API_KEY environment variable or use --api-key option")
         sys.exit(1)
 
     # Create tool registry
