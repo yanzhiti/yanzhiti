@@ -88,7 +88,7 @@ async def main():
     # Create configuration with custom tool
     config = QueryEngineConfig(
         cwd=".",
-        model="claude-3-5-sonnet-20241022",
+        model="anthropic/claude-3-5-sonnet-20241022",
         max_tokens=4096,
         tools=[
             # Standard tools

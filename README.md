@@ -7,7 +7,7 @@
 
 ## 项目简介
 
-衍智体（YANZHITI）是一个基于 Python 实现的 AI 智能编程助手，提供强大的代码生成、重构和开发辅助功能。本项目是对 Anthropic Claude Code CLI 的完整 Python 重构实现。
+衍智体（YANZHITI）是一个基于 Python 实现的 AI 智能编程助手，提供强大的代码生成、重构和开发辅助功能。本项目是一个独立的 Python 实现，提供智能化的代码辅助能力。
 
 ## 核心特性
 

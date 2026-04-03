@@ -353,7 +353,7 @@ async def test_my_custom_tool():
 ## Best Practices
 
 1. **Clear Names** - Use descriptive, unique tool names
-2. **Good Descriptions** - Help Claude understand when to use the tool
+2. **Good Descriptions** - Help the AI understand when to use the tool
 3. **Validation** - Validate all inputs thoroughly
 4. **Error Handling** - Return meaningful error messages
 5. **Documentation** - Document parameters and behavior

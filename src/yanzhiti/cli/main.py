@@ -157,7 +157,7 @@ async def run_interactive(engine: QueryEngine) -> None:
                 continue
 
             # Process query
-            console.print("[assistant]Claude[/assistant]: ", end="")
+            console.print("[assistant]YANZHITI[/assistant]: ", end="")
 
             with console.status("[bold green]Thinking...[/bold green]"):
                 response = await engine.query(user_input)
@@ -215,7 +215,7 @@ def show_help() -> None:
 @click.option(
     "--model",
     "-m",
-    default="claude-3-5-sonnet-20241022",
+    default="anthropic/claude-3-5-sonnet-20241022",
     help="Model to use",
 )
 @click.option(

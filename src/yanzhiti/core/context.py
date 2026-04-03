@@ -26,7 +26,7 @@ class ContextCompressor:
 
     def __init__(
         self,
-        max_tokens: int = 128000,  # Claude's context window
+        max_tokens: int = 128000,  # AI model's context window
         target_tokens: int = 100000,  # Target after compression
         preserve_recent: int = 5,  # Always keep last N messages
     ):

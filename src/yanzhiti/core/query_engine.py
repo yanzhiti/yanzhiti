@@ -25,7 +25,7 @@ from yanzhiti.types import (
 class QueryEngineConfig(BaseModel):
     """Configuration for QueryEngine"""
     cwd: str = "."
-    model: str = "claude-3-5-sonnet-20241022"
+    model: str = "anthropic/claude-3-5-sonnet-20241022"
     max_tokens: int = 4096
     temperature: float = 1.0
     system_prompt: Optional[str] = None
@@ -43,7 +43,7 @@ class QueryEngine:
 
     This is the core component that:
     1. Processes user queries
-    2. Calls the Claude API
+    2. Calls the AI API
     3. Executes tools
     4. Manages conversation state
     """
@@ -96,7 +96,7 @@ class QueryEngine:
         while self._turn_count < self.config.max_turns:
             self._turn_count += 1
 
-            # Call Claude API
+            # Call AI API
             response = await self._call_api()
 
             # Process response
@@ -112,7 +112,7 @@ class QueryEngine:
         )
 
     async def _call_api(self) -> AnthropicMessage:
-        """Call the Claude API"""
+        """Call the AI API"""
         # Convert messages to Anthropic format
         messages = self._convert_messages()
 

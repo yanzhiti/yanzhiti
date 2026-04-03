@@ -27,7 +27,7 @@ async def main():
     # Create configuration
     config = QueryEngineConfig(
         cwd=".",
-        model="claude-3-5-sonnet-20241022",
+        model="anthropic/claude-3-5-sonnet-20241022",
         max_tokens=4096,
         tools=[
             FileReadTool(),
@@ -51,7 +51,7 @@ async def main():
     # Example 2: File operations
     print("Example 2: File operations")
     response = await engine.query(
-        "Create a file called test.txt with the content 'Hello, Claude!'"
+        "Create a file called test.txt with the content 'Hello, YANZHITI!'"
     )
     print(f"Response: {response.content}")
     print()

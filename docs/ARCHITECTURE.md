@@ -49,7 +49,7 @@ The `QueryEngine` is the heart of 衍智体 (YANZHITI). It:
 
 **Key Methods:**
 - `query(user_input)` - Process a user query
-- `_call_api()` - Make API call to Claude
+- `_call_api()` - Make API call to AI model
 - `_process_response()` - Handle API response
 - `_execute_tool()` - Execute a tool
 - `reset()` - Reset session state

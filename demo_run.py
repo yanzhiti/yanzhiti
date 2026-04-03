@@ -103,7 +103,7 @@ class DemoRunner:
         self.print_section("TaskCreateTool - 创建任务")
         tool = self.registry.get("task_create")
         result = await tool.execute({
-            "title": "Claude Code Python 开发",
+            "title": "衍智体 (YANZHITI) 开发",
             "description": "完成Python重构和测试",
             "priority": "high",
             "tags": ["python", "refactor", "ai"]

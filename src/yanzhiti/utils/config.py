@@ -20,27 +20,27 @@ class AppConfig(BaseSettings):
     api_base_url: str = Field(default="https://api.anthropic.com", env="ANTHROPIC_BASE_URL")
 
     # Model settings
-    model: str = Field(default="claude-3-5-sonnet-20241022", env="YANZHITI_MODEL")
-    max_tokens: int = Field(default=4096, env="CLAUDE_MAX_TOKENS")
-    temperature: float = Field(default=1.0, env="CLAUDE_TEMPERATURE")
+    model: str = Field(default="anthropic/claude-3-5-sonnet-20241022", env="YANZHITI_MODEL")
+    max_tokens: int = Field(default=4096, env="YANZHITI_MAX_TOKENS")
+    temperature: float = Field(default=1.0, env="YANZHITI_TEMPERATURE")
 
     # Execution settings
-    timeout: int = Field(default=120, env="CLAUDE_TIMEOUT")
-    max_retries: int = Field(default=3, env="CLAUDE_MAX_RETRIES")
-    max_turns: int = Field(default=100, env="CLAUDE_MAX_TURNS")
+    timeout: int = Field(default=120, env="YANZHITI_TIMEOUT")
+    max_retries: int = Field(default=3, env="YANZHITI_MAX_RETRIES")
+    max_turns: int = Field(default=100, env="YANZHITI_MAX_TURNS")
 
     # UI settings
-    verbose: bool = Field(default=False, env="CLAUDE_VERBOSE")
-    debug: bool = Field(default=False, env="CLAUDE_DEBUG")
-    color: bool = Field(default=True, env="CLAUDE_COLOR")
+    verbose: bool = Field(default=False, env="YANZHITI_VERBOSE")
+    debug: bool = Field(default=False, env="YANZHITI_DEBUG")
+    color: bool = Field(default=True, env="YANZHITI_COLOR")
 
     # File settings
-    max_file_size: int = Field(default=10 * 1024 * 1024, env="CLAUDE_MAX_FILE_SIZE")  # 10MB
-    allowed_directories: list[str] = Field(default_factory=list, env="CLAUDE_ALLOWED_DIRS")
+    max_file_size: int = Field(default=10 * 1024 * 1024, env="YANZHITI_MAX_FILE_SIZE")  # 10MB
+    allowed_directories: list[str] = Field(default_factory=list, env="YANZHITI_ALLOWED_DIRS")
 
     # Permission settings
-    permission_mode: str = Field(default="default", env="CLAUDE_PERMISSION_MODE")
-    auto_approve: bool = Field(default=False, env="CLAUDE_AUTO_APPROVE")
+    permission_mode: str = Field(default="default", env="YANZHITI_PERMISSION_MODE")
+    auto_approve: bool = Field(default=False, env="YANZHITI_AUTO_APPROVE")
 
     class Config:
         env_file = ".env"

@@ -55,7 +55,7 @@ class Tool(ABC):
     """
     Base class for all tools
 
-    Tools are the primary way Claude interacts with the environment.
+    Tools are the primary way the AI interacts with the environment.
     Each tool defines its schema, validation, and execution logic.
     """
 
