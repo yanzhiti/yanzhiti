@@ -43,7 +43,7 @@ class SessionStorage:
         if storage_dir is None:
             # Default storage location
             home = Path.home()
-            storage_dir = home / ".claude" / "sessions"
+            storage_dir = home / ".yanzhiti" / "sessions"
 
         self.storage_dir = storage_dir
         self.storage_dir.mkdir(parents=True, exist_ok=True)

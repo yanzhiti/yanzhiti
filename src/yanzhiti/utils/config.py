@@ -20,7 +20,7 @@ class AppConfig(BaseSettings):
     api_base_url: str = Field(default="https://api.anthropic.com", env="ANTHROPIC_BASE_URL")
 
     # Model settings
-    model: str = Field(default="claude-3-5-sonnet-20241022", env="CLAUDE_MODEL")
+    model: str = Field(default="claude-3-5-sonnet-20241022", env="YANZHITI_MODEL")
     max_tokens: int = Field(default=4096, env="CLAUDE_MAX_TOKENS")
     temperature: float = Field(default=1.0, env="CLAUDE_TEMPERATURE")
 

@@ -109,7 +109,7 @@ async def test_local_engine():
     print("=" * 70)
     print()
     print("要使用完整功能，运行:")
-    print("  claude-local")
+    print("  yanzhiti-local")
     print()
 
 

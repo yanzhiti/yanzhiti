@@ -76,7 +76,7 @@ mlx = [
     "mlx-lm>=0.0.7",
 ]
 all = [
-    "claude-code[dev,docs,mlx]",
+    "yanzhiti[dev,docs,mlx]",
 ]
 
 [project.scripts]

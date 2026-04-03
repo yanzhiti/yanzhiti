@@ -22,13 +22,13 @@ echo ""
 
 echo "2️⃣  检查命令"
 echo "------------------------------------------------------------------------"
-echo "✅ claude-local 版本:"
-claude-local --version
+echo "✅ yanzhiti-local 版本:"
+yanzhiti-local --version
 echo ""
 
 echo "3️⃣  可用选项"
 echo "------------------------------------------------------------------------"
-claude-local --help
+yanzhiti-local --help
 echo ""
 
 echo "4️⃣  工具演示"
@@ -39,12 +39,12 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from claude_code.core import ToolRegistry
-from claude_code.tools import (
+from yanzhiti.core import ToolRegistry
+from yanzhiti.tools import (
     FileReadTool, GlobTool, GrepTool, BashTool,
     GitStatusTool, TaskCreateTool, TodoWriteTool
 )
-from claude_code.core.tool import ToolContext
+from yanzhiti.core.tool import ToolContext
 
 async def demo():
     registry = ToolRegistry()
@@ -98,9 +98,9 @@ echo "✅ 演示完成！"
 echo "========================================================================"
 echo ""
 echo "现在您可以:"
-echo "  1. 运行交互模式: claude-local"
-echo "  2. 单次查询: claude-local '您的问题'"
-echo "  3. 指定模型: claude-local --model mlx-community/Llama-3.2-1B-Instruct-4bit"
+echo "  1. 运行交互模式: yanzhiti-local"
+echo "  2. 单次查询: yanzhiti-local '您的问题'"
+echo "  3. 指定模型: yanzhiti-local --model mlx-community/Llama-3.2-1B-Instruct-4bit"
 echo ""
 echo "首次使用会下载模型 (~700MB for 1B model)"
 echo "模型下载后即可完全离线使用！"

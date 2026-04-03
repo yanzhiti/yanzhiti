@@ -464,7 +464,7 @@ class ConfigTool(Tool):
             description="Manage configuration settings",
         )
         self._config: Dict[str, Any] = {}
-        self._config_file = Path.home() / ".claude" / "config.json"
+        self._config_file = Path.home() / ".yanzhiti" / "config.json"
         self._load_config()
 
     def _load_config(self):
