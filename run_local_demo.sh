@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "========================================================================"
-echo "Claude Code Local - 完整演示"
+echo "衍智体 (YANZHITI) Local - 完整演示"
 echo "========================================================================"
 echo ""
-echo "这个脚本将演示Claude Code Local的主要功能"
+echo "这个脚本将演示衍智体 (YANZHITI) Local的主要功能"
 echo ""
 echo "按Enter继续..."
 read
@@ -74,7 +74,7 @@ async def demo():
     # 演示3: Task
     print("【演示3】TaskCreateTool - 创建任务")
     result = await registry.get("task_create").execute({
-        "title": "Claude Code Local演示",
+        "title": "衍智体 (YANZHITI) Local演示",
         "priority": "high"
     }, context)
     print(f"{result.output}\n")

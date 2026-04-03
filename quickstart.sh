@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Quick start script for Claude Code Python
+# Quick start script for 衍智体 (YANZHITI) Python
 
-echo "Claude Code Python - Quick Start"
+echo "衍智体 (YANZHITI) Python - Quick Start"
 echo "================================="
 echo ""
 
@@ -30,7 +30,7 @@ echo "Installation complete!"
 echo ""
 echo "To get started:"
 echo "  1. Set your API key: export ANTHROPIC_API_KEY=your-key"
-echo "  2. Run Claude Code: claude-code"
+echo "  2. Run 衍智体 (YANZHITI): claude-code"
 echo "  3. Or use the short alias: ccd"
 echo ""
 echo "For more information, see README.md"

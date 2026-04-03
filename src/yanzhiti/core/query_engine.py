@@ -1,5 +1,5 @@
 """
-Query Engine - The heart of Claude Code
+Query Engine - The heart of 衍智体 (YANZHITI)
 """
 
 import asyncio

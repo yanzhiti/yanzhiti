@@ -1,5 +1,5 @@
 """
-Core functionality for Claude Code
+Core functionality for 衍智体 (YANZHITI)
 """
 
 from yanzhiti.core.query_engine import QueryEngine, QueryEngineConfig

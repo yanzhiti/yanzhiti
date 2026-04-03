@@ -1,5 +1,5 @@
 """
-Web UI launcher for Claude Code Local
+Web UI launcher for 衍智体 (YANZHITI) Local
 """
 
 import click
@@ -33,11 +33,11 @@ console = Console()
 )
 def main(host: str, port: int, reload: bool):
     """
-    Start Claude Code Local Web UI
+    Start 衍智体 (YANZHITI) Local Web UI
 
     Access the web interface at http://localhost:PORT
     """
-    console.print(f"[bold cyan]🚀 Starting Claude Code Local Web UI v{__version__}[/bold cyan]")
+    console.print(f"[bold cyan]🚀 Starting 衍智体 (YANZHITI) Local Web UI v{__version__}[/bold cyan]")
     console.print(f"[green]📍 Server running at: http://localhost:{port}[/green]")
     console.print("[yellow]💡 Open this URL in your browser[/yellow]")
     console.print("[dim]Press Ctrl+C to stop[/dim]")

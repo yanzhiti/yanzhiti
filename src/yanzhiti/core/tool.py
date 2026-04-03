@@ -1,5 +1,5 @@
 """
-Core Tool system for Claude Code
+Core Tool system for 衍智体 (YANZHITI)
 """
 
 from abc import ABC, abstractmethod

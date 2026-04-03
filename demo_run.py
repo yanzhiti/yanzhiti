@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude Code Python - 完整功能演示
+衍智体 (YANZHITI) - 完整功能演示
 """
 
 import asyncio
@@ -54,7 +54,7 @@ class DemoRunner:
     async def run_demo(self):
         """运行演示"""
         print("\n" + "🎉 " * 20)
-        print("Claude Code Python v2.1.88 - 完整功能演示")
+        print("衍智体 (YANZHITI) v1.0.0 - 完整功能演示")
         print("🎉 " * 20)
         
         # 创建上下文
@@ -144,12 +144,12 @@ class DemoRunner:
         print("✅ Todo列表: 正常")
         
         print("\n" + "🎉 " * 20)
-        print("Claude Code Python 运行演示完成！")
+        print("衍智体 (YANZHITI) 运行演示完成！")
         print("🎉 " * 20)
-        
+
         print("\n要使用完整AI功能，请设置 ANTHROPIC_API_KEY 环境变量")
-        print("然后运行: claude-code")
-        print("\n感谢使用 Claude Code Python！")
+        print("然后运行: yanzhiti")
+        print("\n感谢使用 衍智体 (YANZHITI)！")
 
 
 def main():

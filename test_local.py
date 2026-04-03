@@ -20,7 +20,7 @@ from yanzhiti.tools import (
 async def test_local_engine():
     """测试本地引擎"""
     print("=" * 70)
-    print("Claude Code Local - MLX模型测试")
+    print("衍智体 (YANZHITI) Local - MLX模型测试")
     print("=" * 70)
     print()
 

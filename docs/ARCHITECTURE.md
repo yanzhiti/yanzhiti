@@ -1,8 +1,8 @@
-# Claude Code Python - Architecture Documentation
+# 衍智体 (YANZHITI) Python - Architecture Documentation
 
 ## Overview
 
-Claude Code Python is a complete refactoring of Anthropic's Claude Code CLI from TypeScript to Python. This document describes the architecture, design decisions, and implementation details.
+衍智体 (YANZHITI) Python is a complete refactoring of Anthropic's 衍智体 (YANZHITI) CLI from TypeScript to Python. This document describes the architecture, design decisions, and implementation details.
 
 ## Project Structure
 
@@ -39,7 +39,7 @@ yanzhiti-python/
 
 ### 1. QueryEngine
 
-The `QueryEngine` is the heart of Claude Code. It:
+The `QueryEngine` is the heart of 衍智体 (YANZHITI). It:
 
 - Processes user queries
 - Calls the Anthropic API

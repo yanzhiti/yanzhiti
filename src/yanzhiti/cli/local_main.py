@@ -93,7 +93,7 @@ def create_tool_registry(query_engine: Optional[LocalQueryEngine] = None) -> Too
 async def run_interactive(engine: LocalQueryEngine) -> None:
     """Run interactive REPL with local model"""
     console.print(Panel.fit(
-        "[bold]Claude Code - Local MLX Edition[/bold]\n"
+        "[bold]衍智体 (YANZHITI) - Local MLX Edition[/bold]\n"
         f"Version: {__version__}\n"
         f"Model: {engine.config.model_name}\n"
         "Running completely on your Mac - No API required!\n"
@@ -155,7 +155,7 @@ async def run_interactive(engine: LocalQueryEngine) -> None:
 def show_help() -> None:
     """Show help information"""
     help_text = """
-# Claude Code Local - Help
+# 衍智体 (YANZHITI) Local - Help
 
 ## Special Commands
 - `/help` - Show this help message
@@ -250,7 +250,7 @@ def main(
     query: Optional[str],
 ) -> None:
     """
-    Claude Code Local - AI assistant running on your Mac
+    衍智体 (YANZHITI) Local - AI assistant running on your Mac
 
     No API key required! Uses LM Studio or MLX models.
 
@@ -258,16 +258,16 @@ def main(
     Otherwise, start interactive mode.
     """
     if version:
-        console.print(f"Claude Code Local v{__version__}")
+        console.print(f"衍智体 (YANZHITI) Local v{__version__}")
         return
 
     # Check backend
     if backend == "mlx" and sys.platform != "darwin":
         console.print("[error]Error: MLX models only work on Mac with Apple Silicon[/error]")
-        console.print("Please use LM Studio backend or the regular claude-code command with API key.")
+        console.print("Please use LM Studio backend or the regular yanzhiti command with API key.")
         sys.exit(1)
 
-    console.print(f"[info]🚀 Starting Claude Code with {backend} backend...[/info]")
+    console.print(f"[info]🚀 Starting 衍智体 (YANZHITI) with {backend} backend...[/info]")
     console.print(f"[info]Model: {model}[/info]")
     if backend == "lm_studio":
         console.print(f"[info]LM Studio URL: {base_url}[/info]")

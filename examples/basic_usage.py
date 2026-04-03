@@ -1,5 +1,5 @@
 """
-Example: Basic usage of Claude Code Python
+Example: Basic usage of 衍智体 (YANZHITI) Python
 """
 
 import asyncio

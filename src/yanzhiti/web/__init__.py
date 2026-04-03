@@ -1,5 +1,5 @@
 """
-Web UI for Claude Code Local
+Web UI for 衍智体 (YANZHITI) Local
 """
 
 from .server import app

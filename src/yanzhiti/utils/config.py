@@ -52,7 +52,7 @@ class ConfigManager:
     """Manager for loading and merging configuration from multiple sources"""
 
     def __init__(self, config_dir: Optional[Path] = None):
-        self.config_dir = config_dir or Path.home() / ".claude-code"
+        self.config_dir = config_dir or Path.home() / ".yanzhiti"
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
         self._config: Optional[AppConfig] = None
@@ -78,7 +78,7 @@ class ConfigManager:
     def _find_config_file(self) -> Optional[Path]:
         """Find configuration file"""
         # Check current directory
-        for name in ["claude-code.toml", "claude-code.yaml", "claude-code.yml", ".claude-code.toml"]:
+        for name in ["yanzhiti.toml", "yanzhiti.yaml", "yanzhiti.yml", ".yanzhiti.toml"]:
             path = Path.cwd() / name
             if path.exists():
                 return path

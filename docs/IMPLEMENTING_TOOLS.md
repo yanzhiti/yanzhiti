@@ -1,6 +1,6 @@
 # Implementing New Tools
 
-This guide explains how to implement new tools for Claude Code Python.
+This guide explains how to implement new tools for 衍智体 (YANZHITI) Python.
 
 ## Tool Structure
 

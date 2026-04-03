@@ -1,5 +1,5 @@
 """
-Main CLI entry point for Claude Code
+Main CLI entry point for 衍智体 (YANZHITI)
 """
 
 import asyncio
@@ -116,7 +116,7 @@ def create_tool_registry() -> ToolRegistry:
 async def run_interactive(engine: QueryEngine) -> None:
     """Run interactive REPL"""
     console.print(Panel.fit(
-        "[bold]Claude Code - Python Edition[/bold]\n"
+        "[bold]衍智体 (YANZHITI) - Python Edition[/bold]\n"
         f"Version: {__version__}\n"
         "Type your query and press Enter. Use Ctrl+C to exit.",
         style="info",
@@ -182,7 +182,7 @@ async def run_interactive(engine: QueryEngine) -> None:
 def show_help() -> None:
     """Show help information"""
     help_text = """
-# Claude Code - Help
+# 衍智体 (YANZHITI) - Help
 
 ## Special Commands
 - `/help` - Show this help message
@@ -252,13 +252,13 @@ def main(
     query: Optional[str],
 ) -> None:
     """
-    Claude Code - AI-powered coding assistant
+    衍智体 (YANZHITI) - AI-powered coding assistant
 
     If QUERY is provided, execute it and exit.
     Otherwise, start interactive mode.
     """
     if version:
-        console.print(f"Claude Code v{__version__}")
+        console.print(f"衍智体 (YANZHITI) v{__version__}")
         return
 
     # Get API key

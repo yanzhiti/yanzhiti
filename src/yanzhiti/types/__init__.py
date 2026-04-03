@@ -1,5 +1,5 @@
 """
-Type definitions for Claude Code
+Type definitions for 衍智体 (YANZHITI)
 """
 
 from enum import Enum

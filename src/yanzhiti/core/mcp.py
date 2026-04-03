@@ -107,8 +107,8 @@ class MCPClient:
             "protocolVersion": "2024-11-05",
             "capabilities": {},
             "clientInfo": {
-                "name": "claude-code-python",
-                "version": "2.1.88",
+                "name": "yanzhiti",
+                "version": "1.0.0",
             }
         })
 

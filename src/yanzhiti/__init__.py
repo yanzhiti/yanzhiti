@@ -1,10 +1,10 @@
 """
-Claude Code - Python Implementation
+衍智体 (YANZHITI) - Python Implementation
 A comprehensive AI-powered coding assistant
 """
 
 __version__ = "2.1.88"
-__author__ = "Claude Code Python Team"
+__author__ = "衍智体 (YANZHITI) Python Team"
 
 from yanzhiti.core.query_engine import QueryEngine
 from yanzhiti.core.tool import Tool, ToolResult

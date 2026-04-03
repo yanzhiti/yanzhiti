@@ -1,5 +1,5 @@
 """
-Web UI for Claude Code Local
+Web UI for 衍智体 (YANZHITI) Local
 FastAPI backend with WebSocket support
 """
 
@@ -27,8 +27,8 @@ from yanzhiti import __version__
 
 # Create FastAPI app
 app = FastAPI(
-    title="Claude Code Local Web UI",
-    description="Web interface for Claude Code Local",
+    title="衍智体 (YANZHITI) Local Web UI",
+    description="Web interface for 衍智体 (YANZHITI) Local",
     version=__version__,
 )
 
@@ -226,7 +226,7 @@ def get_default_html() -> str:
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Claude Code Local</title>
+    <title>衍智体 (YANZHITI) Local</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -329,7 +329,7 @@ def get_default_html() -> str:
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 Claude Code Local</h1>
+            <h1>🤖 衍智体 (YANZHITI) Local</h1>
             <p>Powered by LM Studio - Running on your Mac</p>
         </div>
         <div class="chat-container" id="chat"></div>
