@@ -3,7 +3,7 @@
 A comprehensive AI-powered coding assistant
 """
 
-__version__ = "2.1.88"
+__version__ = "2.2.0"
 __author__ = "衍智体 (YANZHITI) Python Team"
 
 from yanzhiti.core.query_engine import QueryEngine

@@ -1,0 +1,43 @@
+# MANIFEST.in - 衍智体 (YANZHITI) 打包清单
+# 包含 PyPI 发布所需的所有非 Python 文件
+
+# ============================================================
+# 📦 核心源码 | Core Source
+# ============================================================
+include src/yanzhiti/**/*.py
+recursive-include src/yanzhiti/web/static *
+recursive-include examples *.py *.md
+
+# ============================================================
+# 📄 文档文件 | Documentation Files
+# ============================================================
+include README.md
+include README.en.md
+include CHANGELOG.md
+include LICENSE
+include NOTICE.md
+include SECURITY.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include SUPPORT.md
+
+# ============================================================
+# 🎨 资源文件 | Asset Files
+# ============================================================
+include docs/logo.svg
+recursive-include docs *.md *.svg *.png
+
+# ============================================================
+# ⚙️ 配置文件 | Configuration Files
+# ============================================================
+include pyproject.toml
+include .gitignore
+
+# ============================================================
+# 🚫 排除项 | Exclusions (安全)
+# ============================================================
+exclude .trae/*
+exclude *.env
+exclude *.local
+exclude sessions/*
+exclude marketing/*.mp4
