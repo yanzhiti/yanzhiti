@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- 主渐变 | Main gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="50%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+    <!-- 光晕渐变 | Glow gradient -->
+    <radialGradient id="glowGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#c084fc;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0"/>
+    </radialGradient>
+    <!-- 图标高光 | Icon highlight -->
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9"/>
+      <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:0.7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角矩形背景 | Rounded background -->
+  <rect x="16" y="16" width="480" height="480" rx="96" ry="96" fill="url(#bgGrad)"/>
+
+  <!-- 内部光晕效果 | Inner glow effect -->
+  <rect x="16" y="16" width="480" height="480" rx="96" ry="96" fill="url(#glowGrad)"/>
+
+  <!-- 外圈装饰环 | Outer decorative ring -->
+  <circle cx="256" cy="240" r="170" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+  <circle cx="256" cy="240" r="150" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+  <!-- 大脑/AI 核心图案 - 左侧 | Brain/AI core pattern - left side -->
+  <g transform="translate(160, 180)">
+    <!-- 神经网络节点 | Neural network nodes -->
+    <circle cx="30" cy="20" r="10" fill="rgba(255,255,255,0.9)"/>
+    <circle cx="70" cy="15" r="8" fill="rgba(255,255,255,0.75)"/>
+    <circle cx="95" cy="35" r="12" fill="rgba(255,255,255,0.85)"/>
+    <circle cx="15" cy="50" r="8" fill="rgba(255,255,255,0.7)"/>
+    <circle cx="50" cy="55" r="14" fill="white"/>
+    <circle cx="90" cy="65" r="9" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="25" cy="85" r="11" fill="rgba(255,255,255,0.85)"/>
+    <circle cx="65" cy="90" r="8" fill="rgba(255,255,255,0.7)"/>
+
+    <!-- 连接线 | Connection lines -->
+    <line x1="30" y1="20" x2="70" y2="15" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <line x1="70" y1="15" x2="95" y2="35" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <line x1="30" y1="20" x2="15" y2="50" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+    <line x1="15" y1="50" x2="50" y2="55" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <line x1="50" y1="55" x2="25" y2="85" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <line x1="50" y1="55" x2="65" y2="90" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+    <line x1="50" y1="55" x2="90" y2="65" stroke="rgba(255,255,255,0.45)" stroke-width="2"/>
+    <line x1="95" y1="35" x2="90" y2="65" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+    <line x1="30" y1="20" x2="50" y2="55" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+    <line x1="70" y1="15" x2="50" y2="55" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+  </g>
+
+  <!-- 代码符号 </> 右侧 | Code brackets right side -->
+  <g transform="translate(290, 185)">
+    <!-- 左尖括号 | Left angle bracket -->
+    <path d="M0,10 L-25,45 L0,80"
+          fill="none" stroke="white" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"
+          opacity="0.9"/>
+    <!-- 右尖括号 | Right angle bracket -->
+    <path d="M75,10 L100,45 L75,80"
+          fill="none" stroke="white" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"
+          opacity="0.9"/>
+    <!-- 斜杠 | Slash -->
+    <line x1="22" y1="18" x2="78" y2="72"
+          stroke="white" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+  </g>
+
+  <!-- 底部文字区域 | Bottom text area -->
+  <!-- Y 字母大写 | Y letter -->
+  <text x="256" y="385" text-anchor="middle"
+        font-family="'Inter','Segoe UI',system-ui,-apple-system,sans-serif"
+        font-size="88" font-weight="800" fill="white" letter-spacing="-2">
+    Y
+  </text>
+
+  <!-- 副标题 | Subtitle text -->
+  <text x="256" y="430" text-anchor="middle"
+        font-family="'Inter','Segoe UI',system-ui,-apple-system,sans-serif"
+        font-size="24" font-weight="600" fill="rgba(255,255,255,0.85)" letter-spacing="8">
+    衍智体
+  </text>
+
+  <!-- 底部装饰线 | Bottom decoration line -->
+  <line x1="166" y1="450" x2="346" y2="450" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- 版本标签 | Version badge -->
+  <rect x="210" y="462" width="92" height="26" rx="13" ry="13" fill="rgba(255,255,255,0.2)"/>
+  <text x="256" y="481" text-anchor="middle"
+        font-family="'Inter',sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.9)">
+    v2.2.0
+  </text>
+
+  <!-- 角落装饰 | Corner decorations -->
+  <circle cx="72" cy="72" r="6" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="440" cy="72" r="6" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="72" cy="440" r="6" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="440" cy="440" r="6" fill="rgba(255,255,255,0.2)"/>
+</svg>

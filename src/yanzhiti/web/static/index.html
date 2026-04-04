@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>衍智体 YANZHITI - AI 编程助手</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -33,11 +34,7 @@
             --header-height: 60px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -47,704 +44,304 @@
             height: 100vh;
         }
 
-        /* ==================== 布局 | Layout ==================== */
-        .app-container {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-        }
+        /* 布局 | Layout */
+        .app-container { display: flex; height: 100vh; width: 100vw; }
 
         /* 侧边栏 | Sidebar */
         .sidebar {
-            width: var(--sidebar-width);
-            background: var(--bg-secondary);
+            width: var(--sidebar-width); background: var(--bg-secondary);
             border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease;
+            display: flex; flex-direction: column; transition: transform 0.3s ease;
         }
-
         .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            padding: 20px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 12px;
         }
-
         .logo {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background: linear-gradient(135deg, var(--primary-color), #a855f7);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold; color: white;
         }
+        .app-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .app-version { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-        .app-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .app-version {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* 新建对话按钮 | New Chat Button */
         .new-chat-btn {
-            margin: 16px;
-            padding: 12px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            margin: 16px; padding: 12px 20px; background: var(--primary-color);
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+            font-size: 14px; font-weight: 500; display: flex; align-items: center;
+            justify-content: center; gap: 8px; transition: all 0.2s ease;
         }
+        .new-chat-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
-        .new-chat-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        /* 对话历史列表 | Chat History List */
-        .chat-history {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 12px;
-        }
-
+        .chat-history { flex: 1; overflow-y: auto; padding: 0 12px; }
         .history-item {
-            padding: 12px 16px;
-            margin-bottom: 4px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 12px 16px; margin-bottom: 4px; border-radius: 8px; cursor: pointer;
+            transition: all 0.2s ease; display: flex; align-items: center; gap: 10px;
             color: var(--text-secondary);
         }
+        .history-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .history-item.active { background: var(--bg-tertiary); color: var(--text-primary); }
+        .history-item i { font-size: 14px; }
+        .history-text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
 
-        .history-item:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .history-item.active {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .history-item i {
-            font-size: 14px;
-        }
-
-        .history-text {
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 13px;
-        }
-
-        /* 侧边栏底部 | Sidebar Footer */
-        .sidebar-footer {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-        }
-
+        .sidebar-footer { padding: 16px; border-top: 1px solid var(--border-color); }
         .settings-btn {
-            width: 100%;
-            padding: 10px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            width: 100%; padding: 10px; background: transparent;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: var(--text-secondary); cursor: pointer; font-size: 13px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.2s ease;
         }
-
-        .settings-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
+        .settings-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
         /* 主内容区 | Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
         /* 顶部栏 | Header */
         .header {
-            height: var(--header-height);
-            background: var(--bg-secondary);
+            height: var(--header-height); background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
+        .header-left { display: flex; align-items: center; gap: 16px; }
         .menu-toggle {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 6px;
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 20px; cursor: pointer; padding: 8px; border-radius: 6px;
             transition: all 0.2s ease;
         }
+        .menu-toggle:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
-        .menu-toggle:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
+        /* 模型选择器 - 增强版 | Enhanced Model Selector */
+        .model-selector-wrap { position: relative; }
         .model-selector {
-            padding: 8px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-primary);
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 8px 32px 8px 16px; background: var(--bg-tertiary);
+            border: 1px solid var(--border-color); border-radius: 6px;
+            color: var(--text-primary); font-size: 13px; cursor: pointer;
+            appearance: none; -webkit-appearance: none;
+            min-width: 200px; max-width: 320px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 8px center; background-size: 18px;
         }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .model-selector:focus { outline: none; border-color: var(--primary-color); }
+        .model-badge {
+            position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+            font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 600;
+            pointer-events: none;
         }
+        .badge-free { background: #065f46; color: #34d399; }
+        .badge-cloud { background: #1e40af; color: #93c5fd; }
+        .badge-local { background: #713f12; color: #fbbf24; }
 
+        .header-right { display: flex; align-items: center; gap: 12px; }
         .icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            position: relative;
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 18px; cursor: pointer; padding: 8px; border-radius: 6px;
+            transition: all 0.2s ease; position: relative;
         }
-
-        .icon-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
+        .icon-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
         /* 聊天区域 | Chat Area */
         .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+            flex: 1; overflow-y: auto; padding: 24px;
+            display: flex; flex-direction: column; gap: 24px;
         }
 
         /* 欢迎界面 | Welcome Screen */
         .welcome-screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px;
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center; padding: 40px;
         }
-
         .welcome-logo {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             background: linear-gradient(135deg, var(--primary-color), #a855f7);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin-bottom: 24px;
-            animation: float 3s ease-in-out infinite;
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 40px; margin-bottom: 24px; animation: float 3s ease-in-out infinite;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
         .welcome-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 32px; font-weight: 700; margin-bottom: 12px;
             background: linear-gradient(135deg, var(--primary-color), #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-
         .welcome-subtitle {
-            font-size: 16px;
-            color: var(--text-secondary);
-            max-width: 500px;
-            line-height: 1.6;
-            margin-bottom: 40px;
+            font-size: 16px; color: var(--text-secondary); max-width: 520px;
+            line-height: 1.6; margin-bottom: 36px;
         }
 
         /* 快捷操作卡片 | Quick Action Cards */
         .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            max-width: 600px;
-            width: 100%;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+            max-width: 620px; width: 100%;
         }
-
         .quick-action-card {
-            padding: 16px 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            padding: 16px 20px; background: var(--bg-secondary);
+            border: 1px solid var(--border-color); border-radius: 12px;
+            text-align: left; cursor: pointer; transition: all 0.2s ease;
         }
-
-        .quick-action-card:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        .quick-action-icon {
-            font-size: 20px;
-            margin-bottom: 8px;
-            color: var(--primary-color);
-        }
-
-        .quick-action-title {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 4px;
-            color: var(--text-primary);
-        }
-
-        .quick-action-desc {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+        .quick-action-card:hover { background: var(--bg-tertiary); border-color: var(--primary-color); transform: translateY(-2px); }
+        .quick-action-icon { font-size: 20px; margin-bottom: 8px; color: var(--primary-color); }
+        .quick-action-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; color: var(--text-primary); }
+        .quick-action-desc { font-size: 12px; color: var(--text-muted); }
 
         /* 消息样式 | Message Styles */
-        .message {
-            display: flex;
-            gap: 12px;
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
+        .message { display: flex; gap: 12px; max-width: 800px; width: 100%; margin: 0 auto; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .message.user { flex-direction: row-reverse; }
         .avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; flex-shrink: 0;
         }
-
-        .message.assistant .avatar {
-            background: linear-gradient(135deg, var(--primary-color), #a855f7);
-            color: white;
-        }
-
-        .message.user .avatar {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .message-content {
-            flex: 1;
-            max-width: calc(100% - 48px);
-        }
-
+        .message.assistant .avatar { background: linear-gradient(135deg, var(--primary-color), #a855f7); color: white; }
+        .message.user .avatar { background: var(--bg-tertiary); color: var(--text-primary); }
+        .message-content { flex: 1; max-width: calc(100% - 48px); }
         .message-bubble {
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.6;
+            padding: 14px 18px; border-radius: 12px; font-size: 14px; line-height: 1.6;
         }
-
         .message.assistant .message-bubble {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            border-top-left-radius: 4px;
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            color: var(--text-primary); border-top-left-radius: 4px;
         }
-
-        .message.user .message-bubble {
-            background: var(--primary-color);
-            color: white;
-            border-top-right-radius: 4px;
-        }
+        .message.user .message-bubble { background: var(--primary-color); color: white; border-top-right-radius: 4px; }
 
         /* 代码块样式 | Code Block Styles */
         .message-bubble pre {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            margin: 12px 0;
-            overflow-x: auto;
-            position: relative;
+            background: var(--bg-primary); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 16px; margin: 12px 0; overflow-x: auto; position: relative;
         }
-
-        .message-bubble code {
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .code-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            padding: 0 4px;
-        }
-
-        .code-lang {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
+        .message-bubble code { font-family: 'Fira Code','Consolas',monospace; font-size: 13px; line-height: 1.5; }
+        .code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding: 0 4px; }
+        .code-lang { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
         .copy-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            background: none; border: none; color: var(--text-muted); cursor: pointer;
+            font-size: 14px; padding: 4px 8px; border-radius: 4px; transition: all 0.2s ease;
         }
-
-        .copy-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
+        .copy-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
         /* 输入区域 | Input Area */
-        .input-area {
-            padding: 20px 24px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .input-container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
+        .input-area { padding: 20px 24px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); }
+        .input-container { max-width: 800px; margin: 0 auto; position: relative; }
         .input-wrapper {
-            display: flex;
-            align-items: flex-end;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px 12px;
+            display: flex; align-items: flex-end; background: var(--bg-tertiary);
+            border: 1px solid var(--border-color); border-radius: 12px; padding: 8px 12px;
             transition: all 0.2s ease;
         }
-
-        .input-wrapper:focus-within {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
+        .input-wrapper:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(99,102,241,.1); }
         textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-primary);
-            font-family: inherit;
-            font-size: 14px;
-            resize: none;
-            min-height: 24px;
-            max-height: 200px;
-            padding: 8px 0;
-            line-height: 1.5;
+            flex: 1; background: transparent; border: none; outline: none;
+            color: var(--text-primary); font-family: inherit; font-size: 14px;
+            resize: none; min-height: 24px; max-height: 200px; padding: 8px 0; line-height: 1.5;
         }
-
-        textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .input-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-left: 8px;
-        }
-
+        textarea::placeholder { color: var(--text-muted); }
+        .input-actions { display: flex; align-items: center; gap: 8px; padding-left: 8px; }
         .action-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
+            background: none; border: none; color: var(--text-muted);
+            font-size: 18px; cursor: pointer; padding: 6px; border-radius: 6px; transition: all 0.2s ease;
         }
-
-        .action-btn:hover {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-
+        .action-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
         .send-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
+            background: var(--primary-color); color: white; border: none;
+            width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
             transition: all 0.2s ease;
         }
-
-        .send-btn:hover:not(:disabled) {
-            background: var(--primary-hover);
-            transform: scale(1.05);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .input-hint {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 8px;
-        }
+        .send-btn:hover:not(:disabled) { background: var(--primary-hover); transform: scale(1.05); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .input-hint { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 8px; }
 
         /* 加载动画 | Loading Animation */
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            padding: 8px 0;
-        }
-
+        .typing-indicator { display: flex; gap: 4px; padding: 8px 0; }
         .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            animation: typingBounce 1.4s infinite ease-in-out both;
+            width: 8px; height: 8px; background: var(--primary-color);
+            border-radius: 50%; animation: typingBounce 1.4s infinite ease-in-out both;
         }
-
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        .typing-dot:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes typingBounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
+        .typing-dot:nth-child(1){animation-delay:-0.32s} .typing-dot:nth-child(2){animation-delay:-0.16s}
+        @keyframes typingBounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
 
         /* 设置面板 | Settings Panel */
         .settings-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            border-left: 1px solid var(--border-color);
-            z-index: 1000;
-            transition: right 0.3s ease;
-            overflow-y: auto;
+            position: fixed; top: 0; right: -420px; width: 420px; height: 100vh;
+            background: var(--bg-secondary); border-left: 1px solid var(--border-color);
+            z-index: 1000; transition: right 0.3s ease; overflow-y: auto;
         }
-
-        .settings-panel.open {
-            right: 0;
-        }
-
+        .settings-panel.open { right: 0; }
         .settings-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,.5); z-index: 999; opacity: 0;
+            visibility: hidden; transition: all 0.3s ease;
         }
-
-        .settings-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .settings-overlay.open { opacity: 1; visibility: visible; }
         .panel-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 20px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
         }
-
-        .panel-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
+        .panel-title { font-size: 18px; font-weight: 600; }
         .close-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: none; border: none; color: var(--text-secondary);
+            font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 4px;
         }
-
-        .close-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .panel-content {
-            padding: 20px;
-        }
-
-        .setting-group {
-            margin-bottom: 24px;
-        }
-
+        .close-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .panel-content { padding: 20px; }
+        .setting-group { margin-bottom: 20px; }
         .setting-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            display: block;
+            font-size: 13px; font-weight: 500; color: var(--text-secondary);
+            margin-bottom: 8px; display: block;
         }
+        .setting-input, .setting-select {
+            width: 100%; padding: 10px 12px; background: var(--bg-tertiary);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: var(--text-primary); font-size: 14px; font-family: inherit;
+        }
+        .setting-input:focus, .setting-select:focus { outline: none; border-color: var(--primary-color); }
 
-        .setting-input,
-        .setting-select {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 14px;
-            font-family: inherit;
+        /* 供应商配置卡片 | Provider Config Card */
+        .provider-card {
+            background: var(--bg-tertiary); border: 1px solid var(--border-color);
+            border-radius: 10px; padding: 14px; margin-bottom: 10px; transition: all 0.2s ease;
         }
-
-        .setting-input:focus,
-        .setting-select:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        .provider-card:hover { border-color: var(--primary-color); }
+        .provider-card-header {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
         }
+        .provider-name { font-weight: 600; font-size: 14px; }
+        .provider-type-badge {
+            font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600;
+        }
+        .type-cloud { background: #1e3a5f; color: #60a5fa; }
+        .type-local { background: #3f3f00; color: #facc15; }
+        .type-builtin { background: #14532d; color: #4ade80; }
+        .provider-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+        .provider-row { display: flex; gap: 8px; align-items: center; }
+        .provider-row input { flex: 1; }
+        .btn-sm {
+            padding: 6px 14px; font-size: 12px; border-radius: 6px; border: none;
+            cursor: pointer; font-weight: 500; transition: all 0.2s ease;
+        }
+        .btn-save { background: var(--primary-color); color: white; }
+        .btn-save:hover { background: var(--primary-hover); }
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px;
+        }
+        .dot-green { background: var(--success-color); }
+        .dot-red { background: var(--error-color); }
+        .dot-gray { background: var(--text-muted); }
 
         /* 移动端响应式 | Mobile Responsive */
         @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 1001;
-                transform: translateX(-100%);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .settings-panel {
-                width: 100%;
-                right: -100%;
-            }
+            .sidebar { position: fixed; left: 0; top: 0; bottom: 0; z-index: 1001; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .quick-actions { grid-template-columns: 1fr; }
+            .settings-panel { width: 100%; right: -100%; }
+            .model-selector { min-width: 140px; max-width: 180px; }
         }
 
-        /* 工具提示 | Tooltip */
-        [data-tooltip] {
-            position: relative;
-        }
-
+        [data-tooltip] { position: relative; }
         [data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 10px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 12px;
-            border-radius: 6px;
-            white-space: nowrap;
-            margin-bottom: 8px;
-            border: 1px solid var(--border-color);
-            z-index: 100;
+            content: attr(data-tooltip); position: absolute; bottom: 100%; left: 50%;
+            transform: translateX(-50%); padding: 6px 10px; background: var(--bg-primary);
+            color: var(--text-primary); font-size: 12px; border-radius: 6px;
+            white-space: nowrap; margin-bottom: 8px; border: 1px solid var(--border-color); z-index: 100;
         }
     </style>
 </head>
@@ -756,17 +353,15 @@
                 <div class="logo">Y</div>
                 <div>
                     <div class="app-title">衍智体</div>
-                    <div class="app-version">v2.1.88</div>
+                    <div class="app-version" id="appVersion">v2.1.88</div>
                 </div>
             </div>
 
             <button class="new-chat-btn" onclick="newChat()">
-                <i class="fas fa-plus"></i>
-                新建对话
+                <i class="fas fa-plus"></i> 新建对话
             </button>
 
             <div class="chat-history" id="chatHistory">
-                <!-- 对话历史将动态加载 -->
                 <div class="history-item active">
                     <i class="fas fa-message"></i>
                     <span class="history-text">欢迎使用衍智体</span>
@@ -775,29 +370,24 @@
 
             <div class="sidebar-footer">
                 <button class="settings-btn" onclick="toggleSettings()">
-                    <i class="fas fa-cog"></i>
-                    设置与配置
+                    <i class="fas fa-cog"></i> 设置与配置
                 </button>
             </div>
         </aside>
 
         <!-- 主内容区 | Main Content -->
         <main class="main-content">
-            <!-- 顶部栏 | Header -->
             <header class="header">
                 <div class="header-left">
                     <button class="menu-toggle" onclick="toggleSidebar()" data-tooltip="菜单">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <select class="model-selector" id="modelSelector">
-                        <option value="openrouter">OpenRouter (推荐)</option>
-                        <option value="builtin">内置模型</option>
-                        <option value="ollama">Ollama 本地</option>
-                        <option value="openai">OpenAI</option>
-                        <option value="anthropic">Anthropic</option>
-                        <option value="deepseek">DeepSeek</option>
-                        <option value="google">Google Gemini</option>
-                    </select>
+                    <div class="model-selector-wrap">
+                        <select class="model-selector" id="modelSelector" onchange="onModelChange()">
+                            <option value="">加载中...</option>
+                        </select>
+                        <span class="model-badge badge-free" id="modelBadge">免费</span>
+                    </div>
                 </div>
 
                 <div class="header-right">
@@ -813,20 +403,14 @@
                 </div>
             </header>
 
-            <!-- 聊天区域 | Chat Container -->
             <div class="chat-container" id="chatContainer">
-                <!-- 欢迎界面 | Welcome Screen -->
                 <div class="welcome-screen" id="welcomeScreen">
-                    <div class="welcome-logo">
-                        <i class="fas fa-robot"></i>
-                    </div>
+                    <div class="welcome-logo"><i class="fas fa-robot"></i></div>
                     <h1 class="welcome-title">欢迎使用衍智体 YANZHITI</h1>
-                    <p class="welcome-subtitle">
-                        您的 AI 编程助手。支持 17+ AI 供应商、本地模型运行、
-                        内置后备模型，让编程更高效。
+                    <p class="welcome-subtitle" id="welcomeSubtitle">
+                        您的 AI 编程助手。支持 17+ AI 供应商、本地模型运行、内置后备模型。
                     </p>
-
-                    <div class="quick-actions">
+                    <div class="quick-actions" id="quickActions">
                         <div class="quick-action-card" onclick="sendQuickAction('帮我写一个 Python 快速排序算法')">
                             <div class="quick-action-icon"><i class="fas fa-code"></i></div>
                             <div class="quick-action-title">代码生成</div>
@@ -860,21 +444,16 @@
                     </div>
                 </div>
 
-                <!-- 消息列表 | Messages will be added here -->
                 <div id="messagesContainer"></div>
             </div>
 
-            <!-- 输入区域 | Input Area -->
             <div class="input-area">
                 <div class="input-container">
                     <div class="input-wrapper">
-                        <textarea 
-                            id="userInput"
+                        <textarea id="userInput"
                             placeholder="输入您的问题... (Shift + Enter 换行)"
-                            rows="1"
-                            onkeydown="handleKeyDown(event)"
-                            oninput="autoResize(this)"
-                        ></textarea>
+                            rows="1" onkeydown="handleKeyDown(event)" oninput="autoResize(this)">
+                        </textarea>
                         <div class="input-actions">
                             <button class="action-btn" data-tooltip="上传文件">
                                 <i class="fas fa-paperclip"></i>
@@ -884,9 +463,7 @@
                             </button>
                         </div>
                     </div>
-                    <p class="input-hint">
-                        按 Enter 发送，Shift + Enter 换行 · 支持 Markdown 格式
-                    </p>
+                    <p class="input-hint" id="inputHint">按 Enter 发送，Shift + Enter 换行 · 支持 Markdown 格式</p>
                 </div>
             </div>
         </main>
@@ -897,30 +474,20 @@
     <aside class="settings-panel" id="settingsPanel">
         <div class="panel-header">
             <h2 class="panel-title">⚙️ 设置</h2>
-            <button class="close-btn" onclick="toggleSettings()">
-                <i class="fas fa-xmark"></i>
-            </button>
+            <button class="close-btn" onclick="toggleSettings()"><i class="fas fa-xmark"></i></button>
         </div>
         <div class="panel-content">
+            <!-- 全局设置 | Global Settings -->
             <div class="setting-group">
-                <label class="setting-label">API 密钥</label>
-                <input type="password" class="setting-input" id="apiKeyInput" placeholder="sk-or-...">
-            </div>
-            
-            <div class="setting-group">
-                <label class="setting-label">AI 模型</label>
-                <select class="setting-select" id="settingsModelSelect">
-                    <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet (推荐)</option>
-                    <option value="openai/gpt-4o">GPT-4o</option>
-                    <option value="deepseek/deepseek-chat-v3-0324">DeepSeek V3 (免费)</option>
-                    <option value="google/gemini-pro-1.5">Gemini Pro 1.5 (免费)</option>
-                </select>
+                <label class="setting-label">默认 AI 模型</label>
+                <select class="setting-select" id="settingsModelSelect" onchange="onSettingsModelChange()"></select>
             </div>
 
             <div class="setting-group">
                 <label class="setting-label">温度参数 (0-2)</label>
-                <input type="range" class="setting-input" id="temperatureSlider" min="0" max="2" step="0.1" value="0.7">
-                <small style="color: var(--text-muted)">当前值: <span id="tempValue">0.7</span></small>
+                <input type="range" class="setting-input" id="temperatureSlider" min="0" max="2" step="0.1" value="0.7"
+                       oninput="document.getElementById('tempValue').textContent=this.value">
+                <small style="color:var(--text-muted)">当前值: <span id="tempValue">0.7</span></small>
             </div>
 
             <div class="setting-group">
@@ -928,37 +495,46 @@
                 <input type="number" class="setting-input" id="maxTokensInput" value="4096" min="256" max="128000">
             </div>
 
-            <div style="margin-top: 24px;">
-                <button class="new-chat-btn" onclick="saveSettings()">
-                    <i class="fas fa-check"></i>
-                    保存设置
+            <div style="margin-top:20px">
+                <button class="new-chat-btn" onclick="saveGlobalSettings()">
+                    <i class="fas fa-check"></i> 保存全局设置
                 </button>
             </div>
 
-            <hr style="border-color: var(--border-color); margin: 24px 0;">
+            <hr style="border-color:var(--border-color);margin:24px 0">
 
+            <!-- 供应商 API Key 配置 | Provider API Key Configuration -->
+            <h3 style="font-size:15px;margin-bottom:12px;color:var(--text-primary)">
+                <i class="fas fa-key" style="color:var(--primary-color);margin-right:6px"></i>
+                供应商 API Key 配置
+            </h3>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px">
+                为云端供应商配置 API 密钥，本地和内置供应商无需密钥。
+            </p>
+            <div id="providerConfigList">
+                <p style="color:var(--text-muted);text-align:center;padding:20px">加载中...</p>
+            </div>
+
+            <hr style="border-color:var(--border-color);margin:24px 0">
+
+            <!-- 工具 | Tools -->
             <div class="setting-group">
                 <label class="setting-label">快速配置向导</label>
                 <button class="settings-btn" onclick="runSetupWizard()">
-                    <i class="fas fa-wand-magic-sparkles"></i>
-                    运行配置向导
+                    <i class="fas fa-wand-magic-sparkles"></i> 运行配置向导
                 </button>
             </div>
-
             <div class="setting-group">
-                <label class="setting-label">诊断工具</label>
+                <label class="setting-label">系统诊断</label>
                 <button class="settings-btn" onclick="runDiagnose()">
-                    <i class="fas fa-stethoscope"></i>
-                    运行系统诊断
+                    <i class="fas fa-stethoscope"></i> 运行诊断
                 </button>
             </div>
         </div>
     </aside>
 
-    <!-- Highlight.js for code highlighting -->
+    <!-- Highlight.js + Marked.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
-    <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <script>
@@ -966,11 +542,20 @@
         let messages = [];
         let isGenerating = false;
         let sessionId = generateSessionId();
+        let allProviders = [];      // 所有供应商数据
+        let allModels = [];         // 所有模型数据
+        let currentProvider = '';   // 当前选中的供应商 ID
+        let currentModel = '';      // 当前选中的模型名
 
         // ==================== 初始化 | Initialization ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettings();
+        document.addEventListener('DOMContentLoaded', async () => {
             setupMarked();
+            loadLocalSettings();
+            await loadProviders();       // 从后端加载所有供应商
+            await loadAllModels();       // 从后端加载所有模型
+            populateModelSelector();     // 填充顶部模型选择器
+            populateSettingsModelSelect(); // 填充设置面板模型列表
+            renderProviderConfigCards(); // 渲染供应商配置卡片
         });
 
         function generateSessionId() {
@@ -981,28 +566,227 @@
             if (typeof marked !== 'undefined') {
                 marked.setOptions({
                     highlight: function(code, lang) {
-                        if (lang && hljs.getLanguage(lang)) {
-                            return hljs.highlight(code, { language: lang }).value;
-                        }
+                        if (lang && hljs.getLanguage(lang)) return hljs.highlight(code,{language:lang}).value;
                         return hljs.highlightAuto(code).value;
                     },
-                    breaks: true,
-                    gfm: true
+                    breaks: true, gfm: true
                 });
+            }
+        }
+
+        // ==================== 数据加载 | Data Loading ====================
+
+        /** 从后端加载所有供应商信息 */
+        async function loadProviders() {
+            try {
+                const res = await fetch('/api/providers');
+                const data = await res.json();
+                allProviders = data.providers || [];
+                console.log(`✅ 已加载 ${allProviders.length} 个供应商`);
+            } catch (e) {
+                console.error('❌ 加载供应商失败:', e);
+            }
+        }
+
+        /** 从后端加载所有模型 */
+        async function loadAllModels() {
+            try {
+                const res = await fetch('/api/models');
+                const data = await res.json();
+                allModels = data.models || [];
+                console.log(`✅ 已加载 ${allModels.length} 个模型`);
+            } catch (e) {
+                console.error('❌ 加载模型失败:', e);
+            }
+        }
+
+        /** 填充顶部模型选择器（按供应商分组） */
+        function populateModelSelector() {
+            const sel = document.getElementById('modelSelector');
+            sel.innerHTML = '';
+
+            if (!allModels.length) {
+                sel.innerHTML = '<option value="">暂无可用模型</option>';
+                return;
+            }
+
+            // 按 provider 分组 | Group by provider
+            const grouped = {};
+            allModels.forEach(m => {
+                if (!grouped[m.provider]) grouped[m.provider] = [];
+                grouped[m.provider].push(m);
+            });
+
+            for (const [pid, models] of Object.entries(grouped)) {
+                const pInfo = allProviders.find(p => p.id === pid);
+                const groupName = pInfo ? pInfo.display_name : pid;
+                const groupType = pInfo ? pInfo.type : 'cloud';
+
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = `${groupName} (${models.length})`;
+
+                models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.name;  // 使用完整 model name 作为 value
+                    opt.textContent = m.display_name + (m.is_free ? ' 🆓' : '');
+                    opt.dataset.provider = pid;
+                    opt.dataset.modelName = m.name;
+                    opt.dataset.isFree = m.isFree;
+                    if (m.is_free) opt.style.color = '#4ade80';
+                    optgroup.appendChild(opt);
+                });
+
+                sel.appendChild(optgroup);
+            }
+
+            // 恢复之前的选择 | Restore previous selection
+            const saved = localStorage.getItem('yanzhiti_selected_model');
+            if (saved) {
+                try { sel.value = JSON.parse(saved).name; } catch(e) {}
+            }
+            onModelChange();
+        }
+
+        /** 模型切换事件 */
+        function onModelChange() {
+            const sel = document.getElementById('modelSelector');
+            const opt = sel.options[sel.selectedIndex];
+            if (!opt) return;
+
+            currentProvider = opt.dataset.provider || '';
+            currentModel = opt.dataset.modelName || sel.value;
+            const isFree = opt.dataset.isFree === 'true';
+
+            // 更新徽章 | Update badge
+            const badge = document.getElementById('modelBadge');
+            const pType = allProviders.find(p => p.id === currentProvider);
+
+            if (pType) {
+                if (pType.type === 'cloud') {
+                    badge.className = 'model-badge ' + (isFree ? 'badge-free' : 'badge-cloud');
+                    badge.textContent = isFree ? '免费' : '付费';
+                } else if (pType.type === 'local') {
+                    badge.className = 'model-badge badge-local';
+                    badge.textContent = '本地';
+                } else {
+                    badge.className = 'model-badge badge-free';
+                    badge.textContent = '内置';
+                }
+            }
+
+            // 保存选择 | Save selection
+            localStorage.setItem('yanzhiti_selected_model', JSON.stringify({
+                provider: currentProvider, model: currentModel, name: sel.value
+            }));
+        }
+
+        /** 填充设置面板的模型下拉框 */
+        function populateSettingsModelSelect() {
+            const sel = document.getElementById('settingsModelSelect');
+            sel.innerHTML = '';
+
+            allModels.slice(0, 30).forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.id;
+                opt.textContent = `${m.display_name} (${m.provider})`;
+                sel.appendChild(opt);
+            });
+        }
+
+        function onSettingsModelChange() {
+            const val = document.getElementById('settingsModelSelect').value;
+            document.getElementById('modelSelector').value = val.split('/').pop() || val;
+            onModelChange();
+        }
+
+        /** 渲染供应商 API Key 配置卡片 */
+        function renderProviderConfigCards() {
+            const container = document.getElementById('providerConfigList');
+
+            if (!allProviders.length) {
+                container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">暂无供应商数据</p>';
+                return;
+            }
+
+            let html = '';
+            allProviders.forEach(p => {
+                const typeClass = p.type === 'cloud' ? 'type-cloud' : (p.type === 'local' ? 'type-local' : 'type-builtin');
+                const typeLabel = p.type === 'cloud' ? '云端' : (p.type === 'local' ? '本地' : '内置');
+                const needsKey = p.type === 'cloud';
+                const statusClass = p.configured ? 'dot-green' : (needsKey ? 'dot-red' : 'dot-green');
+                const statusText = p.configured ? '已配置' : (needsKey ? '未配置' : '无需配置');
+
+                html += `
+                <div class="provider-card" id="pcard-${p.id}">
+                    <div class="provider-card-header">
+                        <span>
+                            <span class="status-dot ${statusClass}"></span>
+                            <span class="provider-name">${p.display_name}</span>
+                        </span>
+                        <span class="provider-type-badge ${typeClass}">${typeLabel}</span>
+                    </div>
+                    <div class="provider-desc">${p.description}</div>
+                    ${needsKey ? `
+                    <div class="provider-row">
+                        <input type="password" class="setting-input" id="key-${p.id}"
+                               placeholder="输入 API Key..." autocomplete="off">
+                        <button class="btn-sm btn-save" onclick="saveProviderKey('${p.id}')">保存</button>
+                    </div>` : `
+                    <div style="font-size:11px;color:var(--success-color)">
+                        <i class="fas fa-check-circle"></i> 无需 API Key，直接可用
+                    </div>`}
+                    <div style="margin-top:6px;font-size:11px;color:var(--text-muted)">
+                        ${p.model_count} 个模型 · ${p.has_free_tier ? '🆓 有免费额度' : ''}
+                        ${p.recommended ? ' · ⭐ 推荐' : ''}
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+
+            // 恢复已保存的 Key 提示状态 | Restore saved key hint state
+            allProviders.forEach(p => {
+                const savedKey = localStorage.getItem(`yanzhiti_key_${p.id}`);
+                if (savedKey) {
+                    const input = document.getElementById(`key-${p.id}`);
+                    if (input) input.placeholder = '•••••••••••• (已保存)';
+                }
+            });
+        }
+
+        /** 保存单个供应商的 API Key */
+        async function saveProviderKey(providerId) {
+            const input = document.getElementById(`key-${providerId}`);
+            const keyValue = input.value.trim();
+
+            try {
+                const res = await fetch('/api/providers/configure', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider_id: providerId, api_key: keyValue })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    // 本地也保存一份 | Also save locally
+                    localStorage.setItem(`yanzhiti_key_${providerId}`, keyValue);
+                    input.value = '';
+                    input.placeholder = '•••••••••••• (已保存)';
+                    alert(`✅ ${providerId} API Key 已保存！`);
+                }
+            } catch (e) {
+                alert(`❌ 保存失败: ${e.message}`);
             }
         }
 
         // ==================== UI 控制 | UI Controls ====================
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
+            document.getElementById('sidebar').classList.toggle('open');
         }
 
         function toggleSettings() {
-            const panel = document.getElementById('settingsPanel');
-            const overlay = document.getElementById('settingsOverlay');
-            panel.classList.toggle('open');
-            overlay.classList.toggle('open');
+            document.getElementById('settingsPanel').classList.toggle('open');
+            document.getElementById('settingsOverlay').classList.toggle('open');
         }
 
         function newChat() {
@@ -1012,93 +796,69 @@
             document.getElementById('welcomeScreen').style.display = 'flex';
             document.getElementById('chatHistory').innerHTML = `
                 <div class="history-item active">
-                    <i class="fas fa-message"></i>
-                    <span class="history-text">新对话</span>
-                </div>
-            `;
+                    <i class="fas fa-message"></i><span class="history-text">新对话</span>
+                </div>`;
         }
 
-        function clearChat() {
-            if (confirm('确定要清空当前对话吗？')) {
-                newChat();
-            }
-        }
+        function clearChat() { if (confirm('确定要清空当前对话吗？')) newChat(); }
 
         function exportChat() {
-            if (messages.length === 0) {
-                alert('没有可导出的对话内容');
-                return;
-            }
-            
-            let content = '# 衍智体 (YANZHITI) 对话记录\n\n';
-            content += `导出时间: ${new Date().toLocaleString()}\n`;
-            content += `会话 ID: ${sessionId}\n\n---\n\n`;
-            
-            messages.forEach(msg => {
-                const role = msg.role === 'user' ? '👤 用户' : '🤖 助手';
-                content += `## ${role}\n\n${msg.content}\n\n---\n\n`;
+            if (!messages.length) { alert('没有可导出的对话内容'); return; }
+            let c = '# 衍智体 (YANZHITI) 对话记录\n\n';
+            c += `导出时间: ${new Date().toLocaleString()}\n会话ID: ${sessionId}\n\n---\n\n`;
+            messages.forEach(m => {
+                c += `## ${m.role==='user'?'👤 用户':'🤖 助手'}\n\n${m.content}\n\n---\n\n`;
             });
-            
-            const blob = new Blob([content], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
+            const blob = new Blob([c], { type: 'text/markdown' });
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = `yanzhiti-chat-${Date.now()}.md`;
-            a.click();
-            URL.revokeObjectURL(url);
+            a.click(); URL.revokeObjectURL(a.href);
         }
 
         // ==================== 消息处理 | Message Handling ====================
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const message = input.value.trim();
-            
+
             if (!message || isGenerating) return;
-            
-            // 隐藏欢迎界面 | Hide welcome screen
+
             document.getElementById('welcomeScreen').style.display = 'none';
-            
-            // 添加用户消息 | Add user message
             addMessage('user', message);
-            input.value = '';
-            input.style.height = 'auto';
-            
-            // 显示加载指示器 | Show loading indicator
-            showTypingIndicator();
-            isGenerating = true;
-            updateSendButton();
-            
+            input.value = ''; input.style.height = 'auto';
+
+            showTypingIndicator(); isGenerating = true; updateSendButton();
+
             try {
-                // 调用 API | Call API
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         message: message,
                         session_id: sessionId,
-                        model: document.getElementById('modelSelector').value
+                        provider: currentProvider,
+                        model: currentModel,
+                        temperature: parseFloat(document.getElementById('temperatureSlider').value),
+                        max_tokens: parseInt(document.getElementById('maxTokensInput').value)
                     })
                 });
-                
+
                 hideTypingIndicator();
-                
+
                 if (response.ok) {
                     const data = await response.json();
-                    
-                    // 流式显示回复 | Stream response
-                    await streamResponse(data.response || data.content || '抱歉，我无法处理您的请求。');
+                    sessionId = data.session_id;
+                    await streamResponse(data.response || '抱歉，无法处理请求。');
                 } else {
-                    addMessage('assistant', '❌ 请求失败，请检查网络连接或 API 配置。');
+                    const errData = await response.json().catch(() => ({}));
+                    addMessage('assistant', `❌ 请求失败 (${response.status}): ${errData.detail || '未知错误'}\n\n请检查网络连接或 API 配置。`);
                 }
-                
             } catch (error) {
                 hideTypingIndicator();
-                console.error('Error:', error);
-                addMessage('assistant', `❌ 连接错误: ${error.message}\n\n请确保：\n1. 后端服务正在运行\n2. API 密钥已正确配置`);
+                addMessage('assistant', `❌ 连接错误: ${error.message}\n\n请确保后端服务正在运行且 API 已正确配置。`);
             }
-            
-            isGenerating = false;
-            updateSendButton();
+
+            isGenerating = false; updateSendButton();
         }
 
         function sendQuickAction(text) {
@@ -1108,194 +868,103 @@
 
         function addMessage(role, content) {
             messages.push({ role, content });
-            
             const container = document.getElementById('messagesContainer');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-            
-            const avatarIcon = role === 'user' ? '👤' : '🤖';
-            const formattedContent = role === 'assistant' ? formatMessage(content) : escapeHtml(content);
-            
-            messageDiv.innerHTML = `
-                <div class="avatar">${avatarIcon}</div>
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.innerHTML = `
+                <div class="avatar">${role==='user'?'👤':'🤖'}</div>
                 <div class="message-content">
-                    <div class="message-bubble">${formattedContent}</div>
-                </div>
-            `;
-            
-            container.appendChild(messageDiv);
+                    <div class="message-bubble">${role==='assistant'?formatMessage(content):escapeHtml(content)}</div>
+                </div>`;
+            container.appendChild(div);
             container.scrollTop = container.scrollHeight;
-            
-            // 更新历史记录 | Update history
             updateChatHistory(content);
         }
 
         async function streamResponse(text) {
             const container = document.getElementById('messagesContainer');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message assistant';
-            
-            messageDiv.innerHTML = `
-                <div class="avatar">🤖</div>
-                <div class="message-content">
-                    <div class="message-bubble" id="streamingContent"></div>
-                </div>
-            `;
-            
-            container.appendChild(messageDiv);
-            
-            const streamingContent = document.getElementById('streamingContent');
-            
-            // 模拟打字效果 | Simulate typing effect
-            const words = text.split('');
-            for (let i = 0; i < words.length; i++) {
-                streamingContent.innerHTML = formatMessage(text.slice(0, i + 1));
+            const div = document.createElement('div');
+            div.className = 'message assistant';
+            div.innerHTML = `<div class="avatar">🤖</div><div class="message-content"><div class="message-bubble" id="streamingContent"></div></div>`;
+            container.appendChild(div);
+            const el = document.getElementById('streamingContent');
+
+            for (let i = 0; i < text.length; i++) {
+                el.innerHTML = formatMessage(text.slice(0, i + 1));
                 container.scrollTop = container.scrollHeight;
-                await new Promise(resolve => setTimeout(resolve, 10));
+                await new Promise(r => setTimeout(r, 8));
             }
-            
-            // 最终格式化 | Final formatting
-            streamingContent.innerHTML = formatMessage(text);
+
+            el.innerHTML = formatMessage(text);
             messages.push({ role: 'assistant', content: text });
-            
-            // 应用代码高亮 | Apply syntax highlighting
-            streamingContent.querySelectorAll('pre code').forEach(block => {
-                hljs.highlightElement(block);
-            });
+            el.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
         }
 
         function formatMessage(content) {
-            if (typeof marked !== 'undefined') {
-                return marked.parse(content);
-            }
+            if (typeof marked !== 'undefined') return marked.parse(content);
             return escapeHtml(content).replace(/\n/g, '<br>');
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
 
         function showTypingIndicator() {
-            const container = document.getElementById('messagesContainer');
-            const indicator = document.createElement('div');
-            indicator.className = 'message assistant';
-            indicator.id = 'typingIndicator';
-            indicator.innerHTML = `
-                <div class="avatar">🤖</div>
-                <div class="message-content">
-                    <div class="message-bubble">
-                        <div class="typing-indicator">
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.appendChild(indicator);
-            container.scrollTop = container.scrollHeight;
+            const c=document.getElementById('messagesContainer');
+            const d=document.createElement('div'); d.className='message assistant'; d.id='typingIndicator';
+            d.innerHTML=`<div class="avatar">🤖</div><div class="message-content"><div class="message-bubble"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div></div>`;
+            c.appendChild(d); c.scrollTop=c.scrollHeight;
         }
 
-        function hideTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
+        function hideTypingIndicator() { const e=document.getElementById('typingIndicator'); if(e)e.remove(); }
 
         function updateSendButton() {
-            const btn = document.getElementById('sendBtn');
-            btn.disabled = isGenerating;
-            btn.innerHTML = isGenerating 
-                ? '<i class="fas fa-spinner fa-spin"></i>' 
-                : '<i class="fas fa-arrow-up"></i>';
+            const b=document.getElementById('sendBtn');
+            b.disabled=isGenerating; b.innerHTML=isGenerating?'<i class="fas fa-spinner fa-spin"></i>':'<i class="fas fa-arrow-up"></i>';
         }
 
-        function updateChatHistory(lastMessage) {
-            const history = document.getElementById('chatHistory');
-            const preview = lastMessage.slice(0, 30) + (lastMessage.length > 30 ? '...' : '');
-            
-            history.innerHTML = `
-                <div class="history-item active">
-                    <i class="fas fa-message"></i>
-                    <span class="history-text">${escapeHtml(preview)}</span>
-                </div>
-            `;
+        function updateChatHistory(msg) {
+            const h=document.getElementById('chatHistory');
+            const preview=msg.slice(0,30)+(msg.length>30?'...':'');
+            h.innerHTML=`<div class="history-item active"><i class="fas fa-message"></i><span class="history-text">${escapeHtml(preview)}</span></div>`;
         }
 
         // ==================== 输入处理 | Input Handling ====================
-        function handleKeyDown(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-        }
+        function handleKeyDown(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()} }
+        function autoResize(ta) { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,200)+'px'; }
 
         // ==================== 设置管理 | Settings Management ====================
-        function loadSettings() {
+        function loadLocalSettings() {
             const saved = localStorage.getItem('yanzhiti_settings');
             if (saved) {
-                const settings = JSON.parse(saved);
-                if (settings.apiKey) document.getElementById('apiKeyInput').value = settings.apiKey;
-                if (settings.model) {
-                    document.getElementById('settingsModelSelect').value = settings.model;
-                    document.getElementById('modelSelector').value = settings.model.split('/')[0];
-                }
-                if (settings.temperature) {
-                    document.getElementById('temperatureSlider').value = settings.temperature;
-                    document.getElementById('tempValue').textContent = settings.temperature;
-                }
-                if (settings.maxTokens) document.getElementById('maxTokensInput').value = settings.maxTokens;
+                const s = JSON.parse(saved);
+                if (s.temperature) { document.getElementById('temperatureSlider').value=s.temperature; document.getElementById('tempValue').textContent=s.temperature; }
+                if (s.maxTokens) document.getElementById('maxTokensInput').value = s.maxTokens;
             }
-            
-            // 温度滑块事件 | Temperature slider event
-            document.getElementById('temperatureSlider').addEventListener('input', (e) => {
-                document.getElementById('tempValue').textContent = e.target.value;
-            });
         }
 
-        function saveSettings() {
-            const settings = {
-                apiKey: document.getElementById('apiKeyInput').value,
-                model: document.getElementById('settingsModelSelect').value,
+        function saveGlobalSettings() {
+            const s = {
                 temperature: document.getElementById('temperatureSlider').value,
-                maxTokens: document.getElementById('maxTokensInput').value
+                maxTokens: document.getElementById('maxTokensInput').value,
+                model: document.getElementById('settingsModelSelect').value,
             };
-            
-            localStorage.setItem('yanzhiti_settings', JSON.stringify(settings));
-            
-            alert('✅ 设置已保存！');
+            localStorage.setItem('yanzhiti_settings', JSON.stringify(s));
+            alert('✅ 全局设置已保存！');
             toggleSettings();
         }
 
-        function runSetupWizard() {
-            alert('配置向导将在终端中启动...\n\n请运行: yzt --setup');
-            toggleSettings();
-        }
-
-        function runDiagnose() {
-            alert('诊断工具将在终端中启动...\n\n请运行: yzt --diagnose');
-            toggleSettings();
-        }
+        function runSetupWizard() { alert('配置向导将在终端启动...\n\n运行: yzt --setup'); toggleSettings(); }
+        function runDiagnose() { alert('诊断工具将在终端启动...\n\n运行: yzt --diagnose'); toggleSettings(); }
 
         // ==================== 复制功能 | Copy Functionality ====================
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('copy-btn') || e.target.closest('.copy-btn')) {
                 const btn = e.target.closest('.copy-btn') || e.target;
-                const codeBlock = btn.closest('pre');
-                if (codeBlock) {
-                    const code = codeBlock.querySelector('code');
+                const pre = btn.closest('pre');
+                if (pre) {
+                    const code = pre.querySelector('code');
                     if (code) {
                         navigator.clipboard.writeText(code.textContent).then(() => {
-                            btn.innerHTML = '<i class="fas fa-check"></i>';
-                            setTimeout(() => {
-                                btn.innerHTML = '<i class="fas fa-copy"></i>';
-                            }, 2000);
+                            btn.innerHTML='<i class="fas fa-check"></i>'; setTimeout(()=>{btn.innerHTML='<i class="fas fa-copy"></i>'},2000);
                         });
                     }
                 }

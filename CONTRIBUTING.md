@@ -1,394 +1,247 @@
-# 🤝 贡献指南 | Contributing Guide
+# 贡献指南 | Contributing to 衍智体 (YANZHITI)
 
-首先，感谢您对衍智体 (YANZHITI) 感兴趣！我们欢迎各种形式的贡献。
+感谢您对衍智体项目的关注！我们欢迎各种形式的贡献。
 
-本文档将帮助您了解如何参与项目开发。
+## 📋 目录 | Contents
 
----
-
-## 📋 目录
-
-1. [行为准则](#行为准则)
-2. [贡献方式](#贡献方式)
-3. [开发环境设置](#开发环境设置)
-4. [提交流程](#提交流程)
-5. [代码规范](#代码规范)
-6. [测试](#测试)
-7. [文档](#文档)
-8. [常见问题](#常见问题)
+- [行为准则](#-行为准则-code-of-conduct)
+- [如何贡献](#-如何贡献-how-to-contribute)
+- [开发环境搭建](#-开发环境-setup)
+- [代码规范](#-代码规范-code-style)
+- [提交规范](#-提交规范-commit-guidelines)
+- [Pull Request 流程](#-pull-request-流程)
+- [测试要求](#-测试要求-testing)
 
 ---
 
-## 行为准则
+## 🤝 行为准则 | Code of Conduct
 
-本项目遵循 [Contributor Covenant](https://www.contributor-covenant.org/) 行为准则。
+- **尊重他人** - 保持礼貌和建设性的讨论
+- **包容开放** - 欢迎不同背景的贡献者
+- **专注技术** - 讨论聚焦于代码和功能本身
+- **遵守许可** - 所有贡献遵循项目开源协议
 
-**我们的承诺**:
-- 营造开放、友好的环境
-- 尊重不同观点和经验
-- 优雅地接受建设性批评
-- 关注对社区最有利的事情
-- 对其他社区成员表示同理心
+## 🚀 如何贡献 | How to Contribute
 
-**不可接受的行为**:
-- 使用性化的语言或图像
-- 人身攻击或侮辱性评论
-- 公开或私下骚扰
-- 未经许可发布他人信息
-- 其他不道德或不专业的行为
+### 贡献方式
 
----
+| 类型 | 说明 |
+|------|------|
+| 🐛 Bug 报告 | 发现问题请提 Issue，尽量提供复现步骤 |
+| 💡 功能建议 | 新功能想法请先提 Issue 讨论 |
+| 🔧 代码贡献 | 修复 Bug 或实现新功能（见下方流程） |
+| 📖 文档改进 | 中英文文档、示例、教程等 |
+| 🌐 国际化 | 多语言翻译支持 |
 
-## 贡献方式
+### 不适合的情况
 
-### 1. 报告 Bug 🐛
-
-发现 Bug? 请提交 Issue:
-
-1. 使用 GitHub Issue 模板
-2. 填写详细信息:
-   - 复现步骤
-   - 预期行为
-   - 实际行为
-   - 环境信息 (OS, Python 版本等)
-   - 截图 (如有)
-
-### 2. 提出建议 💡
-
-有新功能想法？请提交 Issue:
-
-1. 使用 Feature Request 模板
-2. 详细描述:
-   - 功能用途
-   - 使用场景
-   - 实现思路 (可选)
-
-### 3. 提交代码 🔀
-
-**首次贡献**:
-
-1. Fork 项目
-2. Clone 到本地
-   ```bash
-   git clone https://github.com/your-username/yanzhiti.git
-   cd yanzhiti
-   ```
-3. 创建分支
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-4. 开发并测试
-5. 提交更改
-   ```bash
-   git add .
-   git commit -m "feat: add amazing feature"
-   ```
-6. 推送到分支
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-7. 创建 Pull Request
-
-**代码审查流程**:
-1. 自动检查 (CI/CD)
-2. 维护者审查
-3. 反馈修改
-4. 合并到主分支
-
-### 4. 改进文档 📖
-
-文档同样重要！欢迎:
-
-- 修正拼写/语法错误
-- 改进说明清晰度
-- 添加示例代码
-- 翻译文档 (多语言支持)
-
-### 5. 帮助他人 💬
-
-在以下方面提供帮助:
-
-- 回答 Issue 中的问题
-- 分享使用经验
-- 创建教程和示例
+- 纯粹的 UI 偏好调整
+- 与项目目标不符的功能
+- 未经过讨论的大型重构
 
 ---
 
-## 开发环境设置
+## 🛠️ 开发环境 | Setup
 
-### 1. 克隆项目
+### 前置要求
 
 ```bash
-git clone https://github.com/yanzhiti/yanzhiti.git
-cd yanzhiti
-```
+# Python 版本 | Python version
+Python >= 3.10 (推荐 3.11+)
 
-### 2. 创建虚拟环境
-
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. 安装依赖
-
-```bash
-# 安装开发依赖
+# 依赖管理 | Dependencies
 pip install -e ".[dev]"
 ```
 
-### 4. 配置 API
+### 克隆和安装
 
 ```bash
-# 运行配置向导
-yzt --setup
+# 克隆仓库 | Clone repository
+git clone https://github.com/yanzhiti/yanzhiti.git
+cd yanzhiti
 
-# 或手动创建 .env 文件
-cat > .env << EOF
-YANZHITI_API_KEY=your-api-key
-YANZHITI_BASE_URL=https://openrouter.ai/api/v1
-YANZHITI_MODEL=openai/gpt-3.5-turbo
-EOF
+# 创建虚拟环境 | Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或 venv\Scripts\activate  # Windows
+
+# 安装依赖 | Install dependencies
+pip install -e ".[dev]"
+
+# 验证安装 | Verify installation
+yzt --version
 ```
 
-### 5. 运行测试
+### 项目结构概览
 
-```bash
-# 运行所有测试
-pytest
-
-# 运行特定测试
-pytest tests/test_tools.py
-
-# 查看测试覆盖率
-pytest --cov=src/yanzhiti --cov-report=html
+```
+yanzhiti/
+├── src/yanzhiti/          # 核心源码
+│   ├── core/              # 核心引擎、供应商系统
+│   │   ├── providers.py   # AI 供应商配置 (17+)
+│   │   ├── unified_engine.py  # 统一 AI 引擎
+│   │   └── builtin_models.py  # 内置模型管理
+│   ├── web/               # Web GUI
+│   │   ├── server.py      # FastAPI 后端
+│   │   └── static/        # 前端静态文件
+│   ├── cli/               # 命令行工具
+│   └── tools/             # 工具集
+├── tests/                 # 测试文件
+├── docs/                  # 文档
+└── pyproject.toml         # 项目配置
 ```
 
 ---
 
-## 提交流程
+## ✍️ 代码规范 | Code Style
 
-### Git 工作流
+### Python 规范
 
-1. **分支命名**
-   - `feature/xxx` - 新功能
-   - `fix/xxx` - Bug 修复
-   - `docs/xxx` - 文档更新
-   - `refactor/xxx` - 重构
+```bash
+# 自动格式化 | Auto-format
+ruff format src/ tests/
 
-2. **提交信息格式**
+# Lint 检查 | Lint check
+ruff check src/ tests/
 
-   ```
-   <类型> (<范围>): <描述>
-   
-   [可选的正文]
-   
-   [可选的脚注]
-   ```
+# 类型检查 | Type checking
+mypy src/yanzhiti/
+```
 
-   **类型说明**:
-   - `feat`: 新功能
-   - `fix`: Bug 修复
-   - `docs`: 文档更新
-   - `style`: 代码格式
-   - `refactor`: 重构
-   - `test`: 测试
-   - `chore`: 构建/工具
+**关键规则**:
+- 遵循 PEP 8
+- 使用 Ruff 格式化器
+- 行宽: 100 字符
+- 所有函数必须有 docstring
+- 注释使用中文 + 英文双语
 
-   **示例**:
-   ```
-   feat (setup): 添加配置向导功能
-   
-   - 实现交互式配置向导
-   - 支持 5 大 AI 提供商
-   - 自动测试 API 连接
-   
-   Closes #123
-   ```
+### JavaScript/CSS 规范
 
-3. **Pull Request 流程**
-   - 填写 PR 模板
-   - 关联 Issue
-   - 等待 CI 通过
-   - 响应审查意见
-   - 合并代码
+- 使用 2 空格缩进
+- CSS 变量统一在 `:root` 定义
+- 函数命名使用 camelCase
+- 类名使用 kebab-case
 
 ---
 
-## 代码规范
+## 📝 提交规范 | Commit Guidelines
 
-### Python 代码风格
+### Commit Message 格式
 
-遵循 [PEP 8](https://pep8.org/) 规范:
+```
+<类型> (<范围>): <描述>
 
-1. **命名规范**
-   ```python
-   # 变量和函数：小写 + 下划线
-   def my_function():
-       pass
-   
-   # 类：大驼峰
-   class MyClass:
-       pass
-   
-   # 常量：全大写 + 下划线
-   MAX_VALUE = 100
-   ```
+[可选的正文]
 
-2. **注释要求**
-   ```python
-   def calculate_sum(a, b):
-       """
-       计算两个数的和
-       
-       Args:
-           a: 第一个数
-           b: 第二个数
-           
-       Returns:
-           两数之和
-       """
-       return a + b
-   ```
+[可选的脚注]
+```
 
-3. **代码格式化**
+### 类型说明
+
+| 类型 | 说明 | 示例 |
+|------|------|------|
+| `feat` | 新功能 | `feat (providers): 添加 Groq 供应商` |
+| `fix` | Bug 修复 | `fix (server): 修复 WebSocket 断连问题` |
+| `docs` | 文档更新 | `docs (readme): 更新安装指南` |
+| `style` | 代码格式 | `style: 统一 import 排序` |
+| `refactor` | 重构 | `refactor (engine): 简化 failover 逻辑` |
+| `test` | 测试相关 | `test (core): 添加供应商单元测试` |
+| `chore` | 构建/工具 | `chore: 更新 CI 配置` |
+
+---
+
+## 🔀 Pull Request 流程
+
+### PR 步骤
+
+1. **Fork 并克隆**
    ```bash
-   # 使用 Black 格式化
-   black src tests
-   
-   # 使用 Ruff 检查
-   ruff check src tests
+   git clone https://github.com/<your-username>/yanzhiti.git
    ```
 
-### 工具配置
+2. **创建特性分支**
+   ```bash
+   git checkout -b feature/你的功能名
+   ```
 
-项目已配置以下工具:
+3. **编写代码并测试**
+   ```bash
+   ruff check src/ --fix
+   ruff format src/
+   pytest tests/ -v
+   ```
 
-- **Black** - 代码格式化
-- **Ruff** - 代码检查
-- **Mypy** - 类型检查
-- **Pytest** - 测试框架
+4. **提交并推送**
+   ```bash
+   git commit -m "feat (scope): 你的改动"
+   git push origin feature/你的功能名
+   ```
+
+5. **创建 PR** - 在 GitHub 上创建 Pull Request
+
+### PR 模板
+
+```markdown
+## 改动类型
+- [ ] Bug 修复
+- [ ] 新功能
+- [ ] 文档改进
+- [ ] 其他: _____
+
+## 改动描述
+简要描述你的改动内容和原因。
+
+## 测试情况
+- [ ] 已运行 `pytest tests/`
+- [ ] 已通过 `ruff check` 检查
+- [ ] 已通过 `ruff format` 格式化
+
+## 相关 Issue
+Closes #(Issue 编号)
+```
 
 ---
 
-## 测试
+## 🧪 测试要求 | Testing
 
 ### 运行测试
 
 ```bash
-# 所有测试
-pytest
+# 全部测试 | All tests
+pytest tests/ -v
 
-# 特定文件
-pytest tests/test_tools.py
+# 覆盖率报告 | Coverage report
+pytest tests/ --cov=src/yanzhiti --cov-report=html
 
-# 特定函数
-pytest tests/test_tools.py::test_file_read
-
-# 带覆盖率
-pytest --cov=src/yanzhiti
+# 单个模块 | Single module
+pytest tests/test_core.py -v
 ```
 
-### 编写测试
+### 新功能必须包含测试
 
-测试文件命名：`test_*.py`
-
-```python
-def test_example():
-    """测试示例"""
-    assert 1 + 1 == 2
-```
-
-### 测试要求
-
-- 核心功能覆盖率 >80%
-- 包含正常和异常情况
-- 测试独立，无副作用
+- 核心功能: 单元测试覆盖率 > 80%
+- API 端点: 至少包含正常和异常两种场景
+- 工具类: 包含边界条件测试
 
 ---
 
-## 文档
+## 💡 建议 | Tips for Contributors
 
-### 文档结构
-
-```
-docs/
-├── README.md          # 主文档
-├── QUICKSTART.md      # 快速入门
-├── BUILDING.md        # 打包指南
-├── IMPLEMENTATION_SUMMARY.md  # 实施总结
-└── TOP10_IMPROVEMENT_PLAN.md  # 改进计划
-```
-
-### 文档规范
-
-1. **中英双语** - 重要文档提供双语版本
-2. **清晰简洁** - 避免冗长
-3. **包含示例** - 代码示例帮助理解
-4. **格式统一** - 遵循 Markdown 规范
+1. **先看 Issue** - 在动手前查看是否有类似的工作在进行
+2. **小步快跑** - 每个 PR 尽量保持专注和精简
+3. **写好文档** - 公开的 API 和复杂逻辑需要注释
+4. **关注性能** - 注意异步操作和资源释放
+5. **多语言友好** - UI 文本考虑国际化
 
 ---
 
-## 常见问题
+## 📞 联系方式 | Contact
 
-### Q: 如何开始第一次贡献？
-**A**: 从简单的任务开始，比如:
-- 修正文档拼写错误
-- 添加注释
-- 修复简单的 Bug
-
-查看 [Good First Issues](https://github.com/yanzhiti/yanzhiti/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-
-### Q: 提交后多久能得到反馈？
-**A**: 通常在 24 小时内。如果超过 48 小时，请礼貌地提醒。
-
-### Q: 可以同时提交多个 PR 吗？
-**A**: 可以，但建议先完成一个再开始下一个。
-
-### Q: 需要签署 CLA 吗？
-**A**: 不需要。提交代码即表示您同意项目使用您的贡献。
+- **Issue**: [GitHub Issues](https://github.com/yanzhiti/yanzhiti/issues)
+- **讨论**: [GitHub Discussions](https://github.com/yanzhiti/yanzhiti/discussions)
 
 ---
 
-## 🎯 项目目标
+**感谢您为衍智体做出贡献！🎉**
 
-**我们的目标：成为 GitHub 上 Star 数前 10 的开源项目！**
-
-每个贡献都在帮助我们更接近这个目标。
-
----
-
-## 📞 联系方式
-
-- 💬 GitHub Discussions
-- 📧 Email: contact@yanzhiti.com
-- 🐦 Twitter: @yanzhiti (Coming Soon)
-
----
-
-## 🙏 致谢
-
-感谢所有为项目做出贡献的开发者！
-
-特别感谢:
-- 核心贡献者
-- 文档翻译者
-- Bug 报告者
-- 社区帮助者
-
----
-
-<div align="center">
-
-**衍智体 (YANZHITI)** - 让 AI 助力您的编程之旅
-
-[开始贡献](#贡献方式) | [查看 Issue](https://github.com/yanzhiti/yanzhiti/issues) | [加入讨论](https://github.com/yanzhiti/yanzhiti/discussions)
-
-⭐ [Star 项目](https://github.com/yanzhiti/yanzhiti/stargazers)
-
-</div>
+*每个贡献者都会被记录在 [CONTRIBUTORS.md](CONTRIBUTORS.md) 中。*
