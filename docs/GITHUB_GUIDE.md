@@ -330,7 +330,94 @@ git push origin --tags      # 推送所有标签
 
 ---
 
-## 6. 常见问题解答
+## 6. Python 环境与 pip 安装故障排除
+
+### 6.1 确认 Python 版本
+
+**衍智体 requires Python 3.10 或更高版本。** 查看当前 Python 版本：
+
+```powershell
+# Windows
+python --version
+
+# Linux / macOS
+python3 --version
+```
+
+如果显示 `Python 3.9.x` 或更低版本，需要升级 Python。
+
+**下载 Python（免费）：**
+- 官网：https://www.python.org/downloads/
+- 选择 **Python 3.10、3.11 或 3.12**（推荐 3.11）
+- 安装时 **务必勾选 "Add Python to PATH"**（非常重要！）
+
+### 6.2 pip 识别不了的解决方法
+
+Windows 上 `pip` 命令无法识别是最常见的问题，原因通常是 **Python 未加入 PATH**。
+
+#### 方法一：使用 python -m pip（推荐）
+
+```powershell
+# 替代方案，直接用 Python 模块方式运行 pip
+python -m pip install yanzhiti
+```
+
+#### 方法二：修复 PATH 环境变量
+
+1. 按 `Win + R`，输入 `sysdm.cpl`，回车
+2. 点击 **高级** → **环境变量**
+3. 在 **系统变量** 中找到 `Path`，双击编辑
+4. 点击 **新建**，添加以下两条路径：
+   ```
+   C:\Users\你的用户名\AppData\Local\Programs\Python\Python311\
+   C:\Users\你的用户名\AppData\Local\Programs\Python\Python311\Scripts\
+   ```
+   （路径中的 `Python311` 换成你实际安装的版本号）
+5. 点击确定，**重新打开 PowerShell 窗口**，再运行 `pip --version`
+
+#### 方法三：重新安装 Python
+
+如果以上方法都不行，重新安装 Python：
+
+1. 从 https://www.python.org/downloads/ 下载最新版
+2. 运行安装程序
+3. **重要**：勾选底部的 **"Add Python to PATH"**
+4. 选择 **"Customize installation"**，确保所有选项都勾选
+5. 安装完成后，**重新打开 PowerShell**，输入：
+   ```powershell
+   pip --version
+   python --version
+   ```
+   如果都能输出版本号，说明安装成功！
+
+### 6.3 验证安装是否成功
+
+```powershell
+# 安装衍智体
+pip install yanzhiti
+
+# 验证安装
+yzt --version
+
+# 或
+python -m yanzhiti --version
+```
+
+如果看到版本号（如 `2.2.0`），说明安装成功！
+
+### 6.4 常见 pip 错误及解决方法
+
+| 错误信息 | 原因 | 解决方法 |
+|---------|------|---------|
+| `'pip' is not recognized` | Python 未加入 PATH | 见上方"方法二"修复 PATH |
+| `WARNING: Ignoring invalid distribution` | pip 缓存损坏 | `pip cache purge` 清理缓存 |
+| `Read timed out` | 网络超时 | `pip install --default-timeout=100 yanzhiti` |
+| `Permission denied` | 权限不足 | Windows: 用管理员身份打开 PowerShell |
+| `Python version mismatch` | Python 版本过低 | 升级 Python 到 3.10+ |
+
+---
+
+## 7. 常见问题解答
 
 ### Q1: 忘记了 GitHub 密码怎么办？
 

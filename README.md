@@ -220,6 +220,7 @@ YANZHITI:
 ## 📚 文档 | Documentation
 
 - 📖 [完整文档 | Full Documentation](docs/)
+- 🚀 [快速上手指南（新手必读）| Quick Start Guide](docs/QUICKSTART.md)
 - 🔧 [工具列表 | Available Tools](docs/tools.md)
 - 🌐 [API 参考 | API Reference](docs/api.md)
 - ❓ [常见问题 | FAQ](docs/faq.md)

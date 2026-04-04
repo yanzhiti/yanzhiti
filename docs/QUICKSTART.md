@@ -1,318 +1,494 @@
-# 🚀 快速入门指南 | Quick Start Guide
+# 衍智体 (YANZHITI) 快速上手指南
 
-> 5 分钟快速开始使用衍智体 | Get started with YANZHITI in 5 minutes
-
-[![快速开始](https://img.shields.io/badge/快速开始-5 分钟-green)]()
-[![难度](https://img.shields.io/badge/难度-简单-blue)]()
-[![更新时间](https://img.shields.io/badge/更新时间-2024--04-yellow)]()
+> 本指南面向**完全没有编程经验的新手**，手把手教你在 Windows、Mac 或 Linux 电脑上安装和使用衍智体。
 
 ---
 
-## 📋 目录 | Table of Contents
+## 📋 目录
 
-1. [安装](#安装)
-2. [配置](#配置)
-3. [运行](#运行)
-4. [第一个任务](#第一个任务)
-5. [下一步](#下一步)
+1. [什么是衍智体？](#1-什么是衍智体)
+2. [第一步：安装 Python](#2-第一步安装-python)（如果电脑上没有 Python）
+3. [第二步：安装衍智体](#3-第二步安装-衍智体)
+4. [第三步：启动衍智体](#4-第三步启动-衍智体)
+5. [首次配置 AI](#5-首次配置-ai)
+6. [常见问题与解决方法](#6-常见问题与解决方法)
+7. [完全卸载指南](#7-完全卸载指南)
 
 ---
 
-## 1️⃣ 安装 | Installation
+## 1. 什么是衍智体？
 
-### 方式 A: 一键安装 (推荐) | One-Click Install (Recommended)
+衍智体是一个**免费的 AI 编程助手**，可以帮你：
 
-**Windows:**
+- 🤖 用自然语言问问题，自动生成代码
+- 🐛 帮你找出代码中的 bug
+- 📝 解释一段代码是做什么的
+- 🔧 自动执行文件操作、Git 操作等
+
+**完全免费，开源**，不需要支付任何费用。
+
+---
+
+## 2. 第一步：安装 Python
+
+衍智体基于 Python 开发，运行它需要先安装 Python。
+
+### 2.1 检查电脑是否已安装 Python
+
+**Windows：**
+1. 按 `Win + X`，选择 **Windows PowerShell**（或 **终端**）
+2. 输入：
+
 ```powershell
-winget install yanzhiti
+python --version
 ```
 
-**macOS:**
+**Mac：**
+1. 打开 **终端**（按 `Command + 空格`，搜索"终端"）
+2. 输入：
+
 ```bash
-brew install yanzhiti
+python3 --version
 ```
 
-**Linux:**
+**Linux：**
+1. 打开**终端**
+2. 输入：
+
 ```bash
-# Ubuntu/Debian
-sudo apt install yanzhiti
+python3 --version
 ```
 
-### 方式 B: 从源码安装 | Install from Source
+**如果显示类似 `Python 3.11.5`，说明已经安装了 Python。**
 
+**如果显示"找不到命令"，说明没有安装，继续下一步。**
+
+---
+
+### 2.2 Windows：下载并安装 Python
+
+1. 打开浏览器，访问：https://www.python.org/downloads/
+2. 点击 **Download Python 3.12.x**（或 3.11.x）
+
+> ⚠️ **注意**：请选择 **3.10、3.11 或 3.12** 版本，**不要**选择 3.9 或更低版本。
+
+**安装界面设置（关键步骤）：**
+
+```
+✅ 一定要勾选：Add Python to PATH   ← 这个非常重要！！！
+
+如果不勾选，后续命令无法使用！！！
+```
+
+3. 点击 **Install Now**
+4. 等待安装完成（大约 1-3 分钟）
+5. 点击 **Close**
+
+**验证安装成功：**
+- **重新打开 PowerShell**
+- 输入 `python --version`，能看到版本号即可
+
+---
+
+### 2.3 Mac：安装 Python
+
+**方法一：使用 Homebrew（推荐）**
+
+1. 打开终端，安装 Homebrew（如果没有）：
 ```bash
-# 1. 克隆仓库 | Clone repository
-git clone https://github.com/yanzhiti/yanzhiti.git
-cd yanzhiti
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-# 2. 创建虚拟环境 | Create virtual environment
-python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # macOS/Linux
+2. 使用 Homebrew 安装 Python：
+```bash
+brew install python
+```
 
-# 3. 安装依赖 | Install dependencies
-pip install -e ".[dev]"
+**方法二：直接从官网下载**
+1. 访问 https://www.python.org/downloads/
+2. 下载 macOS 安装包
+3. 双击运行，按提示安装
+
+**验证安装：**
+```bash
+python3 --version
+pip3 --version
 ```
 
 ---
 
-## 2️⃣ 配置 | Configuration
+### 2.4 Linux：安装 Python
 
-### 方式 A: 使用配置向导 (推荐) | Using Setup Wizard (Recommended)
+**Ubuntu / Debian：**
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-venv
+```
+
+**Fedora：**
+```bash
+sudo dnf install python3 python3-pip
+```
+
+**Arch Linux：**
+```bash
+sudo pacman -S python python-pip
+```
+
+**验证安装：**
+```bash
+python3 --version
+pip3 --version
+```
+
+---
+
+## 3. 第二步：安装 衍智体
+
+### Windows
+
+打开 PowerShell（**以管理员身份运行**），输入：
+
+```powershell
+pip install yanzhiti
+```
+
+### Mac
+
+打开终端，输入：
 
 ```bash
-# 运行配置向导
-yzt --setup
-
-# 或
-yanzhiti --setup
+pip3 install yanzhiti
 ```
 
-配置向导会引导您完成:
-1. 选择 AI 提供商 (OpenRouter/OpenAI/DeepSeek 等)
-2. 输入 API 密钥
-3. 选择模型
-4. 测试连接
-5. 保存配置
+### Linux
 
-### 方式 B: 手动配置 | Manual Configuration
-
-1. **获取 API 密钥 | Get API Key**
-
-   访问 [OpenRouter](https://openrouter.ai/keys) 或其他提供商获取 API 密钥
-
-2. **创建 .env 文件 | Create .env File**
-
-在项目根目录创建 `.env` 文件:
+打开终端，输入：
 
 ```bash
-# Windows PowerShell
-notepad .env
-
-# macOS/Linux
-nano .env
+pip3 install yanzhiti
 ```
 
-添加以下内容:
-
-```env
-# API 配置
-YANZHITI_API_KEY=sk-or-v1-your-api-key-here
-YANZHITI_BASE_URL=https://openrouter.ai/api/v1
-YANZHITI_MODEL=openai/gpt-3.5-turbo
-
-# 模型参数
-YANZHITI_MAX_TOKENS=4096
-YANZHITI_TEMPERATURE=1.0
+**如果看到类似下面的文字，说明安装成功：**
+```
+Successfully installed yanzhiti-2.2.0
 ```
 
-3. **测试配置 | Test Configuration**
+---
+
+## 4. 第三步：启动衍智体
+
+安装成功后，启动衍智体：
+
+| 操作系统 | 启动命令 |
+|---------|---------|
+| Windows | `yzt` |
+| Mac | `yzt` 或 `python3 -m yanzhiti` |
+| Linux | `yzt` 或 `yanzhiti` |
+
+### 4.1 启动方式一览
+
+| 命令 | 说明 |
+|------|------|
+| `yzt` | 启动交互式对话（最常用） |
+| `yzt --gui` | 启动网页界面（在浏览器中使用） |
+| `yzt --setup` | 重新配置 AI 设置 |
+| `yzt --diagnose` | 运行系统诊断 |
+
+> 💡 **如果提示"找不到命令"**，尝试：
+> - `python3 -m yanzhiti`（Mac/Linux）
+> - `python -m yanzhiti`（Windows）
+
+---
+
+## 5. 首次配置 AI
+
+第一次运行 `yzt` 时，会自动进入配置向导。
+
+### 5.1 选择使用模式
+
+```
+🤖 衍智体配置向导
+
+请选择 AI 供应商模式：
+
+  [1] ☁️ 云端模式 (推荐) — 使用 OpenRouter 等云端 API
+  [2] 🖥️ 本地模式 — 使用 Ollama 等本地模型
+  [3] 🔧 内置模式 — 无需配置，内置小模型可用
+
+请输入选项 (1/2/3):
+```
+
+**新手推荐选择 [1] 云端模式**，然后按照提示输入 API Key。
+
+### 5.2 什么是 API Key？
+
+API Key 就像一个**密码**，用于连接云端 AI 服务。
+
+**推荐使用 OpenRouter（最简单）：**
+1. 打开 https://openrouter.ai/
+2. 注册账号（可以用 Google 登录）
+3. 点击左侧 **Keys** → **Create Key**
+4. 复制生成的 Key（一串随机字符）
+
+### 5.3 没有 API Key 能用吗？
+
+可以！选择 **内置模式 [3]**，会有一个内置的小模型可以体验基本功能，但能力有限。
+
+---
+
+## 6. 常见问题与解决方法
+
+### 问题1：Windows 提示 "'pip' is not recognized"
+
+**这是 Windows 新手最常遇到的问题**，意思是 Windows 找不到 Python。
+
+#### 解决方法一：用 python -m pip 代替（最简单）
+
+```powershell
+python -m pip install yanzhiti
+```
+
+#### 解决方法二：重新安装 Python 并勾选 PATH
+
+1. 打开 **控制面板** → **程序和功能**
+2. 找到 **Python**，右键点击 **卸载**
+3. 重新下载 Python：https://www.python.org/downloads/
+4. **安装时一定要勾选 "Add Python to PATH"**
+5. 安装完成后，**重新打开 PowerShell**，再试
+
+#### 解决方法三：手动添加 PATH
+
+1. 按 `Win + R`，输入 `sysdm.cpl`，回车
+2. 点击 **高级** 选项卡 → **环境变量**
+3. 在下方 **系统变量** 区域，找到 **Path**，双击
+4. 点击 **新建**，添加这两行：
+   ```
+   C:\Users\你的用户名\AppData\Local\Programs\Python\Python312\
+   C:\Users\你的用户名\AppData\Local\Programs\Python\Python312\Scripts\
+   ```
+   （把"你的用户名"换成你电脑的用户名，Python312 换成你的版本号）
+5. **确定** → **确定** → **确定**
+6. **重新打开 PowerShell**
+
+---
+
+### 问题2：Mac 提示 "Permission denied" 或 "Operation not permitted"
+
+**解决方法：** 使用 sudo 获取管理员权限
 
 ```bash
-# 运行诊断工具
-yzt --diagnose
+sudo pip3 install yanzhiti
 ```
+
+输入你的 Mac 开机密码即可。
 
 ---
 
-## 3️⃣ 运行 | Run
+### 问题3：Linux 提示 "Permission denied"
 
-### 交互式模式 | Interactive Mode
+**解决方法：** 使用 sudo
 
 ```bash
-# 启动交互式界面
-yanzhiti
-
-# 或使用简短命令
-yzt
+sudo pip3 install yanzhiti
 ```
 
-启动后会看到:
+---
 
+### 问题4：安装时提示 "Read timed out"（网络超时）
+
+**解决方法：** 增加超时时间后重试
+
+**Windows：**
+```powershell
+pip install yanzhiti --default-timeout=100
 ```
-╭──────────────────────────────────────────────────────╮
-│ 衍智体 (YANZHITI) - Python Edition                   │
-│ Version: 2.1.88                                      │
-│ Type your query and press Enter. Use Ctrl+C to exit. │
-╰──────────────────────────────────────────────────────╯
 
-You: 
+**Mac / Linux：**
+```bash
+pip3 install yanzhiti --default-timeout=100
 ```
 
-### 单次查询模式 | Single Query Mode
+---
+
+### 问题5：提示 "WARNING: Ignoring invalid distribution"
+
+这是 pip 缓存损坏，不影响正常使用。如果想清理：
+
+**Windows：**
+```powershell
+pip cache purge
+```
+
+**Mac / Linux：**
+```bash
+pip3 cache purge
+```
+
+---
+
+### 问题6：提示 "Python version mismatch"
+
+你的 Python 版本太低了。衍智体需要 **Python 3.10 或更高版本**。
+
+**Windows 解决方法：**
+1. 卸载旧版本 Python
+2. 从 https://www.python.org/downloads/ 下载并安装 **3.10/3.11/3.12**
+
+**Mac 解决方法：**
+```bash
+brew install python@3.11
+```
+
+**Linux 解决方法：**
+```bash
+sudo apt update
+sudo apt install python3.11
+```
+
+---
+
+### 问题7：Mac 提示 "zsh: command not found: pip"
+
+**解决方法：** 用 pip3 代替 pip
 
 ```bash
-# 执行单个任务
-yzt "帮我创建一个 Python 函数"
-
-# 或
-yanzhiti "Help me create a Python function"
+pip3 install yanzhiti
 ```
 
 ---
 
-## 4️⃣ 第一个任务 | First Task
+### 问题8：安装了但运行 `yzt` 提示找不到命令
 
-### 任务 1: 代码生成 | Code Generation
-
-**输入 | Input:**
-```
-帮我创建一个快速排序算法，用 Python 实现
+**Windows 解决方法：**
+```powershell
+python -m yanzhiti
 ```
 
-**期望输出 | Expected Output:**
-```python
-def quick_sort(arr):
-    """快速排序实现"""
-    if len(arr) <= 1:
-        return arr
-    
-    pivot = arr[len(arr) // 2]
-    left = [x for x in arr if x < pivot]
-    middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if x > pivot]
-    
-    return quick_sort(left) + middle + quick_sort(right)
-
-# 测试
-arr = [64, 34, 25, 12, 22, 11, 90]
-print(quick_sort(arr))  # 输出：[11, 12, 22, 25, 34, 64, 90]
+**Mac / Linux 解决方法：**
+```bash
+python3 -m yanzhiti
 ```
 
-### 任务 2: 文件操作 | File Operations
-
-**输入 | Input:**
-```
-读取当前目录下的 README.md 文件，总结主要内容
-```
-
-**期望输出 | Expected Output:**
-```
-我已读取 README.md 文件，主要内容包括:
-
-1. 项目简介：衍智体是一个开源 AI 编程助手
-2. 核心特性：40+ 开发工具集
-3. 安装方法：支持多种安装方式
-4. 使用示例：代码生成、文件操作等
-...
-```
-
-### 任务 3: Git 管理 | Git Management
-
-**输入 | Input:**
-```
-查看当前的 Git 状态
-```
-
-**期望输出 | Expected Output:**
-```
-📊 Git Status:
-  On branch: main
-  Modified files:
-    - src/main.py
-    - README.md
-  
-  No staged changes
+或检查安装位置：
+```bash
+which yzt
+pip3 show yanzhiti
 ```
 
 ---
 
-## 5️⃣ 下一步 | Next Steps
+### 问题9：Linux 提示 "bash: pip3: command not found"
 
-### 学习更多功能 | Learn More Features
+**解决方法：** 安装 pip3
 
-- 📖 [完整文档 | Full Documentation](docs/README.md)
-- 🎯 [使用教程 | Tutorials](docs/tutorials/)
-- 🔧 [可用工具 | Available Tools](docs/tools.md)
-- ❓ [常见问题 | FAQ](docs/faq.md)
-
-### 实践练习 | Practice Exercises
-
-1. **代码重构** | Code Refactoring
-   ```
-   优化这段代码，使其更简洁高效
-   ```
-
-2. **调试帮助** | Debug Help
-   ```
-   分析这个错误并给出修复建议：[粘贴错误信息]
-   ```
-
-3. **文档生成** | Documentation Generation
-   ```
-   为这个函数添加详细的注释和文档字符串
-   ```
-
-4. **测试生成** | Test Generation
-   ```
-   为这个模块创建单元测试
-   ```
-
-### 加入社区 | Join Community
-
-- 💬 [GitHub Discussions](https://github.com/yanzhiti/yanzhiti/discussions)
-- 🐛 [报告问题 | Report Issues](https://github.com/yanzhiti/yanzhiti/issues)
-- ⭐ [给项目 Star](https://github.com/yanzhiti/yanzhiti/stargazers)
+```bash
+sudo apt update
+sudo apt install python3-pip
+```
 
 ---
 
-## 🆘 常见问题 | FAQ
+### 问题10：提示 "SSL" 或 "HTTPS" 相关错误
 
-### Q1: 找不到 API 密钥怎么办？
-**A:** 访问 [OpenRouter](https://openrouter.ai/keys) 或其他 AI 提供商注册获取。推荐使用 OpenRouter，支持多个模型。
+**解决方法：** 更新证书
 
-### Q2: 配置向导无法连接 API？
-**A:** 
-1. 检查网络连接
-2. 确认 API 密钥正确
-3. 检查防火墙设置
-4. 运行 `yzt --diagnose` 诊断问题
+**Windows：**
+```powershell
+python -m pip install --upgrade certifi
+```
 
-### Q3: 如何切换模型？
-**A:** 修改 `.env` 文件中的 `YANZHITI_MODEL` 变量，或重新运行配置向导 `yzt --setup`。
-
-### Q4: 命令不存在怎么办？
-**A:** 
-- Windows: 确保 Scripts 目录已添加到 PATH
-- macOS/Linux: 确保运行 `source venv/bin/activate`
-- 或使用完整路径：`python -m yanzhiti.cli.main`
-
-### Q5: 如何退出交互式模式？
-**A:** 输入 `/exit` 或按 `Ctrl+C`。
+**Mac / Linux：**
+```bash
+sudo pip3 install --upgrade certifi
+```
 
 ---
 
-## 📞 获取帮助 | Get Help
+## 7. 完全卸载指南
 
-如果遇到问题:
+### Windows
 
-1. **查看文档** | Check Documentation
-   - [完整文档](docs/README.md)
-   - [常见问题](docs/faq.md)
+```powershell
+pip uninstall yanzhiti
+```
 
-2. **运行诊断** | Run Diagnostic
-   ```bash
-   yzt --diagnose
-   ```
+清理配置文件夹（可选）：
+```powershell
+Remove-Item -Recurse "$env:USERPROFILE\.yanzhiti"
+```
 
-3. **寻求帮助** | Ask for Help
-   - [GitHub Issues](https://github.com/yanzhiti/yanzhiti/issues)
-   - [Discussions](https://github.com/yanzhiti/yanzhiti/discussions)
+### Mac / Linux
+
+```bash
+pip3 uninstall yanzhiti
+```
+
+清理配置文件夹（可选）：
+```bash
+rm -rf ~/.yanzhiti
+```
 
 ---
 
-## 🎉 恭喜！| Congratulations!
+## 📞 获取帮助
 
-您已经完成了快速入门！现在可以开始使用衍智体进行 AI 辅助编程了。
+如果按照以上方法仍然无法解决问题：
 
-**祝您编程愉快！| Happy Coding!** 🚀
+1. 查看 GitHub Issues：https://github.com/yanzhiti/yanzhiti/issues
+2. 创建新的 Issue，描述你的问题
+3. 加入衍智体社区讨论
 
 ---
 
-<div align="center">
+## 🎉 快速命令速查
 
-**衍智体 (YANZHITI)** - 让 AI 助力您的编程之旅
+| 操作系统 | 安装命令 | 启动命令 |
+|---------|---------|---------|
+| Windows | `pip install yanzhiti` | `yzt` |
+| Mac | `pip3 install yanzhiti` | `yzt` 或 `python3 -m yanzhiti` |
+| Linux | `pip3 install yanzhiti` | `yzt` |
 
-[开始使用](#1️⃣-安装) | [查看文档](docs/README.md) | [报告问题](https://github.com/yanzhiti/yanzhiti/issues)
+**其他常用命令：**
 
-</div>
+```powershell
+# 升级版本
+pip install yanzhiti --upgrade
+
+# 卸载
+pip uninstall yanzhiti
+
+# 查看版本
+pip show yanzhiti
+```
+
+```bash
+# 升级版本 (Mac/Linux)
+pip3 install yanzhiti --upgrade
+
+# 卸载 (Mac/Linux)
+pip3 uninstall yanzhiti
+
+# 查看版本 (Mac/Linux)
+pip3 show yanzhiti
+```
+
+---
+
+## 🖥️ 不同操作系统特殊说明
+
+### Windows
+- 如果使用 **WSL2**（Windows 子系统 Linux），可以按照 Linux 的方式安装
+- 推荐使用 **PowerShell 7** 或 **Windows Terminal** 获得更好的体验
+
+### Mac
+- 如果遇到 **zsh 配置问题**，可能需要编辑 `~/.zshrc` 文件
+- 推荐使用 **Homebrew** 管理 Python 版本
+
+### Linux
+- 如果遇到 **权限问题**，每个命令前加 `sudo`
+- 不同发行版的包管理器不同（apt/dnf/pacman/yum），选择对应的命令
+
+---
+
+*本指南由衍智体 (YANZHITI) 项目组编写，专为新手设计，开源许可可自由分享。*
