@@ -95,11 +95,16 @@
 ### 方式一：pip 安装 (推荐) | Method 1: pip install (Recommended)
 
 ```bash
-# 安装稳定版
+# 安装稳定版（推荐）
 pip install yanzhiti
+
+# 或使用短名称安装
+pip install yzt
 
 # 全量安装（含所有可选依赖）
 pip install yanzhiti[all]
+# 或
+pip install yzt[all]
 
 # 从源码安装开发版
 pip install git+https://github.com/yanzhiti/yanzhiti.git
@@ -198,15 +203,17 @@ YANZHITI:
 
 ## 📥 安装方式 | Installation
 
-> **推荐使用 pip 安装** | Recommended: `pip install yanzhiti`
+> **推荐使用 pip 安装** | Recommended: `pip install yanzhiti` 或 `pip install yzt`
 
 | 安装方式 | 命令 | 说明 |
 |---------|------|------|
-| **pip（推荐）** | `pip install yanzhiti` | PyPI 官方包，最简方式 |
-| **pip 全量安装** | `pip install yanzhiti[all]` | 含所有可选依赖 |
+| **pip（推荐）** | `pip install yanzhiti` | PyPI 官方包 |
+| **pip 短名称** | `pip install yzt` | 与 yanzhiti 相同包，仅名称不同 |
+| **pip 全量安装** | `pip install yanzhiti[all]` 或 `pip install yzt[all]` | 含所有可选依赖 |
 | **最新源码** | `pip install git+https://github.com/yanzhiti/yanzhiti.git` | 保持最新 |
 
 **发布版本**通过 Git tag 创建，每次 `v*` tag push 时自动构建并发布到 PyPI。
+**PyPI 地址**: https://pypi.org/project/yanzhiti/ | https://pypi.org/project/yzt/
 
 ---
 
