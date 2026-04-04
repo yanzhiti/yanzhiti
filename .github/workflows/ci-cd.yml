@@ -66,32 +66,42 @@ jobs:
           pip install -e .[dev]
 
       - name: 运行测试 | Run tests
+        id: tests
         run: |
-          python -m pytest tests/ -v --tb=short --cov=yanzhiti --cov-report=html --cov-report=xml --cov-report=term || {
-            echo "Tests failed, but generating coverage report anyway..."
-          }
-          echo "=== Coverage report files ==="
-          ls -la htmlcov/ || echo "htmlcov/ not found"
-          ls -la coverage.xml || echo "coverage.xml not found"
+          python -m pytest tests/ -v --tb=short --cov=yanzhiti --cov-report=html --cov-report=xml --cov-report=term
+          echo "test_exit_code=$?" >> $GITHUB_OUTPUT
+
+      - name: 显示测试结果
+        run: |
+          echo "Test exit code: ${{ steps.tests.outputs.test_exit_code }}"
+          if [ "${{ steps.tests.outputs.test_exit_code }}" != "0" ]; then
+            echo "⚠️ Tests failed with exit code: ${{ steps.tests.outputs.test_exit_code }}"
+          fi
 
       - name: 验证覆盖率报告 | Verify coverage report
         if: always()
         run: |
           echo "=== Checking coverage report ==="
           ls -la
-          if [ ! -d "htmlcov" ]; then
-            echo "❌ Coverage report directory not found!"
-            exit 1
+          if [ -d "htmlcov" ]; then
+            echo "✅ Coverage report found:"
+            ls -la htmlcov/ | head -20
+          else
+            echo "⚠️ htmlcov/ directory not found (tests may have failed before coverage collection)"
           fi
-          echo "✅ Coverage report found:"
-          ls -la htmlcov/
+          if [ -f "coverage.xml" ]; then
+            echo "✅ coverage.xml found"
+          else
+            echo "⚠️ coverage.xml not found"
+          fi
 
       - name: 上传覆盖率报告 | Upload coverage
         uses: actions/upload-artifact@v6
-        if: success() || failure()
+        if: always()
         with:
           name: coverage-report-py${{ matrix.python-version }}
           path: htmlcov/
+          if-no-files-found: warn
 
   # ==================== 构建分发�?| Build Distribution ====================
   build:
