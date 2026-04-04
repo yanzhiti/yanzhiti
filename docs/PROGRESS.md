@@ -1,7 +1,7 @@
 # 衍智体 (YANZHITI) 实施进度跟踪表
 # Implementation Progress Tracker
 
-> 📅 最后更新: 2025-04-04  
+> 📅 最后更新: 2025-04-04
 > 🎯 目标: GitHub TOP10 开源项目  
 > 📊 当前版本: v2.2.0
 
@@ -94,6 +94,40 @@ feat (web): 增强 GUI 后端 API、添加供应商配置系统、Logo 和安全
 - 添加项目 Logo (SVG) 和 Favicon
 - 创建 SECURITY.md 安全政策文件
 - 创建 CONTRIBUTING.md 完整贡献指南
+```
+
+---
+
+### 5. PyPI 包发布准备 (v2.2.0)
+**状态**: ✅ 完成 | **优先级**: 高 | **日期**: 2025-04-04
+
+**改动文件**:
+- [pyproject.toml](pyproject.toml) - 完全重写，PyPI 标准元数据
+- [MANIFEST.in](MANIFEST.in) - 新建，打包清单定义
+- [publish_pypi.bat](publish_pypi.bat) - 新建，一键发布脚本
+- [__init__.py](src/yanzhiti/__init__.py) - 版本号升级至 2.2.0
+
+**具体成果**:
+| 功能 | 说明 |
+|------|------|
+| pyproject.toml | 18 个标准 classifiers + 6 个可选依赖组 + 8 个 CLI 入口点 |
+| 构建产物 | wheel (34KB) + sdist (33KB) 均通过 Twine 验证 PASSED |
+| 安装验证 | `pip install` 成功，8 个命令正确注册 (yzt/yanzhiti/yzt-web等) |
+| Web 静态文件 | favicon.svg + index.html 正确包含在包内 |
+| 发布脚本 | 支持 test/prod/build 三种模式 |
+
+**安装方式**:
+```bash
+# 正式版 (待发布到 PyPI)
+pip install yanzhiti
+
+# 可选依赖安装
+pip install yanzhiti[all]        # 全量安装
+pip install yanzhiti[openai]     # 仅 OpenAI 支持
+pip install yanzhiti[anthropic]  # 仅 Anthropic 支持
+
+# 从本地构建测试
+pip install dist/yanzhiti-2.2.0-py3-none-any.whl
 ```
 
 **GitHub 重试方式**: 运行 `push_to_github.bat` 或等待网络恢复后 `git push origin main`
