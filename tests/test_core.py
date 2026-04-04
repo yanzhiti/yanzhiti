@@ -3,25 +3,20 @@
 Unit Tests - Cover core functionality
 """
 
-import pytest
 from pathlib import Path
-from unittest.mock import Mock, patch, AsyncMock
+
+import pytest
 
 # 导入被测试模块 | Import modules under test
+from yanzhiti.core.permissions import PermissionManager, PermissionScope
 from yanzhiti.types import (
-    Message,
-    MessageRole,
-    ToolResultStatus,
-    PermissionResult,
-    ValidationResult,
     AppState,
     Config,
+    Message,
+    MessageRole,
     PermissionMode,
-)
-from yanzhiti.core.permissions import (
-    PermissionScope,
-    PermissionRule,
-    PermissionManager,
+    PermissionResult,
+    ValidationResult,
 )
 
 
@@ -123,8 +118,6 @@ class TestToolRegistry:
             description = "A mock tool for testing"
 
             async def execute(self, input_data: dict, context):
-                from yanzhiti.types import ToolResultStatus
-
                 return {"status": "success", "output": "Mock executed"}
 
         registry = ToolRegistry()
@@ -181,7 +174,7 @@ class TestConfigManager:
     def test_config_dir_creation(self) -> None:
         """测试配置目录创建 | Test config dir creation"""
         import tempfile
-        from pathlib import Path
+
         from yanzhiti.utils.config import ConfigManager
 
         # 使用临时目录避免影响实际配置
@@ -216,7 +209,7 @@ class TestDiagnosticChecker:
 
         # 只检查是否能运行，不检查结果
         try:
-            result = checker.check_dependencies()
+            checker.check_dependencies()
             # 核心依赖应该已安装或至少不会崩溃
             assert True
         except Exception as e:
@@ -279,27 +272,27 @@ class TestIntegration:
         errors = []
 
         try:
-            from yanzhiti.utils.config import ConfigManager
+            import yanzhiti.utils.config
         except ImportError as e:
             errors.append(f"ConfigManager: {e}")
 
         try:
-            from yanzhiti.core import ToolRegistry
+            import yanzhiti.core
         except ImportError as e:
             errors.append(f"ToolRegistry: {e}")
 
         try:
-            from yanzhiti.core.permissions import PermissionManager, PermissionMode
+            import yanzhiti.core.permissions
         except ImportError as e:
             errors.append(f"Permissions: {e}")
 
         try:
-            from yanzhiti.cli.setup_wizard import AI_PROVIDERS
+            import yanzhiti.cli.setup_wizard
         except ImportError as e:
             errors.append(f"SetupWizard: {e}")
 
         try:
-            from yanzhiti.cli.diagnose import DiagnosticChecker
+            import yanzhiti.cli.diagnose  # noqa: F401
         except ImportError as e:
             errors.append(f"Diagnose: {e}")
 
@@ -340,6 +333,7 @@ class TestPerformance:
     def test_registry_performance(self) -> None:
         """测试注册表性能 | Test registry performance"""
         import time
+
         from yanzhiti.core import ToolRegistry
 
         class QuickTool:

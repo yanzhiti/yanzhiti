@@ -4,8 +4,8 @@ Tests for core functionality
 
 import pytest
 
-from yanzhiti.core import Tool, ToolContext, ToolInputSchema, ToolResult
-from yanzhiti.tools import FileReadTool, GlobTool, BashTool
+from yanzhiti.core import ToolContext
+from yanzhiti.tools import BashTool, FileReadTool, GlobTool
 
 
 class TestToolSystem:
