@@ -5,9 +5,9 @@ Complete Tool Set - 补全所有缺失工具
 
 import asyncio
 import json
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Callable
-from pathlib import Path
+from typing import Any
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolResult
 from yanzhiti.types import ToolResultStatus
@@ -21,10 +21,10 @@ class TeamCreateTool(Tool):
             name="team_create",
             description="Create a team of agents for collaborative work",
         )
-        self._teams: Dict[str, Dict[str, Any]] = {}
+        self._teams: dict[str, dict[str, Any]] = {}
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -40,7 +40,7 @@ class TeamCreateTool(Tool):
             "required": ["team_name"],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         team_name = input_data["team_name"]
         description = input_data.get("description", "")
         agents = input_data.get("agents", [])
@@ -69,12 +69,12 @@ class TeamCreateTool(Tool):
 class TeamDeleteTool(Tool):
     """删除Agent团队"""
 
-    def __init__(self, team_create_tool: Optional[TeamCreateTool] = None):
+    def __init__(self, team_create_tool: TeamCreateTool | None = None):
         super().__init__(name="team_delete", description="Delete a team of agents")
         self._team_create_tool = team_create_tool
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -84,7 +84,7 @@ class TeamDeleteTool(Tool):
             "required": [],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         team_id = input_data.get("team_id")
         team_name = input_data.get("team_name")
 
@@ -104,10 +104,10 @@ class BriefTool(Tool):
 
     def __init__(self):
         super().__init__(name="brief", description="Show brief status update to the user")
-        self._status_callback: Optional[Callable] = None
+        self._status_callback: Callable | None = None
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -118,7 +118,7 @@ class BriefTool(Tool):
             "required": ["message"],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         message = input_data["message"]
         msg_type = input_data.get("type", "info")
         progress = input_data.get("progress")
@@ -137,10 +137,10 @@ class ScheduleCronTool(Tool):
 
     def __init__(self):
         super().__init__(name="schedule_cron", description="Schedule a task using cron expression")
-        self._scheduled_tasks: Dict[str, Dict[str, Any]] = {}
+        self._scheduled_tasks: dict[str, dict[str, Any]] = {}
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -153,7 +153,7 @@ class ScheduleCronTool(Tool):
             "required": ["action"],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         action = input_data["action"]
 
         if action == "schedule":
@@ -194,7 +194,7 @@ class SleepTool(Tool):
         super().__init__(name="sleep", description="Pause execution for a specified duration")
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -204,7 +204,7 @@ class SleepTool(Tool):
             "required": ["seconds"],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         seconds = input_data["seconds"]
         if seconds < 0:
             return ToolResult(status=ToolResultStatus.ERROR, error="Seconds must be non-negative")
@@ -218,10 +218,10 @@ class EnterWorktreeTool(Tool):
 
     def __init__(self):
         super().__init__(name="enter_worktree", description="Enter a git worktree for isolated work")
-        self._current_worktree: Optional[str] = None
+        self._current_worktree: str | None = None
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -232,7 +232,7 @@ class EnterWorktreeTool(Tool):
             "required": ["branch"],
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         branch = input_data["branch"]
         path = input_data.get("path", f"../{branch}-worktree")
         create = input_data.get("create", True)
@@ -251,12 +251,12 @@ class EnterWorktreeTool(Tool):
 class ExitWorktreeTool(Tool):
     """退出Git worktree"""
 
-    def __init__(self, enter_worktree_tool: Optional[EnterWorktreeTool] = None):
+    def __init__(self, enter_worktree_tool: EnterWorktreeTool | None = None):
         super().__init__(name="exit_worktree", description="Exit the current git worktree")
         self._enter_worktree_tool = enter_worktree_tool
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -265,7 +265,7 @@ class ExitWorktreeTool(Tool):
             },
         }
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         remove = input_data.get("remove", False)
         force = input_data.get("force", False)
 
@@ -295,10 +295,10 @@ class ListMcpResourcesTool(Tool):
         self._mcp_manager = mcp_manager
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {"type": "object", "properties": {"server": {"type": "string", "description": "Filter by server name"}}}
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         if not self._mcp_manager:
             return ToolResult(status=ToolResultStatus.SUCCESS, output="No MCP manager configured", metadata={"resources": []})
 
@@ -319,10 +319,10 @@ class ReadMcpResourceTool(Tool):
         self._mcp_manager = mcp_manager
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {"type": "object", "properties": {"uri": {"type": "string", "description": "URI of the resource to read"}}, "required": ["uri"]}
 
-    async def execute(self, input_data: Dict[str, Any], context: ToolContext) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         uri = input_data["uri"]
 
         if not self._mcp_manager:

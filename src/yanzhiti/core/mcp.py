@@ -5,9 +5,8 @@ Integration with external tools and resources
 
 import asyncio
 import json
-from typing import Any, Dict, List, Optional, Callable
-from pathlib import Path
 from enum import Enum
+from typing import Any
 
 import httpx
 from pydantic import BaseModel, Field
@@ -24,11 +23,11 @@ class MCPTransport(str, Enum):
 class MCPServerConfig(BaseModel):
     """Configuration for an MCP server"""
     name: str
-    command: Optional[str] = None  # For stdio transport
-    url: Optional[str] = None  # For http/ws transport
+    command: str | None = None  # For stdio transport
+    url: str | None = None  # For http/ws transport
     transport: MCPTransport = MCPTransport.STDIO
-    env: Dict[str, str] = Field(default_factory=dict)
-    args: List[str] = Field(default_factory=list)
+    env: dict[str, str] = Field(default_factory=dict)
+    args: list[str] = Field(default_factory=list)
     enabled: bool = True
 
 
@@ -36,15 +35,15 @@ class MCPTool(BaseModel):
     """An MCP tool definition"""
     name: str
     description: str
-    input_schema: Dict[str, Any]
+    input_schema: dict[str, Any]
 
 
 class MCPResource(BaseModel):
     """An MCP resource"""
     uri: str
     name: str
-    description: Optional[str] = None
-    mime_type: Optional[str] = None
+    description: str | None = None
+    mime_type: str | None = None
 
 
 class MCPClient:
@@ -54,10 +53,10 @@ class MCPClient:
 
     def __init__(self, config: MCPServerConfig):
         self.config = config
-        self.tools: List[MCPTool] = []
-        self.resources: List[MCPResource] = []
-        self._process: Optional[asyncio.subprocess.Process] = None
-        self._http_client: Optional[httpx.AsyncClient] = None
+        self.tools: list[MCPTool] = []
+        self.resources: list[MCPResource] = []
+        self._process: asyncio.subprocess.Process | None = None
+        self._http_client: httpx.AsyncClient | None = None
         self._initialized = False
 
     async def connect(self):
@@ -103,7 +102,7 @@ class MCPClient:
     async def _initialize(self):
         """Initialize MCP connection and get capabilities"""
         # Send initialize request
-        response = await self._send_request("initialize", {
+        await self._send_request("initialize", {
             "protocolVersion": "2024-11-05",
             "capabilities": {},
             "clientInfo": {
@@ -121,7 +120,7 @@ class MCPClient:
                     description=tool_data.get("description", ""),
                     input_schema=tool_data.get("inputSchema", {}),
                 ))
-        except:
+        except Exception:
             pass
 
         # List resources
@@ -134,10 +133,10 @@ class MCPClient:
                     description=resource_data.get("description"),
                     mime_type=resource_data.get("mimeType"),
                 ))
-        except:
+        except Exception:
             pass
 
-    async def _send_request(self, method: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    async def _send_request(self, method: str, params: dict[str, Any]) -> dict[str, Any]:
         """Send a request to the MCP server"""
         request = {
             "jsonrpc": "2.0",
@@ -153,7 +152,7 @@ class MCPClient:
         else:
             raise NotImplementedError(f"Transport {self.config.transport} not implemented")
 
-    async def _send_stdio_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _send_stdio_request(self, request: dict[str, Any]) -> dict[str, Any]:
         """Send request via stdio"""
         if not self._process or not self._process.stdin or not self._process.stdout:
             raise RuntimeError("Process not connected")
@@ -172,7 +171,7 @@ class MCPClient:
 
         return response.get("result", {})
 
-    async def _send_http_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def _send_http_request(self, request: dict[str, Any]) -> dict[str, Any]:
         """Send request via HTTP"""
         if not self._http_client:
             raise RuntimeError("HTTP client not connected")
@@ -186,7 +185,7 @@ class MCPClient:
 
         return data.get("result", {})
 
-    async def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Any:
+    async def call_tool(self, tool_name: str, arguments: dict[str, Any]) -> Any:
         """Call an MCP tool"""
         if not self._initialized:
             await self.connect()
@@ -229,8 +228,8 @@ class MCPManager:
     """
 
     def __init__(self):
-        self.clients: Dict[str, MCPClient] = {}
-        self._tool_to_server: Dict[str, str] = {}
+        self.clients: dict[str, MCPClient] = {}
+        self._tool_to_server: dict[str, str] = {}
 
     async def add_server(self, config: MCPServerConfig):
         """Add and connect to an MCP server"""
@@ -253,7 +252,7 @@ class MCPManager:
                 k: v for k, v in self._tool_to_server.items() if v != name
             }
 
-    async def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Any:
+    async def call_tool(self, tool_name: str, arguments: dict[str, Any]) -> Any:
         """Call a tool on the appropriate MCP server"""
         if tool_name not in self._tool_to_server:
             raise ValueError(f"Tool not found: {tool_name}")
@@ -274,14 +273,14 @@ class MCPManager:
 
         raise ValueError(f"Invalid resource URI: {uri}")
 
-    def list_tools(self) -> List[MCPTool]:
+    def list_tools(self) -> list[MCPTool]:
         """List all available MCP tools"""
         tools = []
         for client in self.clients.values():
             tools.extend(client.tools)
         return tools
 
-    def list_resources(self) -> List[MCPResource]:
+    def list_resources(self) -> list[MCPResource]:
         """List all available MCP resources"""
         resources = []
         for client in self.clients.values():
@@ -311,12 +310,12 @@ def create_mcp_tool_wrapper(mcp_manager: MCPManager, tool: MCPTool):
             self.manager = manager
 
         @property
-        def input_schema(self) -> Dict[str, Any]:
+        def input_schema(self) -> dict[str, Any]:
             return self.mcp_tool.input_schema
 
         async def execute(
             self,
-            input_data: Dict[str, Any],
+            input_data: dict[str, Any],
             context: ToolContext,
         ) -> ToolResult:
             try:

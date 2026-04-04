@@ -8,7 +8,6 @@ from rich.console import Console
 
 from yanzhiti import __version__
 
-
 console = Console()
 
 

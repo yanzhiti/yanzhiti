@@ -2,10 +2,8 @@
 Web operation tools
 """
 
-import asyncio
 import re
-from typing import Any, Dict, List, Optional
-from urllib.parse import urljoin, urlparse
+from typing import Any
 
 import httpx
 
@@ -53,17 +51,16 @@ class WebFetchTool(Tool):
 
     async def check_permission(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> PermissionResult:
-        url = input_data["url"]
         # Check if URL is allowed
         # For now, allow all - implement proper URL whitelist later
         return PermissionResult(granted=True)
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         url = input_data["url"]
@@ -156,7 +153,7 @@ class WebSearchTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         query = input_data["query"]
@@ -227,11 +224,10 @@ class WebScrapeTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         url = input_data["url"]
-        selector = input_data.get("selector")
         extract = input_data.get("extract", "text")
 
         try:
@@ -325,7 +321,7 @@ class APITestTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         url = input_data["url"]

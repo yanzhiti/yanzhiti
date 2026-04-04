@@ -4,8 +4,8 @@ Additional Tools - NotebookEdit, AskUser, etc.
 
 import asyncio
 import json
-from typing import Any, Dict, List, Optional
 from pathlib import Path
+from typing import Any
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolResult
 from yanzhiti.types import ToolResultStatus
@@ -21,7 +21,7 @@ class NotebookEditTool(Tool):
         )
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -48,7 +48,7 @@ class NotebookEditTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         notebook_path = input_data["notebook_path"]
@@ -65,7 +65,7 @@ class NotebookEditTool(Tool):
                 )
 
             # Read notebook
-            with open(path, 'r') as f:
+            with open(path) as f:
                 notebook = json.load(f)
 
             # Validate cell index
@@ -111,7 +111,7 @@ class AskUserQuestionTool(Tool):
         self._prompt_callback = callback
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -134,7 +134,7 @@ class AskUserQuestionTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         question = input_data["question"]
@@ -194,7 +194,7 @@ class ImageAnalyzerTool(Tool):
         )
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -212,7 +212,7 @@ class ImageAnalyzerTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         image_path = input_data["image_path"]
@@ -267,7 +267,7 @@ class CodeSearchTool(Tool):
         )
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -293,7 +293,7 @@ class CodeSearchTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         query = input_data["query"]
@@ -334,7 +334,7 @@ class CodeSearchTool(Tool):
                     continue
 
                 try:
-                    with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    with open(file_path, encoding='utf-8', errors='ignore') as f:
                         content = f.read()
 
                     # Simple text matching (semantic search would use embeddings)
@@ -357,7 +357,7 @@ class CodeSearchTool(Tool):
                         if len(results) >= max_results:
                             break
 
-                except:
+                except Exception:
                     continue
 
             output = json.dumps(results, indent=2)
@@ -385,7 +385,7 @@ class DiagramGeneratorTool(Tool):
         )
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -413,12 +413,11 @@ class DiagramGeneratorTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         diagram_type = input_data["type"]
         description = input_data["description"]
-        code_path = input_data.get("code_path")
         output_format = input_data.get("output_format", "mermaid")
 
         try:

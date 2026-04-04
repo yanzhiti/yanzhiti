@@ -3,19 +3,17 @@ Local Query Engine using local models (LM Studio or MLX)
 No API required - runs completely on your Mac
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
+from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry
 from yanzhiti.types import (
     AssistantMessage,
     Message,
     Usage,
     UserMessage,
-    ToolResultStatus,
 )
 
 
@@ -27,8 +25,8 @@ class LocalQueryEngineConfig(BaseModel):
     base_url: str = "http://localhost:1234/v1"  # LM Studio default
     max_tokens: int = 2048
     temperature: float = 0.7
-    system_prompt: Optional[str] = None
-    tools: List[Tool] = Field(default_factory=list)
+    system_prompt: str | None = None
+    tools: list[Tool] = Field(default_factory=list)
     max_turns: int = 50
     verbose: bool = False
 
@@ -67,7 +65,7 @@ class LocalQueryEngine:
             self.tool_registry.register(tool)
 
         # State
-        self.messages: List[Message] = []
+        self.messages: list[Message] = []
         self.usage = Usage()
         self.session_id = uuid4()
         self._turn_count = 0
@@ -169,7 +167,7 @@ class LocalQueryEngine:
 
         return "\n".join(parts)
 
-    def _extract_tool_calls(self, response: str) -> List[Dict[str, Any]]:
+    def _extract_tool_calls(self, response: str) -> list[dict[str, Any]]:
         """Extract tool calls from response"""
         tool_calls = []
 
@@ -187,7 +185,7 @@ class LocalQueryEngine:
                         try:
                             params_str = lines[i+1].split("PARAMS:")[1].strip()
                             params = json.loads(params_str)
-                        except:
+                        except Exception:
                             pass
 
                     tool_calls.append({
@@ -203,7 +201,7 @@ class LocalQueryEngine:
 
         return tool_calls
 
-    async def _execute_tool(self, tool_call: Dict[str, Any]) -> str:
+    async def _execute_tool(self, tool_call: dict[str, Any]) -> str:
         """Execute a tool"""
         tool_name = tool_call["name"]
         params = tool_call.get("parameters", {})
@@ -237,7 +235,7 @@ class LocalQueryEngine:
         self.session_id = uuid4()
         self._turn_count = 0
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get engine statistics"""
         return {
             "session_id": str(self.session_id),

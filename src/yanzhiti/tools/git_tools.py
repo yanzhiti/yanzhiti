@@ -3,12 +3,10 @@ Git operation tools
 """
 
 import asyncio
-import os
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
-from yanzhiti.types import PermissionResult, ToolResultStatus
+from yanzhiti.types import ToolResultStatus
 
 
 class GitTool(Tool):
@@ -43,7 +41,7 @@ class GitTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         command = input_data["command"]
@@ -108,7 +106,7 @@ class GitStatusTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         cwd = input_data.get("cwd", context.cwd)
@@ -237,7 +235,7 @@ class GitDiffTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         file = input_data.get("file")
@@ -316,7 +314,7 @@ class GitLogTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         count = input_data.get("count", 10)
@@ -387,7 +385,7 @@ class GitBranchTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         action = input_data["action"]

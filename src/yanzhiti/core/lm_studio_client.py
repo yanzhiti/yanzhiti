@@ -3,10 +3,10 @@ LM Studio Client - Use local LM Studio server
 LM Studio provides an OpenAI-compatible API server
 """
 
-import asyncio
-import httpx
-from typing import Any, Dict, List, Optional, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
+import httpx
 from pydantic import BaseModel
 
 
@@ -25,7 +25,7 @@ class LMStudioClient:
     LM Studio provides OpenAI-compatible API
     """
 
-    def __init__(self, config: Optional[LMStudioConfig] = None):
+    def __init__(self, config: LMStudioConfig | None = None):
         self.config = config or LMStudioConfig()
         self.client = httpx.AsyncClient(timeout=self.config.timeout)
 
@@ -36,16 +36,16 @@ class LMStudioClient:
                 f"{self.config.base_url}/models"
             )
             return response.status_code == 200
-        except:
+        except Exception:
             return False
 
     async def chat(
         self,
-        messages: List[Dict[str, str]],
-        tools: Optional[List[Dict[str, Any]]] = None,
-        max_tokens: Optional[int] = None,
-        temperature: Optional[float] = None,
-    ) -> Dict[str, Any]:
+        messages: list[dict[str, str]],
+        tools: list[dict[str, Any]] | None = None,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
+    ) -> dict[str, Any]:
         """
         Chat completion with LM Studio
 
@@ -104,10 +104,10 @@ class LMStudioClient:
 
     async def stream_chat(
         self,
-        messages: List[Dict[str, str]],
-        tools: Optional[List[Dict[str, Any]]] = None,
-        max_tokens: Optional[int] = None,
-        temperature: Optional[float] = None,
+        messages: list[dict[str, str]],
+        tools: list[dict[str, Any]] | None = None,
+        max_tokens: int | None = None,
+        temperature: float | None = None,
     ) -> AsyncIterator[str]:
         """
         Stream chat completion
@@ -140,13 +140,13 @@ class LMStudioClient:
                             delta = data["choices"][0]["delta"]
                             if "content" in delta:
                                 yield delta["content"]
-                        except:
+                        except Exception:
                             continue
 
         except httpx.HTTPError as e:
             raise RuntimeError(f"LM Studio streaming error: {e}")
 
-    async def get_models(self) -> List[Dict[str, Any]]:
+    async def get_models(self) -> list[dict[str, Any]]:
         """Get available models"""
         try:
             response = await self.client.get(
@@ -155,7 +155,7 @@ class LMStudioClient:
             response.raise_for_status()
             data = response.json()
             return data.get("data", [])
-        except:
+        except Exception:
             return []
 
     async def close(self):
@@ -178,7 +178,7 @@ class SimpleLMStudioClient:
 
     async def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         **kwargs
     ) -> str:
         """Simple chat - returns just the content"""

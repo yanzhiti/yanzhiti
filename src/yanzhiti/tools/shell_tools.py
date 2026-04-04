@@ -4,8 +4,7 @@ Shell execution tools
 
 import asyncio
 import os
-import subprocess
-from typing import Any, Dict, Optional
+from typing import Any
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolInputSchema, ToolResult
 from yanzhiti.types import PermissionResult, ToolResultStatus
@@ -42,7 +41,7 @@ class BashTool(Tool):
 
     async def check_permission(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> PermissionResult:
         # TODO: Implement proper permission checks
@@ -51,7 +50,7 @@ class BashTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         command = input_data["command"]
@@ -131,7 +130,7 @@ class PowerShellTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         if os.name != "nt":
@@ -192,7 +191,7 @@ class TaskTool(Tool):
             name="task",
             description="Create and manage background tasks",
         )
-        self._tasks: Dict[str, asyncio.Task] = {}
+        self._tasks: dict[str, asyncio.Task] = {}
 
     @property
     def input_schema(self) -> ToolInputSchema:
@@ -217,7 +216,7 @@ class TaskTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         action = input_data["action"]

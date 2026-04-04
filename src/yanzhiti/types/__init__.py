@@ -3,7 +3,7 @@ Type definitions for 衍智体 (YANZHITI)
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -34,8 +34,8 @@ class ToolResultStatus(str, Enum):
 class Message(BaseModel):
     """Base message type"""
     role: MessageRole
-    content: Union[str, List[Dict[str, Any]]]
-    metadata: Optional[Dict[str, Any]] = None
+    content: str | list[dict[str, Any]]
+    metadata: dict[str, Any] | None = None
 
 
 class UserMessage(Message):
@@ -58,29 +58,29 @@ class ToolUseBlock(BaseModel):
     type: str = "tool_use"
     id: str
     name: str
-    input: Dict[str, Any]
+    input: dict[str, Any]
 
 
 class ToolResultBlock(BaseModel):
     """Tool result block"""
     type: str = "tool_result"
     tool_use_id: str
-    content: Union[str, Dict[str, Any]]
+    content: str | dict[str, Any]
     is_error: bool = False
 
 
 class PermissionResult(BaseModel):
     """Result of permission check"""
     granted: bool
-    reason: Optional[str] = None
+    reason: str | None = None
     mode: PermissionMode = PermissionMode.DEFAULT
 
 
 class ValidationResult(BaseModel):
     """Result of input validation"""
     valid: bool
-    message: Optional[str] = None
-    error_code: Optional[int] = None
+    message: str | None = None
+    error_code: int | None = None
 
 
 class ToolProgress(BaseModel):
@@ -88,8 +88,8 @@ class ToolProgress(BaseModel):
     tool_name: str
     tool_use_id: str
     status: str
-    message: Optional[str] = None
-    percentage: Optional[float] = None
+    message: str | None = None
+    percentage: float | None = None
 
 
 class Usage(BaseModel):
@@ -111,9 +111,9 @@ class SessionInfo(BaseModel):
 
 class AppState(BaseModel):
     """Application state"""
-    session_id: Optional[UUID] = None
+    session_id: UUID | None = None
     cwd: str = "."
-    messages: List[Message] = Field(default_factory=list)
+    messages: list[Message] = Field(default_factory=list)
     usage: Usage = Field(default_factory=Usage)
     permission_mode: PermissionMode = PermissionMode.DEFAULT
     is_active: bool = True
@@ -121,7 +121,7 @@ class AppState(BaseModel):
 
 class Config(BaseModel):
     """Application configuration"""
-    api_key: Optional[str] = None
+    api_key: str | None = None
     model: str = "default-model"
     max_tokens: int = 4096
     temperature: float = 1.0

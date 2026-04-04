@@ -3,15 +3,14 @@ Session Management - Persistence and resume functionality
 """
 
 import json
-import asyncio
-from typing import Any, Dict, List, Optional
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
-from yanzhiti.types import Message, AssistantMessage, UserMessage
+from yanzhiti.types import AssistantMessage, Message, UserMessage
 
 
 class SessionMetadata(BaseModel):
@@ -23,14 +22,14 @@ class SessionMetadata(BaseModel):
     backend: str
     message_count: int = 0
     total_tokens: int = 0
-    tags: List[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
 
 
 class Session(BaseModel):
     """A complete session with messages and metadata"""
     metadata: SessionMetadata
-    messages: List[Dict[str, Any]] = Field(default_factory=list)
-    config: Dict[str, Any] = Field(default_factory=dict)
+    messages: list[dict[str, Any]] = Field(default_factory=list)
+    config: dict[str, Any] = Field(default_factory=dict)
 
 
 class SessionStorage:
@@ -39,7 +38,7 @@ class SessionStorage:
     Uses JSONL format for efficient append operations
     """
 
-    def __init__(self, storage_dir: Optional[Path] = None):
+    def __init__(self, storage_dir: Path | None = None):
         if storage_dir is None:
             # Default storage location
             home = Path.home()
@@ -68,7 +67,7 @@ class SessionStorage:
             for msg in session.messages:
                 f.write(json.dumps(msg) + '\n')
 
-    async def load_session(self, session_id: str) -> Optional[Session]:
+    async def load_session(self, session_id: str) -> Session | None:
         """Load a session by ID"""
         meta_file = self._get_metadata_file(session_id)
         session_file = self._get_session_file(session_id)
@@ -81,7 +80,7 @@ class SessionStorage:
 
         # Load messages
         messages = []
-        with open(session_file, 'r') as f:
+        with open(session_file) as f:
             for line in f:
                 if line.strip():
                     messages.append(json.loads(line))
@@ -118,7 +117,7 @@ class SessionStorage:
         self,
         limit: int = 20,
         offset: int = 0,
-    ) -> List[SessionMetadata]:
+    ) -> list[SessionMetadata]:
         """List all sessions"""
         sessions = []
 
@@ -126,7 +125,7 @@ class SessionStorage:
             try:
                 metadata = SessionMetadata.model_validate_json(meta_file.read_text())
                 sessions.append(metadata)
-            except:
+            except Exception:
                 continue
 
         # Sort by updated_at (most recent first)
@@ -151,7 +150,7 @@ class SessionStorage:
 
         return deleted
 
-    async def search_sessions(self, query: str) -> List[SessionMetadata]:
+    async def search_sessions(self, query: str) -> list[SessionMetadata]:
         """Search sessions by content"""
         results = []
 
@@ -163,12 +162,12 @@ class SessionStorage:
 
                 # Search in messages
                 if session_file.exists():
-                    with open(session_file, 'r') as f:
+                    with open(session_file) as f:
                         for line in f:
                             if query.lower() in line.lower():
                                 results.append(metadata)
                                 break
-            except:
+            except Exception:
                 continue
 
         return results
@@ -179,15 +178,15 @@ class SessionManager:
     High-level session manager
     """
 
-    def __init__(self, storage_dir: Optional[Path] = None):
+    def __init__(self, storage_dir: Path | None = None):
         self.storage = SessionStorage(storage_dir)
-        self.current_session: Optional[Session] = None
+        self.current_session: Session | None = None
 
     async def create_session(
         self,
         model: str,
         backend: str,
-        config: Optional[Dict[str, Any]] = None,
+        config: dict[str, Any] | None = None,
     ) -> Session:
         """Create a new session"""
         session_id = str(uuid4())
@@ -212,7 +211,7 @@ class SessionManager:
 
         return session
 
-    async def resume_session(self, session_id: str) -> Optional[Session]:
+    async def resume_session(self, session_id: str) -> Session | None:
         """Resume an existing session"""
         session = await self.storage.load_session(session_id)
 
@@ -246,7 +245,7 @@ class SessionManager:
             self.current_session.metadata.updated_at = datetime.now()
             await self.storage.save_session(self.current_session)
 
-    async def list_sessions(self, limit: int = 20) -> List[SessionMetadata]:
+    async def list_sessions(self, limit: int = 20) -> list[SessionMetadata]:
         """List recent sessions"""
         return await self.storage.list_sessions(limit=limit)
 
@@ -257,11 +256,11 @@ class SessionManager:
 
         return await self.storage.delete_session(session_id)
 
-    async def search_sessions(self, query: str) -> List[SessionMetadata]:
+    async def search_sessions(self, query: str) -> list[SessionMetadata]:
         """Search sessions"""
         return await self.storage.search_sessions(query)
 
-    def get_session_messages(self) -> List[Message]:
+    def get_session_messages(self) -> list[Message]:
         """Get messages from current session as Message objects"""
         if not self.current_session:
             return []

@@ -3,27 +3,42 @@ Web UI for 衍智体 (YANZHITI) Local
 FastAPI backend with WebSocket support
 """
 
-import asyncio
 import json
-from typing import List, Optional
 from pathlib import Path
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, FileResponse
 from pydantic import BaseModel
 
-from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
-from yanzhiti.core import ToolRegistry
-from yanzhiti.tools import (
-    FileReadTool, FileWriteTool, FileEditTool, GlobTool, GrepTool,
-    BashTool, PowerShellTool, TaskTool,
-    WebFetchTool, WebSearchTool, WebScrapeTool, APITestTool,
-    GitTool, GitStatusTool, GitDiffTool, GitLogTool, GitBranchTool,
-    TaskCreateTool, TaskListTool, TaskGetTool, TaskUpdateTool, TaskDeleteTool, TodoWriteTool,
-)
 from yanzhiti import __version__
-
+from yanzhiti.core import ToolRegistry
+from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
+from yanzhiti.tools import (
+    APITestTool,
+    BashTool,
+    FileEditTool,
+    FileReadTool,
+    FileWriteTool,
+    GitBranchTool,
+    GitDiffTool,
+    GitLogTool,
+    GitStatusTool,
+    GitTool,
+    GlobTool,
+    GrepTool,
+    PowerShellTool,
+    TaskCreateTool,
+    TaskDeleteTool,
+    TaskGetTool,
+    TaskListTool,
+    TaskTool,
+    TaskUpdateTool,
+    TodoWriteTool,
+    WebFetchTool,
+    WebScrapeTool,
+    WebSearchTool,
+)
 
 # Create FastAPI app
 app = FastAPI(
@@ -41,7 +56,7 @@ class Message(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str
-    session_id: Optional[str] = None
+    session_id: str | None = None
 
 
 class ChatResponse(BaseModel):
@@ -131,7 +146,7 @@ async def get_models():
         return {"models": models}
     except Exception as e:
         await client.close()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.post("/api/chat")
@@ -142,10 +157,7 @@ async def chat(request: ChatRequest):
     session_id = request.session_id or str(uuid.uuid4())
 
     # Get or create engine
-    if session_id not in engines:
-        engine = create_engine(session_id)
-    else:
-        engine = engines[session_id]
+    engine = create_engine(session_id) if session_id not in engines else engines[session_id]
 
     # Process message
     try:
@@ -155,7 +167,7 @@ async def chat(request: ChatRequest):
             session_id=session_id,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.websocket("/ws/{session_id}")
@@ -164,10 +176,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
     await websocket.accept()
 
     # Create engine for this session
-    if session_id not in engines:
-        engine = create_engine(session_id)
-    else:
-        engine = engines[session_id]
+    engine = create_engine(session_id) if session_id not in engines else engines[session_id]
 
     try:
         while True:

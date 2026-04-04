@@ -2,13 +2,12 @@
 Configuration management utilities
 """
 
-import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import tomli
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
@@ -16,7 +15,7 @@ class AppConfig(BaseSettings):
     """Application configuration with environment variable support"""
 
     # API settings
-    api_key: Optional[str] = Field(default=None, env="YANZHITI_API_KEY")
+    api_key: str | None = Field(default=None, env="YANZHITI_API_KEY")
     api_base_url: str = Field(default="https://api.example.com", env="YANZHITI_BASE_URL")
 
     # Model settings
@@ -51,11 +50,11 @@ class AppConfig(BaseSettings):
 class ConfigManager:
     """Manager for loading and merging configuration from multiple sources"""
 
-    def __init__(self, config_dir: Optional[Path] = None):
+    def __init__(self, config_dir: Path | None = None):
         self.config_dir = config_dir or Path.home() / ".yanzhiti"
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
-        self._config: Optional[AppConfig] = None
+        self._config: AppConfig | None = None
 
     def load(self) -> AppConfig:
         """Load configuration from all sources"""
@@ -75,7 +74,7 @@ class ConfigManager:
         self._config = AppConfig(**config_dict)
         return self._config
 
-    def _find_config_file(self) -> Optional[Path]:
+    def _find_config_file(self) -> Path | None:
         """Find configuration file"""
         # Check current directory
         for name in ["yanzhiti.toml", "yanzhiti.yaml", "yanzhiti.yml", ".yanzhiti.toml"]:
@@ -91,7 +90,7 @@ class ConfigManager:
 
         return None
 
-    def _load_config_file(self, path: Path) -> Dict[str, Any]:
+    def _load_config_file(self, path: Path) -> dict[str, Any]:
         """Load configuration from file"""
         try:
             with open(path, "rb") as f:
@@ -103,7 +102,7 @@ class ConfigManager:
             print(f"Warning: Failed to load config file {path}: {e}")
             return {}
 
-    def save(self, config: Dict[str, Any], format: str = "toml") -> None:
+    def save(self, config: dict[str, Any], format: str = "toml") -> None:
         """Save configuration to file"""
         import tomli_w
 
@@ -131,7 +130,7 @@ class ConfigManager:
 
 
 # Global config manager
-_config_manager: Optional[ConfigManager] = None
+_config_manager: ConfigManager | None = None
 
 
 def get_config() -> AppConfig:

@@ -3,9 +3,7 @@ Local CLI using MLX models - No API required!
 """
 
 import asyncio
-import os
 import sys
-from typing import Optional
 
 import click
 from rich.console import Console
@@ -16,21 +14,38 @@ from rich.theme import Theme
 
 from yanzhiti import __version__
 from yanzhiti.core import ToolRegistry
-from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
 from yanzhiti.core.agent import AgentTool, ForkTool
+from yanzhiti.core.local_query_engine import LocalQueryEngine, LocalQueryEngineConfig
 from yanzhiti.tools import (
-    # File tools
-    FileReadTool, FileWriteTool, FileEditTool, GlobTool, GrepTool,
+    APITestTool,
     # Shell tools
-    BashTool, PowerShellTool, TaskTool,
-    # Web tools
-    WebFetchTool, WebSearchTool, WebScrapeTool, APITestTool,
+    BashTool,
+    FileEditTool,
+    # File tools
+    FileReadTool,
+    FileWriteTool,
+    GitBranchTool,
+    GitDiffTool,
+    GitLogTool,
+    GitStatusTool,
     # Git tools
-    GitTool, GitStatusTool, GitDiffTool, GitLogTool, GitBranchTool,
+    GitTool,
+    GlobTool,
+    GrepTool,
+    PowerShellTool,
     # Task tools
-    TaskCreateTool, TaskListTool, TaskGetTool, TaskUpdateTool, TaskDeleteTool, TodoWriteTool,
+    TaskCreateTool,
+    TaskDeleteTool,
+    TaskGetTool,
+    TaskListTool,
+    TaskTool,
+    TaskUpdateTool,
+    TodoWriteTool,
+    # Web tools
+    WebFetchTool,
+    WebScrapeTool,
+    WebSearchTool,
 )
-
 
 # Custom theme
 custom_theme = Theme({
@@ -45,7 +60,7 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 
 
-def create_tool_registry(query_engine: Optional[LocalQueryEngine] = None) -> ToolRegistry:
+def create_tool_registry(query_engine: LocalQueryEngine | None = None) -> ToolRegistry:
     """Create and populate tool registry"""
     registry = ToolRegistry()
 
@@ -247,7 +262,7 @@ def main(
     cwd: str,
     verbose: bool,
     version: bool,
-    query: Optional[str],
+    query: str | None,
 ) -> None:
     """
     衍智体 (YANZHITI) Local - AI assistant running on your Mac

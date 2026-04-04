@@ -2,11 +2,8 @@
 Task management tools
 """
 
-import asyncio
-import json
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
@@ -19,33 +16,33 @@ class Task(BaseModel):
     """Task model"""
     id: str = Field(default_factory=lambda: str(uuid4()))
     title: str
-    description: Optional[str] = None
+    description: str | None = None
     status: str = "pending"  # pending, in_progress, completed, failed
     priority: str = "medium"  # low, medium, high, urgent
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    tags: List[str] = Field(default_factory=list)
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    tags: list[str] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class TaskManager:
     """In-memory task manager"""
 
     def __init__(self):
-        self._tasks: Dict[str, Task] = {}
+        self._tasks: dict[str, Task] = {}
 
     def create_task(self, task: Task) -> Task:
         self._tasks[task.id] = task
         return task
 
-    def get_task(self, task_id: str) -> Optional[Task]:
+    def get_task(self, task_id: str) -> Task | None:
         return self._tasks.get(task_id)
 
     def list_tasks(
         self,
-        status: Optional[str] = None,
-        priority: Optional[str] = None,
-    ) -> List[Task]:
+        status: str | None = None,
+        priority: str | None = None,
+    ) -> list[Task]:
         tasks = list(self._tasks.values())
         if status:
             tasks = [t for t in tasks if t.status == status]
@@ -53,7 +50,7 @@ class TaskManager:
             tasks = [t for t in tasks if t.priority == priority]
         return sorted(tasks, key=lambda t: t.created_at, reverse=True)
 
-    def update_task(self, task_id: str, **kwargs) -> Optional[Task]:
+    def update_task(self, task_id: str, **kwargs) -> Task | None:
         task = self._tasks.get(task_id)
         if not task:
             return None
@@ -113,7 +110,7 @@ class TaskCreateTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         task = Task(
@@ -161,7 +158,7 @@ class TaskListTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         status = input_data.get("status")
@@ -217,7 +214,7 @@ class TaskGetTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         task_id = input_data["task_id"]
@@ -293,7 +290,7 @@ class TaskUpdateTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         task_id = input_data["task_id"]
@@ -337,7 +334,7 @@ class TaskDeleteTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         task_id = input_data["task_id"]
@@ -363,7 +360,7 @@ class TodoWriteTool(Tool):
             name="todo_write",
             description="Write or update a todo list",
         )
-        self._todos: List[Dict[str, Any]] = []
+        self._todos: list[dict[str, Any]] = []
 
     @property
     def input_schema(self) -> ToolInputSchema:
@@ -390,7 +387,7 @@ class TodoWriteTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         todos = input_data["todos"]

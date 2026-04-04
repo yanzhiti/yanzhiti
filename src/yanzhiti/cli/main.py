@@ -5,7 +5,6 @@ Main CLI entry point for 衍智体 (YANZHITI)
 import asyncio
 import os
 import sys
-from typing import Optional
 
 import click
 from dotenv import load_dotenv
@@ -21,36 +20,35 @@ from rich.theme import Theme
 from yanzhiti import __version__
 from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
 from yanzhiti.tools import (
+    APITestTool,
+    # Shell tools
+    BashTool,
+    FileEditTool,
     # File tools
     FileReadTool,
     FileWriteTool,
-    FileEditTool,
-    GlobTool,
-    GrepTool,
-    # Shell tools
-    BashTool,
-    PowerShellTool,
-    TaskTool,
-    # Web tools
-    WebFetchTool,
-    WebSearchTool,
-    WebScrapeTool,
-    APITestTool,
-    # Git tools
-    GitTool,
-    GitStatusTool,
+    GitBranchTool,
     GitDiffTool,
     GitLogTool,
-    GitBranchTool,
+    GitStatusTool,
+    # Git tools
+    GitTool,
+    GlobTool,
+    GrepTool,
+    PowerShellTool,
     # Task tools
     TaskCreateTool,
-    TaskListTool,
-    TaskGetTool,
-    TaskUpdateTool,
     TaskDeleteTool,
+    TaskGetTool,
+    TaskListTool,
+    TaskTool,
+    TaskUpdateTool,
     TodoWriteTool,
+    # Web tools
+    WebFetchTool,
+    WebScrapeTool,
+    WebSearchTool,
 )
-
 
 # Custom theme
 custom_theme = Theme({
@@ -65,7 +63,7 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 
 
-def get_api_key() -> Optional[str]:
+def get_api_key() -> str | None:
     """Get API key from environment or config"""
     # Try environment variable
     api_key = os.environ.get("YANZHITI_API_KEY")
@@ -77,7 +75,7 @@ def get_api_key() -> Optional[str]:
     return None
 
 
-def get_base_url() -> Optional[str]:
+def get_base_url() -> str | None:
     """Get API base URL from environment or config"""
     # Try environment variable
     base_url = os.environ.get("YANZHITI_BASE_URL")
@@ -272,9 +270,29 @@ def show_help() -> None:
     is_flag=True,
     help="Run diagnostic tool",
 )
+@click.option(
+    "--info",
+    is_flag=True,
+    help="Show project information and system status",
+)
+@click.option(
+    "--tools",
+    is_flag=True,
+    help="Show available tools list",
+)
+@click.option(
+    "--examples",
+    is_flag=True,
+    help="Show example library",
+)
+@click.option(
+    "--update",
+    is_flag=True,
+    help="Check for updates",
+)
 @click.argument("query", required=False)
 def main(
-    api_key: Optional[str],
+    api_key: str | None,
     model: str,
     max_tokens: int,
     cwd: str,
@@ -282,7 +300,12 @@ def main(
     version: bool,
     setup: bool,
     lang: str,
-    query: Optional[str],
+    query: str | None,
+    diagnose: bool = False,
+    info: bool = False,
+    tools: bool = False,
+    examples: bool = False,
+    update: bool = False,
 ) -> None:
     """
     衍智体 (YANZHITI) - AI-powered coding assistant
@@ -290,18 +313,42 @@ def main(
     If QUERY is provided, execute it and exit.
     Otherwise, start interactive mode.
     """
+    # 显示项目信息 | Show project information
+    if info:
+        from yanzhiti.cli.extended_commands import show_info
+        show_info()
+        return
+
+    # 显示工具列表 | Show tools list
+    if tools:
+        from yanzhiti.cli.extended_commands import show_tools
+        show_tools()
+        return
+
+    # 显示示例库 | Show examples
+    if examples:
+        from yanzhiti.cli.extended_commands import show_examples
+        show_examples()
+        return
+
+    # 检查更新 | Check for updates
+    if update:
+        from yanzhiti.cli.extended_commands import check_update
+        check_update()
+        return
+
     # Run setup wizard
     if setup:
         from yanzhiti.cli.setup_wizard import main as setup_main
         setup_main(standalone_mode=False)
         return
-    
+
     # Run diagnostic tool
     if diagnose:
         from yanzhiti.cli.diagnose import main as diagnose_main
         diagnose_main(standalone_mode=False)
         return
-    
+
     if version:
         console.print(f"衍智体 (YANZHITI) v{__version__}")
         return

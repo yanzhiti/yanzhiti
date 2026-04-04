@@ -3,9 +3,9 @@ Permission System - Rule-based permission engine
 """
 
 import re
-from typing import Any, Callable, Dict, List, Optional, Set
+from collections.abc import Callable
 from enum import Enum
-from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -36,24 +36,24 @@ class PermissionRule(BaseModel):
     pattern: str  # Regex pattern to match
     priority: int = 0  # Higher priority rules are checked first
     enabled: bool = True
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class PermissionContext(BaseModel):
     """Context for permission check"""
     tool_name: str
     operation: str
-    path: Optional[str] = None
-    command: Optional[str] = None
-    user: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    path: str | None = None
+    command: str | None = None
+    user: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class PermissionResult(BaseModel):
     """Result of permission check"""
     granted: bool
     action: PermissionAction
-    rule: Optional[PermissionRule] = None
+    rule: PermissionRule | None = None
     reason: str = ""
     ask_user: bool = False
     message: str = ""
@@ -65,9 +65,9 @@ class PermissionEngine:
     """
 
     def __init__(self):
-        self.rules: List[PermissionRule] = []
+        self.rules: list[PermissionRule] = []
         self._default_action = PermissionAction.ASK
-        self._user_callbacks: Dict[str, Callable] = {}
+        self._user_callbacks: dict[str, Callable] = {}
 
     def add_rule(self, rule: PermissionRule):
         """Add a permission rule"""
@@ -162,17 +162,14 @@ class PermissionEngine:
         pattern = rule.pattern
 
         # Try to match against different context fields
-        if context.path:
-            if re.search(pattern, context.path):
-                return True
+        if context.path and re.search(pattern, context.path):
+            return True
 
-        if context.command:
-            if re.search(pattern, context.command):
-                return True
+        if context.command and re.search(pattern, context.command):
+            return True
 
-        if context.tool_name:
-            if re.search(pattern, context.tool_name):
-                return True
+        if context.tool_name and re.search(pattern, context.tool_name):
+            return True
 
         return False
 
@@ -207,7 +204,7 @@ class PermissionEngine:
 
         return "\n".join(parts)
 
-    def create_default_rules(self) -> List[PermissionRule]:
+    def create_default_rules(self) -> list[PermissionRule]:
         """Create default permission rules"""
         rules = [
             # Allow reading files in current directory

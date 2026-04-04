@@ -3,9 +3,7 @@ Logging utilities
 """
 
 import logging
-import sys
 from pathlib import Path
-from typing import Optional
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -13,8 +11,8 @@ from rich.logging import RichHandler
 
 def setup_logging(
     level: str = "INFO",
-    log_file: Optional[Path] = None,
-    rich_console: Optional[Console] = None,
+    log_file: Path | None = None,
+    rich_console: Console | None = None,
 ) -> logging.Logger:
     """Setup logging with Rich handler"""
 
@@ -51,7 +49,7 @@ def setup_logging(
     return logger
 
 
-def get_logger(name: Optional[str] = None) -> logging.Logger:
+def get_logger(name: str | None = None) -> logging.Logger:
     """Get logger instance"""
     if name:
         return logging.getLogger(f"yanzhiti.{name}")

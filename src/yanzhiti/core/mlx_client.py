@@ -4,10 +4,9 @@ Supports running LLMs locally using Apple's MLX framework
 """
 
 import asyncio
-import json
 import subprocess
-from typing import Any, Dict, List, Optional, AsyncIterator
-from pathlib import Path
+from collections.abc import AsyncIterator
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -34,7 +33,7 @@ class MLXClient:
     Uses mlx-lm for inference
     """
 
-    def __init__(self, config: Optional[MLXModelConfig] = None):
+    def __init__(self, config: MLXModelConfig | None = None):
         self.config = config or MLXModelConfig()
         self._check_mlx_installed()
 
@@ -57,9 +56,9 @@ class MLXClient:
 
     async def generate(
         self,
-        messages: List[MLXMessage],
-        tools: Optional[List[Dict[str, Any]]] = None,
-    ) -> Dict[str, Any]:
+        messages: list[MLXMessage],
+        tools: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
         """
         Generate response from MLX model
 
@@ -113,8 +112,8 @@ class MLXClient:
 
     def _build_prompt(
         self,
-        messages: List[MLXMessage],
-        tools: Optional[List[Dict[str, Any]]] = None,
+        messages: list[MLXMessage],
+        tools: list[dict[str, Any]] | None = None,
     ) -> str:
         """Build prompt from messages"""
         parts = []
@@ -144,8 +143,8 @@ class MLXClient:
 
     async def stream_generate(
         self,
-        messages: List[MLXMessage],
-        tools: Optional[List[Dict[str, Any]]] = None,
+        messages: list[MLXMessage],
+        tools: list[dict[str, Any]] | None = None,
     ) -> AsyncIterator[str]:
         """
         Stream generate response (for interactive use)
@@ -171,7 +170,7 @@ class SimpleMLXClient:
         """Load model and tokenizer"""
         if self._model is None:
             try:
-                from mlx_lm import load, generate
+                from mlx_lm import generate, load
 
                 print(f"Loading MLX model: {self.model_name}")
                 self._model, self._tokenizer = load(self.model_name)
@@ -210,7 +209,7 @@ class SimpleMLXClient:
 
     async def chat(
         self,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         max_tokens: int = 4096,
         temperature: float = 0.7,
     ) -> str:

@@ -2,11 +2,10 @@
 Context Management - Auto-compression and optimization
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional, Tuple
 from dataclasses import dataclass
+from typing import Any
 
-from yanzhiti.types import Message, AssistantMessage, UserMessage
+from yanzhiti.types import AssistantMessage, Message, UserMessage
 
 
 @dataclass
@@ -34,7 +33,7 @@ class ContextCompressor:
         self.target_tokens = target_tokens
         self.preserve_recent = preserve_recent
 
-    def estimate_tokens(self, messages: List[Message]) -> int:
+    def estimate_tokens(self, messages: list[Message]) -> int:
         """Estimate token count for messages"""
         # Simple estimation: ~4 characters per token
         total_chars = 0
@@ -44,16 +43,16 @@ class ContextCompressor:
 
         return total_chars // 4
 
-    def should_compress(self, messages: List[Message]) -> bool:
+    def should_compress(self, messages: list[Message]) -> bool:
         """Check if compression is needed"""
         token_count = self.estimate_tokens(messages)
         return token_count > self.target_tokens
 
     async def compress(
         self,
-        messages: List[Message],
+        messages: list[Message],
         strategy: str = "sliding_window",
-    ) -> Tuple[List[Message], CompressionStats]:
+    ) -> tuple[list[Message], CompressionStats]:
         """
         Compress messages using specified strategy
 
@@ -87,7 +86,7 @@ class ContextCompressor:
 
         return compressed, stats
 
-    async def _compress_sliding_window(self, messages: List[Message]) -> List[Message]:
+    async def _compress_sliding_window(self, messages: list[Message]) -> list[Message]:
         """Keep most recent messages"""
         if len(messages) <= self.preserve_recent:
             return messages
@@ -109,13 +108,13 @@ class ContextCompressor:
 
         return system_messages + recent
 
-    async def _compress_summarize(self, messages: List[Message]) -> List[Message]:
+    async def _compress_summarize(self, messages: list[Message]) -> list[Message]:
         """Summarize old messages (requires LLM)"""
         # For now, fall back to sliding window
         # Full implementation would use LLM to summarize
         return await self._compress_sliding_window(messages)
 
-    async def _compress_semantic(self, messages: List[Message]) -> List[Message]:
+    async def _compress_semantic(self, messages: list[Message]) -> list[Message]:
         """Keep semantically important messages"""
         # For now, fall back to sliding window
         # Full implementation would use embeddings to find important messages
@@ -137,14 +136,14 @@ class ContextManager:
         self.auto_compress = auto_compress
         self.compression_threshold = compression_threshold
         self.compressor = ContextCompressor(max_tokens=max_tokens)
-        self.messages: List[Message] = []
+        self.messages: list[Message] = []
         self._compression_count = 0
 
     def add_message(self, message: Message):
         """Add a message to context"""
         self.messages.append(message)
 
-    def get_messages(self) -> List[Message]:
+    def get_messages(self) -> list[Message]:
         """Get all messages"""
         return self.messages
 
@@ -152,7 +151,7 @@ class ContextManager:
         """Clear all messages"""
         self.messages.clear()
 
-    async def maybe_compress(self) -> Optional[CompressionStats]:
+    async def maybe_compress(self) -> CompressionStats | None:
         """Compress if needed"""
         if not self.auto_compress:
             return None
@@ -168,7 +167,7 @@ class ContextManager:
 
         return None
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get context statistics"""
         token_count = self.compressor.estimate_tokens(self.messages)
         return {
@@ -215,7 +214,7 @@ class MessagePrioritizer:
         # Cap at 1.0
         return min(score, 1.0)
 
-    def prioritize(self, messages: List[Message]) -> List[Tuple[Message, float]]:
+    def prioritize(self, messages: list[Message]) -> list[tuple[Message, float]]:
         """Prioritize messages by importance"""
         scored = [(msg, self.calculate_importance(msg)) for msg in messages]
         scored.sort(key=lambda x: x[1], reverse=True)
@@ -230,7 +229,7 @@ class ContextOptimizer:
     def __init__(self):
         self.prioritizer = MessagePrioritizer()
 
-    def optimize(self, messages: List[Message]) -> List[Message]:
+    def optimize(self, messages: list[Message]) -> list[Message]:
         """Optimize message order and content"""
         # Remove duplicate consecutive messages
         messages = self._remove_duplicates(messages)
@@ -240,7 +239,7 @@ class ContextOptimizer:
 
         return messages
 
-    def _remove_duplicates(self, messages: List[Message]) -> List[Message]:
+    def _remove_duplicates(self, messages: list[Message]) -> list[Message]:
         """Remove duplicate consecutive messages"""
         if len(messages) < 2:
             return messages
@@ -254,7 +253,7 @@ class ContextOptimizer:
 
         return result
 
-    def _merge_short_messages(self, messages: List[Message]) -> List[Message]:
+    def _merge_short_messages(self, messages: list[Message]) -> list[Message]:
         """Merge short consecutive messages from same role"""
         if len(messages) < 2:
             return messages

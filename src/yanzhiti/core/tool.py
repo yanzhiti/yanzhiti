@@ -3,14 +3,13 @@ Core Tool system for 衍智体 (YANZHITI)
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, Field
 
 from yanzhiti.types import (
     PermissionResult,
-    ToolProgress,
     ToolResultBlock,
     ToolResultStatus,
     ValidationResult,
@@ -20,16 +19,16 @@ from yanzhiti.types import (
 class ToolInputSchema(BaseModel):
     """JSON schema for tool input"""
     type: str = "object"
-    properties: Dict[str, Any] = Field(default_factory=dict)
-    required: List[str] = Field(default_factory=list)
+    properties: dict[str, Any] = Field(default_factory=dict)
+    required: list[str] = Field(default_factory=list)
 
 
 class ToolResult(BaseModel):
     """Result of tool execution"""
     status: ToolResultStatus = ToolResultStatus.SUCCESS
-    output: Optional[str] = None
-    error: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    output: str | None = None
+    error: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     def to_block(self, tool_use_id: str) -> ToolResultBlock:
         """Convert to tool result block"""
@@ -45,7 +44,7 @@ class ToolContext(BaseModel):
     tool_use_id: str = Field(default_factory=lambda: str(uuid4()))
     cwd: str = "."
     permission_mode: str = "default"
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     class Config:
         arbitrary_types_allowed = True
@@ -62,7 +61,7 @@ class Tool(ABC):
     def __init__(self, name: str, description: str):
         self.name = name
         self.description = description
-        self._input_schema: Optional[ToolInputSchema] = None
+        self._input_schema: ToolInputSchema | None = None
 
     @property
     @abstractmethod
@@ -73,7 +72,7 @@ class Tool(ABC):
     @abstractmethod
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         """
@@ -88,7 +87,7 @@ class Tool(ABC):
         """
         pass
 
-    def validate_input(self, input_data: Dict[str, Any]) -> ValidationResult:
+    def validate_input(self, input_data: dict[str, Any]) -> ValidationResult:
         """
         Validate tool input against schema
 
@@ -118,7 +117,7 @@ class Tool(ABC):
 
     async def check_permission(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> PermissionResult:
         """
@@ -135,7 +134,7 @@ class Tool(ABC):
         # Override in subclasses for permission checks
         return PermissionResult(granted=True)
 
-    def to_api_format(self) -> Dict[str, Any]:
+    def to_api_format(self) -> dict[str, Any]:
         """
         Convert tool to AI API format
 
@@ -153,7 +152,7 @@ class ToolRegistry:
     """Registry for managing available tools"""
 
     def __init__(self):
-        self._tools: Dict[str, Tool] = {}
+        self._tools: dict[str, Tool] = {}
 
     def register(self, tool: Tool) -> None:
         """Register a tool"""
@@ -163,15 +162,15 @@ class ToolRegistry:
         """Unregister a tool"""
         self._tools.pop(name, None)
 
-    def get(self, name: str) -> Optional[Tool]:
+    def get(self, name: str) -> Tool | None:
         """Get a tool by name"""
         return self._tools.get(name)
 
-    def list_tools(self) -> List[Tool]:
+    def list_tools(self) -> list[Tool]:
         """List all registered tools"""
         return list(self._tools.values())
 
-    def to_api_format(self) -> List[Dict[str, Any]]:
+    def to_api_format(self) -> list[dict[str, Any]]:
         """Convert all tools to AI API format"""
         return [tool.to_api_format() for tool in self._tools.values()]
 

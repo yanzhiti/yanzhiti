@@ -3,11 +3,10 @@ Missing Important Tools - 补充缺失的重要工具
 将工具覆盖率从72%提升到85%+
 """
 
-import asyncio
 import json
-from typing import Any, Dict, List, Optional
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
+from typing import Any
 
 from yanzhiti.core.tool import Tool, ToolContext, ToolResult
 from yanzhiti.types import ToolResultStatus
@@ -31,7 +30,7 @@ class SkillTool(Tool):
             name="skill",
             description="Invoke a skill (predefined tool combination)",
         )
-        self._skills: Dict[str, Dict[str, Any]] = {}
+        self._skills: dict[str, dict[str, Any]] = {}
         self._load_default_skills()
 
     def _load_default_skills(self):
@@ -65,7 +64,7 @@ class SkillTool(Tool):
         }
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -87,12 +86,11 @@ class SkillTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         skill_name = input_data["skill_name"]
         target = input_data.get("target", context.cwd)
-        args = input_data.get("args", {})
 
         if skill_name not in self._skills:
             available = list(self._skills.keys())
@@ -113,7 +111,7 @@ class SkillTool(Tool):
             },
         )
 
-    def register_skill(self, name: str, description: str, tools: List[str], prompt: str):
+    def register_skill(self, name: str, description: str, tools: list[str], prompt: str):
         """注册自定义技能"""
         self._skills[name] = {
             "description": description,
@@ -121,7 +119,7 @@ class SkillTool(Tool):
             "prompt": prompt,
         }
 
-    def list_skills(self) -> List[Dict[str, Any]]:
+    def list_skills(self) -> list[dict[str, Any]]:
         """列出所有可用技能"""
         return [
             {"name": name, **data}
@@ -140,10 +138,10 @@ class LSPTool(Tool):
             name="lsp",
             description="Language Server Protocol integration for code intelligence",
         )
-        self._lsp_clients: Dict[str, Any] = {}
+        self._lsp_clients: dict[str, Any] = {}
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -174,7 +172,7 @@ class LSPTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         action = input_data["action"]
@@ -218,10 +216,10 @@ class EnterPlanModeTool(Tool):
             description="Enter planning mode to create a detailed plan before execution",
         )
         self._plan_mode = PlanMode.IDLE
-        self._current_plan: Optional[Dict[str, Any]] = None
+        self._current_plan: dict[str, Any] | None = None
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -239,7 +237,7 @@ class EnterPlanModeTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         goal = input_data["goal"]
@@ -263,7 +261,7 @@ class EnterPlanModeTool(Tool):
 class ExitPlanModeTool(Tool):
     """退出规划模式"""
 
-    def __init__(self, plan_tool: Optional[EnterPlanModeTool] = None):
+    def __init__(self, plan_tool: EnterPlanModeTool | None = None):
         super().__init__(
             name="exit_plan_mode",
             description="Exit planning mode and execute the plan",
@@ -271,7 +269,7 @@ class ExitPlanModeTool(Tool):
         self._plan_tool = plan_tool
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -289,7 +287,7 @@ class ExitPlanModeTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         execute = input_data.get("execute", True)
@@ -321,10 +319,10 @@ class SendMessageTool(Tool):
             name="send_message",
             description="Send a message to another agent or the main conversation",
         )
-        self._message_queue: Dict[str, List[Dict[str, Any]]] = {}
+        self._message_queue: dict[str, list[dict[str, Any]]] = {}
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -347,7 +345,7 @@ class SendMessageTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         recipient = input_data["recipient"]
@@ -373,7 +371,7 @@ class SendMessageTool(Tool):
             metadata=msg,
         )
 
-    def get_messages(self, recipient: str) -> List[Dict[str, Any]]:
+    def get_messages(self, recipient: str) -> list[dict[str, Any]]:
         """获取指定接收者的消息"""
         return self._message_queue.get(recipient, [])
 
@@ -389,7 +387,7 @@ class MCPResourceTools(Tool):
         self._mcp_manager = mcp_manager
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -408,7 +406,7 @@ class MCPResourceTools(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         action = input_data["action"]
@@ -463,7 +461,7 @@ class ConfigTool(Tool):
             name="config",
             description="Manage configuration settings",
         )
-        self._config: Dict[str, Any] = {}
+        self._config: dict[str, Any] = {}
         self._config_file = Path.home() / ".yanzhiti" / "config.json"
         self._load_config()
 
@@ -472,7 +470,7 @@ class ConfigTool(Tool):
         if self._config_file.exists():
             try:
                 self._config = json.loads(self._config_file.read_text())
-            except:
+            except Exception:
                 self._config = {}
 
     def _save_config(self):
@@ -481,7 +479,7 @@ class ConfigTool(Tool):
         self._config_file.write_text(json.dumps(self._config, indent=2))
 
     @property
-    def input_schema(self) -> Dict[str, Any]:
+    def input_schema(self) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
@@ -504,7 +502,7 @@ class ConfigTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         action = input_data["action"]

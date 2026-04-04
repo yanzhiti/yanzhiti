@@ -2,23 +2,19 @@
 Query Engine - The heart of 衍智体 (YANZHITI)
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import uuid4
 
 # Note: This project uses the Anthropic SDK for AI model integration
 # The SDK is used as a dependency, but this is an independent implementation
-from anthropic import Anthropic, AsyncAnthropic
+from anthropic import AsyncAnthropic
 from anthropic.types import Message as AIMessage
 from pydantic import BaseModel, Field
 
-from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry, ToolResult
+from yanzhiti.core.tool import Tool, ToolContext, ToolRegistry
 from yanzhiti.types import (
     AssistantMessage,
-    Config,
     Message,
-    PermissionMode,
-    ToolUseBlock,
     Usage,
     UserMessage,
 )
@@ -30,8 +26,8 @@ class QueryEngineConfig(BaseModel):
     model: str = "default-model"
     max_tokens: int = 4096
     temperature: float = 1.0
-    system_prompt: Optional[str] = None
-    tools: List[Tool] = Field(default_factory=list)
+    system_prompt: str | None = None
+    tools: list[Tool] = Field(default_factory=list)
     max_turns: int = 100
     verbose: bool = False
 
@@ -53,8 +49,8 @@ class QueryEngine:
     def __init__(
         self,
         config: QueryEngineConfig,
-        api_key: Optional[str] = None,
-        base_url: Optional[str] = None,
+        api_key: str | None = None,
+        base_url: str | None = None,
     ):
         self.config = config
         self.api_key = api_key
@@ -71,7 +67,7 @@ class QueryEngine:
             self.tool_registry.register(tool)
 
         # State
-        self.messages: List[Message] = []
+        self.messages: list[Message] = []
         self.usage = Usage()
         self.session_id = uuid4()
         self._turn_count = 0
@@ -79,7 +75,7 @@ class QueryEngine:
     async def query(
         self,
         user_input: str,
-        attachments: Optional[List[Dict[str, Any]]] = None,
+        attachments: list[dict[str, Any]] | None = None,
     ) -> AssistantMessage:
         """
         Process a user query
@@ -207,7 +203,7 @@ class QueryEngine:
         self,
         tool_id: str,
         tool_name: str,
-        tool_input: Dict[str, Any],
+        tool_input: dict[str, Any],
     ) -> Any:
         """Execute a tool and return result"""
         tool = self.tool_registry.get(tool_name)
@@ -257,7 +253,7 @@ class QueryEngine:
                 "is_error": True,
             }
 
-    def _convert_messages(self) -> List[Dict[str, Any]]:
+    def _convert_messages(self) -> list[dict[str, Any]]:
         """Convert internal messages to API format"""
         api_messages = []
 
@@ -286,7 +282,7 @@ class QueryEngine:
         self.session_id = uuid4()
         self._turn_count = 0
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get engine statistics"""
         return {
             "session_id": str(self.session_id),

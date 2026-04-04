@@ -2,10 +2,8 @@
 File operation tools
 """
 
-import asyncio
-import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import aiofiles
 
@@ -44,17 +42,16 @@ class FileReadTool(Tool):
 
     async def check_permission(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> PermissionResult:
-        file_path = input_data["file_path"]
         # Check if file is within allowed directories
         # For now, allow all - implement proper permission checks later
         return PermissionResult(granted=True)
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         file_path = input_data["file_path"]
@@ -75,7 +72,7 @@ class FileReadTool(Tool):
                     error=f"Not a file: {file_path}",
                 )
 
-            async with aiofiles.open(file_path, mode="r") as f:
+            async with aiofiles.open(file_path) as f:
                 lines = await f.readlines()
 
             # Apply offset and limit
@@ -130,7 +127,7 @@ class FileWriteTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         file_path = input_data["file_path"]
@@ -191,7 +188,7 @@ class FileEditTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         file_path = input_data["file_path"]
@@ -207,7 +204,7 @@ class FileEditTool(Tool):
                     error=f"File not found: {file_path}",
                 )
 
-            async with aiofiles.open(file_path, mode="r") as f:
+            async with aiofiles.open(file_path) as f:
                 content = await f.read()
 
             if old_string not in content:
@@ -264,7 +261,7 @@ class GlobTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         pattern = input_data["pattern"]
@@ -323,7 +320,7 @@ class GrepTool(Tool):
 
     async def execute(
         self,
-        input_data: Dict[str, Any],
+        input_data: dict[str, Any],
         context: ToolContext,
     ) -> ToolResult:
         import re
@@ -337,19 +334,14 @@ class GrepTool(Tool):
             regex = re.compile(pattern)
 
             results = []
-            files_to_search = []
-
-            if path.is_file():
-                files_to_search = [path]
-            else:
-                files_to_search = list(path.rglob(file_pattern))
+            files_to_search = [path] if path.is_file() else list(path.rglob(file_pattern))
 
             for file_path in files_to_search:
                 if not file_path.is_file():
                     continue
 
                 try:
-                    async with aiofiles.open(file_path, mode="r") as f:
+                    async with aiofiles.open(file_path) as f:
                         lines = await f.readlines()
 
                     for i, line in enumerate(lines):
