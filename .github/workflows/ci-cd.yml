@@ -69,9 +69,21 @@ jobs:
         run: |
           pytest tests/ -v --cov=yanzhiti --cov-report=xml --cov-report=html --cov-report=term-missing
 
+      - name: 验证覆盖率报告 | Verify coverage report
+        if: always()
+        run: |
+          echo "=== Checking coverage report ==="
+          ls -la
+          if [ ! -d "htmlcov" ]; then
+            echo "❌ Coverage report directory not found!"
+            exit 1
+          fi
+          echo "✅ Coverage report found:"
+          ls -la htmlcov/
+
       - name: 上传覆盖率报告 | Upload coverage
         uses: actions/upload-artifact@v6
-        if: always()
+        if: success() || failure()
         with:
           name: coverage-report-py${{ matrix.python-version }}
           path: htmlcov/
