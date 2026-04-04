@@ -1,6 +1,6 @@
-# 🚀 衍智体 (YANZHITI) - AI-Powered Intelligent Code Assistant
+# 🚀 YANZHITI - AI-Powered Intelligent Code Assistant
 
-> **开源 AI 智能编程助手 - Python 实现 | Open-Source AI Coding Assistant in Python**
+> **Open-Source AI Coding Assistant in Python - Free Alternative to Claude Code**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -13,23 +13,13 @@
 
 ---
 
-## 🌟 为什么选择衍智体？ | Why Choose YANZHITI?
+## 🌟 Why Choose YANZHITI?
 
 <div align="center">
   <img src="docs/images/demo-banner.gif" alt="YANZHITI Demo" width="800"/>
+  <p><i>Interactive Demo - Coming Soon</i></p>
 </div>
 
-**中文**:
-衍智体 (YANZHITI) 是一个**完全开源免费**的 AI 智能编程助手，基于 Python 实现。与闭源的 Claude Code 不同，我们提供:
-
-- ✅ **完全开源** (MIT 许可证) - 可自由查看、修改、分发
-- ✅ **永久免费** - 无订阅费用，个人和企业均可使用
-- ✅ **本地部署** - 代码不上传云端，保护隐私安全
-- ✅ **Python 原生** - 无缝集成 Python 生态系统
-- ✅ **可定制扩展** - 根据需求自由修改源码
-- ✅ **40+ 开发工具** - 文件操作、Shell 执行、Git 管理、Web 操作等
-
-**English**:
 YANZHITI is a **completely open-source and free** AI-powered intelligent coding assistant, implemented in Python. Unlike closed-source alternatives like Claude Code, we provide:
 
 - ✅ **Fully Open-Source** (MIT License) - Free to view, modify, and distribute
@@ -41,58 +31,58 @@ YANZHITI is a **completely open-source and free** AI-powered intelligent coding 
 
 ---
 
-## 📊 功能对比 | Feature Comparison
+## 📊 Feature Comparison
 
-| Feature 功能 | YANZHITI 衍智体 | Claude Code | GitHub Copilot |
-|--------------|----------------|-------------|----------------|
-| **开源许可 License** | ✅ MIT | ❌ Proprietary | ❌ Proprietary |
-| **免费 Free** | ✅ 100% Free | ❌ $20/month | ❌ $10/month |
-| **本地部署 Self-hosted** | ✅ Yes | ❌ Cloud only | ❌ Cloud only |
-| **隐私 Privacy** | ✅ Local first | ❌ Cloud processing | ❌ Cloud processing |
-| **模型选择 Models** | ✅ Any LLM | ❌ Claude only | ❌ OpenAI only |
-| **可扩展 Extensible** | ✅ Full source | ❌ Closed | ❌ Closed |
-| **离线使用 Offline** | ✅ Supported | ❌ Online only | ❌ Online only |
-| **编程语言 Language** | 🐍 Python | TS/Node.js | TS/Node.js |
+| Feature | YANZHITI | Claude Code | GitHub Copilot |
+|---------|----------|-------------|----------------|
+| **License** | ✅ MIT Open-Source | ❌ Proprietary | ❌ Proprietary |
+| **Cost** | ✅ 100% Free | ❌ $20/month | ❌ $10/month |
+| **Self-Hosted** | ✅ Yes | ❌ Cloud Only | ❌ Cloud Only |
+| **Privacy** | ✅ Local First | ❌ Cloud Processing | ❌ Cloud Processing |
+| **Model Choice** | ✅ Any LLM | ❌ Claude Only | ❌ OpenAI Only |
+| **Extensible** | ✅ Full Source Access | ❌ Closed | ❌ Closed |
+| **Offline Mode** | ✅ Supported | ❌ Online Only | ❌ Online Only |
+| **Language** | 🐍 Python | TS/Node.js | TS/Node.js |
 
 ---
 
-## ✨ 核心特性 | Core Features
+## ✨ Core Features
 
-### 🔧 40+ 开发工具集 | Developer Toolkit
+### 🔧 40+ Developer Toolkit
 
 <div align="center">
   <table>
     <tr>
       <td align="center">
-        <b>📁 文件操作</b><br/>
-        File Operations<br/>
-        <small>Read, Write, Edit, Search</small>
+        <b>📁 File Operations</b><br/>
+        Read, Write, Edit, Search<br/>
+        <small>Glob, Grep, Watch</small>
       </td>
       <td align="center">
-        <b>⚡ Shell 执行</b><br/>
-        Shell Execution<br/>
-        <small>Bash, PowerShell, CMD</small>
+        <b>⚡ Shell Execution</b><br/>
+        Bash, PowerShell, CMD<br/>
+        <small>Permission Control</small>
       </td>
       <td align="center">
-        <b>🔀 Git 管理</b><br/>
-        Git Management<br/>
-        <small>Commit, Branch, Diff</small>
+        <b>🔀 Git Management</b><br/>
+        Status, Commit, Branch<br/>
+        <small>Diff, Log, Push</small>
       </td>
       <td align="center">
-        <b>🌐 Web 操作</b><br/>
-        Web Operations<br/>
-        <small>Fetch, Search, API</small>
+        <b>🌐 Web Operations</b><br/>
+        Fetch, Search, API<br/>
+        <small>Scrape, Test</small>
       </td>
       <td align="center">
-        <b>📋 任务管理</b><br/>
-        Task Management<br/>
-        <small>Create, Track, Organize</small>
+        <b>📋 Task Management</b><br/>
+        Create, Track, Organize<br/>
+        <small>Subtasks, Todo</small>
       </td>
     </tr>
   </table>
 </div>
 
-### 🏗️ 技术架构 | Technical Architecture
+### 🏗️ Technical Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -101,10 +91,10 @@ YANZHITI is a **completely open-source and free** AI-powered intelligent coding 
 │  🎨 User Interface Layer (CLI / Web / Desktop GUI)      │
 ├─────────────────────────────────────────────────────────┤
 │  🧠 Core Engine                                         │
-│    • Query Engine (智能查询引擎)                        │
-│    • Tool System (模块化工具系统)                       │
-│    • Session Management (会话管理)                      │
-│    • Permission Control (权限控制)                      │
+│    • Query Engine - Advanced query processing           │
+│    • Tool System - Modular & extensible                 │
+│    • Session Management - Stateful conversations        │
+│    • Permission Control - Fine-grained access           │
 ├─────────────────────────────────────────────────────────┤
 │  🔌 Tool Layer (40+ Tools)                              │
 │    • File Tools  • Shell Tools  • Git Tools            │
@@ -117,26 +107,26 @@ YANZHITI is a **completely open-source and free** AI-powered intelligent coding 
 
 ---
 
-## 🚀 快速开始 | Quick Start
+## 🚀 Quick Start
 
-### 方式一：一键安装 (推荐) | Method 1: One-Click Install (Recommended)
+### Method 1: One-Click Install (Recommended)
 
 **Windows:**
 ```powershell
-# 使用 winget (Windows 10/11 自带)
+# Using winget (built-in on Windows 10/11)
 winget install yanzhiti
 
-# 或下载安装包
-# Download installer from: https://github.com/yanzhiti/yanzhiti/releases
+# Or download installer
+# https://github.com/yanzhiti/yanzhiti/releases
 ```
 
 **macOS:**
 ```bash
-# 使用 Homebrew
+# Using Homebrew
 brew install yanzhiti
 
-# 或下载 DMG
-# Or download DMG from: https://github.com/yanzhiti/yanzhiti/releases
+# Or download DMG
+# https://github.com/yanzhiti/yanzhiti/releases
 ```
 
 **Linux:**
@@ -151,37 +141,36 @@ sudo dnf install yanzhiti
 yay -S yanzhiti
 ```
 
-### 方式二：从源码安装 | Method 2: Install from Source
+### Method 2: Install from Source
 
 ```bash
-# 1. 克隆仓库 | Clone repository
+# 1. Clone repository
 git clone https://github.com/yanzhiti/yanzhiti.git
 cd yanzhiti
 
-# 2. 创建虚拟环境 | Create virtual environment
+# 2. Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows
 
-# 3. 安装依赖 | Install dependencies
+# 3. Install dependencies
 pip install -e ".[dev]"
 ```
 
-### 配置 API | Configuration
+### Configuration
 
-**首次运行配置向导 | First Run Configuration Wizard:**
+**First Run - Configuration Wizard:**
 
 ```bash
-# 运行配置向导 (自动引导配置)
+# Run interactive setup wizard
 yzt --setup
 
-# 或手动配置
-# Or manual configuration
+# Or configure manually
 export YANZHITI_API_KEY=your-api-key
 export YANZHITI_MODEL=openai/gpt-3.5-turbo
 ```
 
-**支持的 AI 提供商 | Supported AI Providers:**
+**Supported AI Providers:**
 
 | Provider | Models | Free Tier | Config Example |
 |----------|--------|-----------|----------------|
@@ -191,44 +180,38 @@ export YANZHITI_MODEL=openai/gpt-3.5-turbo
 | **DeepSeek** | DeepSeek V3 | ✅ Free | `deepseek-chat` |
 | **Ollama** | Local LLMs | ✅ Free | `ollama/llama2` |
 
-### 运行衍智体 | Run YANZHITI
+### Run YANZHITI
 
 ```bash
-# 启动交互式界面
 # Launch interactive mode
 yanzhiti
 
-# 或使用简短命令
 # Or use shortcut
 yzt
 
-# 单次查询模式
 # Single query mode
-yzt "帮我创建一个 Python 函数"
 yzt "Help me create a Python function"
 
-# 使用 Web 界面
 # Use Web interface
 yzt-web
 
-# 使用桌面应用 (开发中)
 # Use Desktop App (Coming Soon)
 yzt-desktop
 ```
 
 ---
 
-## 📸 使用示例 | Usage Examples
+## 📸 Usage Examples
 
-### 示例 1: 代码生成 | Code Generation
+### Example 1: Code Generation
 
 ```
-You: 帮我创建一个快速排序算法
-YANZHITI: 好的，我来为您创建一个快速排序的 Python 实现:
+You: Help me create a quick sort algorithm
+YANZHITI: Sure! Here's a Python implementation of quick sort:
 
 ```python
 def quick_sort(arr):
-    """快速排序实现"""
+    """Quick sort implementation"""
     if len(arr) <= 1:
         return arr
     
@@ -239,24 +222,24 @@ def quick_sort(arr):
     
     return quick_sort(left) + middle + quick_sort(right)
 
-# 测试
+# Test
 arr = [64, 34, 25, 12, 22, 11, 90]
-print(quick_sort(arr))  # 输出：[11, 12, 22, 25, 34, 64, 90]
+print(quick_sort(arr))  # Output: [11, 12, 22, 25, 34, 64, 90]
 ```
 ```
 
-### 示例 2: 文件操作 | File Operations
+### Example 2: File Operations
 
 ```
-You: 帮我读取 src/main.py 文件并添加类型注解
-YANZHITI: [读取文件...] [分析代码...] [添加类型注解...]
-完成！已更新文件。
+You: Read src/main.py and add type hints
+YANZHITI: [Reading file...] [Analyzing code...] [Adding type hints...]
+Done! File updated successfully.
 ```
 
-### 示例 3: Git 管理 | Git Management
+### Example 3: Git Management
 
 ```
-You: 查看当前的 Git 状态并提交所有更改
+You: Check git status and commit all changes
 YANZHITI: 
 📊 Git Status:
   Modified: src/main.py
@@ -267,7 +250,7 @@ YANZHITI:
 
 ---
 
-## 📦 安装包下载 | Downloads
+## 📦 Downloads
 
 | Platform | Package | Size | Downloads |
 |----------|---------|------|-----------|
@@ -279,106 +262,103 @@ YANZHITI:
 
 ---
 
-## 📚 文档 | Documentation
+## 📚 Documentation
 
-- 📖 [完整文档 | Full Documentation](docs/README.md)
-- 🎯 [使用教程 | Tutorials](docs/tutorials/)
-- 🔧 [工具列表 | Available Tools](docs/tools.md)
-- 🌐 [API 参考 | API Reference](docs/api.md)
-- ❓ [常见问题 | FAQ](docs/faq.md)
-- 🎓 [示例库 | Examples](examples/)
+- 📖 [Full Documentation](docs/README.md)
+- 🎯 [Tutorials](docs/tutorials/)
+- 🔧 [Available Tools](docs/tools.md)
+- 🌐 [API Reference](docs/api.md)
+- ❓ [FAQ](docs/faq.md)
+- 🎓 [Examples](examples/)
 
 ---
 
-## 🤝 参与贡献 | Contributing
+## 🤝 Contributing
 
-衍智体是一个开源项目，欢迎社区贡献！
 YANZHITI is an open-source project. Community contributions are welcome!
 
-### 贡献方式 | Ways to Contribute
+### Ways to Contribute
 
-1. 🐛 [报告 Bug | Report Bugs](https://github.com/yanzhiti/yanzhiti/issues)
-2. 💡 [提出建议 | Suggest Features](https://github.com/yanzhiti/yanzhiti/issues)
-3. 🔀 [提交代码 | Submit Code](https://github.com/yanzhiti/yanzhiti/pulls)
-4. 📖 [改进文档 | Improve Docs](https://github.com/yanzhiti/yanzhiti/pulls)
-5. 🌍 [翻译 | Translation](docs/i18n/)
-6. ⭐ [点个 Star | Star Us](https://github.com/yanzhiti/yanzhiti/stargazers)
+1. 🐛 [Report Bugs](https://github.com/yanzhiti/yanzhiti/issues)
+2. 💡 [Suggest Features](https://github.com/yanzhiti/yanzhiti/issues)
+3. 🔀 [Submit Code](https://github.com/yanzhiti/yanzhiti/pulls)
+4. 📖 [Improve Docs](https://github.com/yanzhiti/yanzhiti/pulls)
+5. 🌍 [Translation](docs/i18n/)
+6. ⭐ [Star Us](https://github.com/yanzhiti/yanzhiti/stargazers)
 
-### 开发设置 | Development Setup
+### Development Setup
 
 ```bash
-# 克隆项目 | Clone the project
+# Clone the project
 git clone https://github.com/yanzhiti/yanzhiti.git
 cd yanzhiti
 
-# 安装开发依赖 | Install dev dependencies
+# Install dev dependencies
 pip install -e ".[dev]"
 
-# 运行测试 | Run tests
+# Run tests
 pytest
 
-# 代码格式化 | Code formatting
+# Code formatting
 black src tests
 ruff check src tests
 
-# 类型检查 | Type checking
+# Type checking
 mypy src
 ```
 
 ---
 
-## 🎯 路线图 | Roadmap
+## 🎯 Roadmap
 
 ### 2024 Q2
-- ✅ 核心功能实现
-- ✅ 基础 CLI 界面
-- 🔄 多语言支持 (i18n)
+- ✅ Core functionality
+- ✅ Basic CLI interface
+- 🔄 i18n support
 
 ### 2024 Q3
-- 📋 Web 界面
-- 📋 桌面应用 (Electron)
-- 📋 插件系统
-- 📋 自动更新
+- 📋 Web interface
+- 📋 Desktop app (Electron)
+- 📋 Plugin system
+- 📋 Auto-update
 
 ### 2024 Q4
-- 📋 可视化工作流编辑器
-- 📋 AI 智能体编排
-- 📋 企业版功能
-- 📋 应用商店
+- 📋 Visual workflow editor
+- 📋 AI agent orchestration
+- 📋 Enterprise features
+- 📋 App store
 
 ---
 
-## 📊 项目统计 | Project Stats
+## 📊 Project Stats
 
 <div align="center">
 
 ![Star History](https://api.star-history.com/svg?repos=yanzhiti/yanzhiti&type=Date)
 
-**活跃用户 | Active Users**: ![Users](https://img.shields.io/badge/users-1000%2B-blue)  
-**月下载量 | Monthly Downloads**: ![Downloads](https://img.shields.io/badge/downloads-5000%2B-green)  
-**贡献者 | Contributors**: ![Contributors](https://img.shields.io/github/contributors/yanzhiti/yanzhiti)  
-**最后更新 | Last Commit**: ![Last Commit](https://img.shields.io/github/last-commit/yanzhiti/yanzhiti)
+**Active Users**: ![Users](https://img.shields.io/badge/users-1000%2B-blue)  
+**Monthly Downloads**: ![Downloads](https://img.shields.io/badge/downloads-5000%2B-green)  
+**Contributors**: ![Contributors](https://img.shields.io/github/contributors/yanzhiti/yanzhiti)  
+**Last Commit**: ![Last Commit](https://img.shields.io/github/last-commit/yanzhiti/yanzhiti)
 
 </div>
 
 ---
 
-## 🙏 致谢 | Acknowledgments
+## 🙏 Acknowledgments
 
-感谢以下开源项目的支持:
 Thanks to these open-source projects:
 
-- [Anthropic](https://www.anthropic.com/) - AI 模型支持
-- [FastAPI](https://fastapi.tiangolo.com/) - Web 框架
-- [Rich](https://github.com/Textualize/rich) - 终端美化
-- [Pydantic](https://docs.pydantic.dev/) - 数据验证
-- 以及所有 Python 社区的贡献者！
+- [Anthropic](https://www.anthropic.com/) - AI model support
+- [FastAPI](https://fastapi.tiangolo.com/) - Web framework
+- [Rich](https://github.com/Textualize/rich) - Terminal beautification
+- [Pydantic](https://docs.pydantic.dev/) - Data validation
+- And all Python community contributors!
 
 ---
 
-## 📄 许可证 | License
+## 📄 License
 
-本项目采用 [MIT](LICENSE) 许可证。
 This project is licensed under the [MIT](LICENSE) License.
 
 ```
@@ -399,24 +379,22 @@ copies or substantial portions of the Software.
 
 ---
 
-## 📬 联系方式 | Contact Us
+## 📬 Contact Us
 
-- 🌐 **官网 | Website**: https://yanzhiti.github.io
-- 💬 **Discord**: [加入社区](https://discord.gg/yanzhiti) (Coming Soon)
+- 🌐 **Website**: https://yanzhiti.github.io
+- 💬 **Discord**: [Join Community](https://discord.gg/yanzhiti) (Coming Soon)
 - 🐦 **Twitter**: [@yanzhiti](https://twitter.com/yanzhiti) (Coming Soon)
-- 📧 **邮箱 | Email**: contact@yanzhiti.com
-- 💼 **微信群**: 扫码加入开发者社区 (二维码见文档)
+- 📧 **Email**: contact@yanzhiti.com
 
 ---
 
 <div align="center">
 
-**衍智体 (YANZHITI)** - 让 AI 助力您的编程之旅  
 **YANZHITI** - Empowering Your Coding Journey with AI
 
-⭐ [给项目点个 Star | Star Us](https://github.com/yanzhiti/yanzhiti/stargazers) | 
-🍴 [Fork 项目 | Fork](https://github.com/yanzhiti/yanzhiti/fork) | 
-📢 [分享 | Share](https://twitter.com/intent/tweet?text=Check%20out%20YANZHITI!)
+⭐ [Star Us](https://github.com/yanzhiti/yanzhiti/stargazers) | 
+🍴 [Fork](https://github.com/yanzhiti/yanzhiti/fork) | 
+📢 [Share](https://twitter.com/intent/tweet?text=Check%20out%20YANZHITI!)
 
 ![GitHub Org's Stars](https://img.shields.io/github/stars/yanzhiti?style=social)
 ![Followers](https://img.shields.io/github/followers/yanzhiti?style=social)

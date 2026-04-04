@@ -65,6 +65,7 @@ dev = [
     "mypy>=1.8.0",
     "pre-commit>=3.6.0",
     "ipython>=8.0.0",
+    "pyinstaller>=6.0",
 ]
 docs = [
     "mkdocs>=1.5.0",
@@ -86,6 +87,8 @@ yanzhiti-local = "yanzhiti.cli.local_main:main"
 yzt-local = "yanzhiti.cli.local_main:main"
 yanzhiti-web = "yanzhiti.cli.web_main:main"
 yzt-web = "yanzhiti.cli.web_main:main"
+yanzhiti-setup = "yanzhiti.cli.setup_wizard:main"
+yzt-diagnose = "yanzhiti.cli.diagnose:main"
 
 [project.urls]
 Homepage = "https://github.com/yanzhiti/yanzhiti"
@@ -152,3 +155,28 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --cov=src/yanzhiti --cov-report=term-missing"
 asyncio_mode = "auto"
+
+# PyInstaller 配置 | PyInstaller Configuration
+[tool.pyinstaller]
+name = "YANZHITI"
+entry_point = "src/yanzhiti/cli/main.py"
+onefile = true
+noconfirm = true
+clean_build = true
+hiddenimports = [
+    "anthropic",
+    "pydantic",
+    "pydantic_settings",
+    "rich",
+    "click",
+    "httpx",
+    "dotenv",
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+    "yaml",
+    "tomli",
+    "tomli_w",
+    "questionary",
+    "prompt_toolkit",
+]

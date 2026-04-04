@@ -54,10 +54,16 @@ class QueryEngine:
         self,
         config: QueryEngineConfig,
         api_key: Optional[str] = None,
+        base_url: Optional[str] = None,
     ):
         self.config = config
         self.api_key = api_key
-        self.client = AsyncAnthropic(api_key=api_key)
+        self.base_url = base_url
+        # 支持自定义 API 端点 (如 OpenRouter)
+        client_kwargs = {"api_key": api_key}
+        if base_url:
+            client_kwargs["base_url"] = base_url
+        self.client = AsyncAnthropic(**client_kwargs)
         self.tool_registry = ToolRegistry()
 
         # Register tools

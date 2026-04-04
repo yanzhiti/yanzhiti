@@ -8,6 +8,10 @@ import sys
 from typing import Optional
 
 import click
+from dotenv import load_dotenv
+
+# 加载 .env 文件中的环境变量
+load_dotenv()
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -70,6 +74,15 @@ def get_api_key() -> Optional[str]:
 
     # Try config file
     # TODO: Implement config file reading
+    return None
+
+
+def get_base_url() -> Optional[str]:
+    """Get API base URL from environment or config"""
+    # Try environment variable
+    base_url = os.environ.get("YANZHITI_BASE_URL")
+    if base_url:
+        return base_url
     return None
 
 
@@ -241,6 +254,24 @@ def show_help() -> None:
     is_flag=True,
     help="Show version and exit",
 )
+@click.option(
+    "--setup",
+    "-s",
+    is_flag=True,
+    help="Run configuration wizard",
+)
+@click.option(
+    "--lang",
+    "-l",
+    type=click.Choice(['zh', 'en']),
+    default='zh',
+    help="Language (zh/en)",
+)
+@click.option(
+    "--diagnose",
+    is_flag=True,
+    help="Run diagnostic tool",
+)
 @click.argument("query", required=False)
 def main(
     api_key: Optional[str],
@@ -249,6 +280,8 @@ def main(
     cwd: str,
     verbose: bool,
     version: bool,
+    setup: bool,
+    lang: str,
     query: Optional[str],
 ) -> None:
     """
@@ -257,6 +290,18 @@ def main(
     If QUERY is provided, execute it and exit.
     Otherwise, start interactive mode.
     """
+    # Run setup wizard
+    if setup:
+        from yanzhiti.cli.setup_wizard import main as setup_main
+        setup_main(standalone_mode=False)
+        return
+    
+    # Run diagnostic tool
+    if diagnose:
+        from yanzhiti.cli.diagnose import main as diagnose_main
+        diagnose_main(standalone_mode=False)
+        return
+    
     if version:
         console.print(f"衍智体 (YANZHITI) v{__version__}")
         return
@@ -269,6 +314,9 @@ def main(
         console.print("[error]Error: No API key provided[/error]")
         console.print("Set YANZHITI_API_KEY environment variable or use --api-key option")
         sys.exit(1)
+
+    # Get base URL (for OpenRouter etc.)
+    base_url = get_base_url()
 
     # Create tool registry
     tool_registry = create_tool_registry()
@@ -283,7 +331,7 @@ def main(
     )
 
     # Create engine
-    engine = QueryEngine(config, api_key=api_key)
+    engine = QueryEngine(config, api_key=api_key, base_url=base_url)
 
     # Run
     if query:
