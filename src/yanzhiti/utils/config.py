@@ -2,13 +2,23 @@
 Configuration management utilities
 """
 
+import sys
 from pathlib import Path
 from typing import Any
 
-import tomli
+if sys.version_info >= (3, 11):
+    import tomllib as tomli
+else:
+    import tomli
+
 import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings
+
+try:
+    import tomli_w
+except ImportError:
+    tomli_w = None
 
 
 class AppConfig(BaseSettings):
@@ -104,11 +114,13 @@ class ConfigManager:
 
     def save(self, config: dict[str, Any], format: str = "toml") -> None:
         """Save configuration to file"""
-        import tomli_w
-
         config_file = self.config_dir / f"config.{format}"
 
         if format == "toml":
+            if tomli_w is None:
+                raise ImportError(
+                    "tomli-w is required for TOML format. Install with: pip install tomli-w"
+                )
             with open(config_file, "wb") as f:
                 tomli_w.dump(config, f)
         else:

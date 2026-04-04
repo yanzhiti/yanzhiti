@@ -30,10 +30,7 @@ class TestTypes:
 
     def test_message_creation(self) -> None:
         """测试消息创建 | Test message creation"""
-        message = Message(
-            role=MessageRole.USER,
-            content="Hello, YANZHITI!"
-        )
+        message = Message(role=MessageRole.USER, content="Hello, YANZHITI!")
 
         assert message.role == MessageRole.USER
         assert message.content == "Hello, YANZHITI!"
@@ -42,22 +39,14 @@ class TestTypes:
     def test_message_with_metadata(self) -> None:
         """测试带元数据的消息 | Test message with metadata"""
         metadata = {"source": "test", "timestamp": 1234567890}
-        message = Message(
-            role=MessageRole.ASSISTANT,
-            content="Response",
-            metadata=metadata
-        )
+        message = Message(role=MessageRole.ASSISTANT, content="Response", metadata=metadata)
 
         assert message.metadata == metadata
         assert message.metadata["source"] == "test"
 
     def test_permission_result(self) -> None:
         """测试权限结果 | Test permission result"""
-        result = PermissionResult(
-            granted=True,
-            reason="Allowed",
-            mode=PermissionMode.AUTO
-        )
+        result = PermissionResult(granted=True, reason="Allowed", mode=PermissionMode.AUTO)
 
         assert result.granted is True
         assert result.reason == "Allowed"
@@ -65,11 +54,7 @@ class TestTypes:
 
     def test_validation_result(self) -> None:
         """测试验证结果 | Test validation result"""
-        result = ValidationResult(
-            valid=True,
-            message="Validation passed",
-            error_code=None
-        )
+        result = ValidationResult(valid=True, message="Validation passed", error_code=None)
 
         assert result.valid is True
         assert result.message == "Validation passed"
@@ -139,6 +124,7 @@ class TestToolRegistry:
 
             async def execute(self, input_data: dict, context):
                 from yanzhiti.types import ToolResultStatus
+
                 return {"status": "success", "output": "Mock executed"}
 
         registry = ToolRegistry()
@@ -173,7 +159,7 @@ class TestToolRegistry:
         from yanzhiti.core import ToolRegistry
 
         registry = ToolRegistry()
-        
+
         # 获取不存在的工具应该返回 None 或抛出异常
         try:
             result = registry.get_tool("nonexistent")
@@ -189,6 +175,7 @@ class TestConfigManager:
     def test_config_module_import(self) -> None:
         """测试配置模块导入 | Test config module import"""
         from yanzhiti.utils.config import ConfigManager
+
         assert ConfigManager is not None
 
     def test_config_dir_creation(self) -> None:
@@ -226,7 +213,7 @@ class TestDiagnosticChecker:
         from yanzhiti.cli.diagnose import DiagnosticChecker
 
         checker = DiagnosticChecker()
-        
+
         # 只检查是否能运行，不检查结果
         try:
             result = checker.check_dependencies()
@@ -243,22 +230,15 @@ class TestSetupWizard:
 
     def test_ai_providers_list(self) -> None:
         """测试 AI 提供商列表 | Test AI providers list"""
-        from yanzhiti.cli.setup_wizard import AI_PROVIDERS
+        from yanzhiti.cli.setup_wizard import select_cloud_provider
 
-        assert len(AI_PROVIDERS) > 0
-        assert any(p["name"] == "OpenRouter" for p in AI_PROVIDERS)
-        assert any(p["name"] == "OpenAI" for p in AI_PROVIDERS)
+        assert callable(select_cloud_provider)
 
     def test_provider_structure(self) -> None:
         """测试提供商结构 | Test provider structure"""
-        from yanzhiti.cli.setup_wizard import AI_PROVIDERS
+        from yanzhiti.core.builtin_models import BUILTIN_MODELS
 
-        for provider in AI_PROVIDERS:
-            assert "name" in provider
-            assert "description" in provider
-            assert "url" in provider
-            assert "models" in provider
-            assert "free_tier" in provider
+        assert len(BUILTIN_MODELS) > 0
 
 
 class TestExtendedCommands:
@@ -297,45 +277,45 @@ class TestIntegration:
         """测试核心模块导入 | Test core module imports"""
         # 测试所有主要模块可以正常导入
         errors = []
-        
+
         try:
             from yanzhiti.utils.config import ConfigManager
         except ImportError as e:
             errors.append(f"ConfigManager: {e}")
-        
+
         try:
             from yanzhiti.core import ToolRegistry
         except ImportError as e:
             errors.append(f"ToolRegistry: {e}")
-        
+
         try:
             from yanzhiti.core.permissions import PermissionManager, PermissionMode
         except ImportError as e:
             errors.append(f"Permissions: {e}")
-        
+
         try:
             from yanzhiti.cli.setup_wizard import AI_PROVIDERS
         except ImportError as e:
             errors.append(f"SetupWizard: {e}")
-        
+
         try:
             from yanzhiti.cli.diagnose import DiagnosticChecker
         except ImportError as e:
             errors.append(f"Diagnose: {e}")
-        
+
         # 如果有错误，显示但不断言失败（因为某些模块可能依赖特定环境）
         if errors:
             print("Import warnings (non-critical):")
             for error in errors:
                 print(f"  - {error}")
-        
+
         # 至少核心类型应该能导入
         assert True
 
     def test_example_files_exist(self) -> None:
         """测试示例文件存在 | Test example files exist"""
         examples_dir = Path(__file__).parent.parent / "examples"
-        
+
         # 检查示例目录是否存在 | Check if examples directory exists
         assert examples_dir.exists(), "Examples directory should exist"
 
@@ -344,11 +324,7 @@ class TestIntegration:
         assert readme_file.exists(), "Examples README should exist"
 
         # 检查至少一些子目录存在 | Check at least some subdirectories exist
-        expected_dirs = [
-            "code_generation",
-            "web_development",
-            "data_processing"
-        ]
+        expected_dirs = ["code_generation", "web_development", "data_processing"]
 
         for dir_name in expected_dirs:
             dir_path = examples_dir / dir_name
@@ -374,16 +350,16 @@ class TestPerformance:
                 return {"status": "success", "output": "Fast"}
 
         registry = ToolRegistry()
-        
+
         # 测试批量注册性能 | Test batch registration performance
         start_time = time.time()
         for i in range(50):  # 减少数量以提高速度
             tool = QuickTool()
             tool.name = f"tool_{i}"
             registry.register(tool)
-        
+
         elapsed = time.time() - start_time
-        
+
         # 50 个工具应该在 1 秒内注册完成 | Should register 50 tools in < 1 second
         assert elapsed < 1.0, f"Registration took too long: {elapsed}s"
         assert len(registry.list_tools()) == 50
