@@ -7,7 +7,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/yanzhiti/yanzhiti?style=social)](https://github.com/yanzhiti/yanzhiti/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/yanzhiti/yanzhiti?style=social)](https://github.com/yanzhiti/yanzhiti/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/yanzhiti/yanzhiti)](https://github.com/yanzhiti/yanzhiti/issues)
-[![Downloads](https://img.shields.io/github/downloads/yanzhiti/yanzhiti/total)](https://github.com/yanzhiti/yanzhiti/releases)
 [![CI/CD](https://github.com/yanzhiti/yanzhiti/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/yanzhiti/yanzhiti/actions)
 [![Code Quality](https://img.shields.io/badge/code%20quality-A%2B-green)](src/)
 [![Test Coverage](https://img.shields.io/badge/coverage-88%25-success)](tests/)
@@ -197,14 +196,17 @@ YANZHITI:
 
 ---
 
-## 📦 下载统计 | Downloads
+## 📥 安装方式 | Installation
 
-[![PyPI Version](https://img.shields.io/pypi/v/yanzhiti?logo=pypi&logoColor=yellow)](https://pypi.org/project/yanzhiti/)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/yanzhiti)](https://pypi.org/project/yanzhiti/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/yanzhiti)](https://pypi.org/project/yanzhiti/)
-[![PyPI - Implementation](https://img.shields.io/pypi/implementation/yanzhiti)](https://pypi.org/project/yanzhiti/)
+> **推荐使用 pip 安装** | Recommended: `pip install yanzhiti`
 
-**PyPI 安装**: `pip install yanzhiti`
+| 安装方式 | 命令 | 说明 |
+|---------|------|------|
+| **pip（推荐）** | `pip install yanzhiti` | PyPI 官方包，最简方式 |
+| **pip 全量安装** | `pip install yanzhiti[all]` | 含所有可选依赖 |
+| **最新源码** | `pip install git+https://github.com/yanzhiti/yanzhiti.git` | 保持最新 |
+
+**发布版本**通过 Git tag 创建，每次 `v*` tag push 时自动构建并发布到 PyPI。
 
 ---
 
