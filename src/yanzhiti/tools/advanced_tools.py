@@ -76,11 +76,11 @@ class NotebookEditTool(Tool):
                 )
 
             # Edit cell
-            notebook["cells"][cell_index]["source"] = new_source.split('\n')
+            notebook["cells"][cell_index]["source"] = new_source.split("\n")
             notebook["cells"][cell_index]["cell_type"] = cell_type
 
             # Write notebook
-            with open(path, 'w') as f:
+            with open(path, "w") as f:
                 json.dump(notebook, f, indent=2)
 
             return ToolResult(
@@ -148,7 +148,7 @@ class AskUserQuestionTool(Tool):
             else:
                 # Default: use console input
                 if options:
-                    options_str = "\n".join(f"{i+1}. {opt}" for i, opt in enumerate(options))
+                    options_str = "\n".join(f"{i + 1}. {opt}" for i, opt in enumerate(options))
                     prompt = f"{question}\n\n{options_str}\n\nYour choice (1-{len(options)}): "
                 else:
                     prompt = f"{question}: "
@@ -227,7 +227,7 @@ class ImageAnalyzerTool(Tool):
                 )
 
             # Check if it's an image file
-            image_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'}
+            image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"}
             if path.suffix.lower() not in image_extensions:
                 return ToolResult(
                     status=ToolResultStatus.ERROR,
@@ -329,30 +329,36 @@ class CodeSearchTool(Tool):
                     continue
 
                 # Skip common non-code directories
-                if any(part in {'node_modules', 'venv', '__pycache__', '.git', 'dist', 'build'}
-                       for part in file_path.parts):
+                if any(
+                    part in {"node_modules", "venv", "__pycache__", ".git", "dist", "build"}
+                    for part in file_path.parts
+                ):
                     continue
 
                 try:
-                    with open(file_path, encoding='utf-8', errors='ignore') as f:
+                    with open(file_path, encoding="utf-8", errors="ignore") as f:
                         content = f.read()
 
                     # Simple text matching (semantic search would use embeddings)
                     if query.lower() in content.lower():
                         # Find matching lines
-                        lines = content.split('\n')
+                        lines = content.split("\n")
                         matches = []
                         for i, line in enumerate(lines):
                             if query.lower() in line.lower():
-                                matches.append({
-                                    "line": i + 1,
-                                    "content": line.strip()[:100],
-                                })
+                                matches.append(
+                                    {
+                                        "line": i + 1,
+                                        "content": line.strip()[:100],
+                                    }
+                                )
 
-                        results.append({
-                            "file": str(file_path),
-                            "matches": matches[:3],  # Top 3 matches per file
-                        })
+                        results.append(
+                            {
+                                "file": str(file_path),
+                                "matches": matches[:3],  # Top 3 matches per file
+                            }
+                        )
 
                         if len(results) >= max_results:
                             break

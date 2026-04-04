@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class PermissionAction(str, Enum):
     """Permission actions"""
+
     ALLOW = "allow"
     DENY = "deny"
     ASK = "ask"  # Ask user for permission
@@ -19,6 +20,7 @@ class PermissionAction(str, Enum):
 
 class PermissionScope(str, Enum):
     """Permission scopes"""
+
     READ = "read"
     WRITE = "write"
     EXECUTE = "execute"
@@ -28,6 +30,7 @@ class PermissionScope(str, Enum):
 
 class PermissionRule(BaseModel):
     """A single permission rule"""
+
     id: str
     name: str
     description: str = ""
@@ -41,6 +44,7 @@ class PermissionRule(BaseModel):
 
 class PermissionContext(BaseModel):
     """Context for permission check"""
+
     tool_name: str
     operation: str
     path: str | None = None
@@ -51,6 +55,7 @@ class PermissionContext(BaseModel):
 
 class PermissionResult(BaseModel):
     """Result of permission check"""
+
     granted: bool
     action: PermissionAction
     rule: PermissionRule | None = None
@@ -213,7 +218,6 @@ class PermissionEngine:
                 pattern=r"^\.\/.*",
                 priority=10,
             ),
-
             # Deny reading sensitive files
             PermissionRule(
                 id="deny-sensitive-files",
@@ -222,7 +226,6 @@ class PermissionEngine:
                 pattern=r"(\.env|\.ssh|\.gitconfig|id_rsa|\.pem)$",
                 priority=100,
             ),
-
             # Ask for write operations
             PermissionRule(
                 id="ask-write",
@@ -232,7 +235,6 @@ class PermissionEngine:
                 pattern=r".*",
                 priority=5,
             ),
-
             # Ask for execute operations
             PermissionRule(
                 id="ask-execute",
@@ -242,7 +244,6 @@ class PermissionEngine:
                 pattern=r".*",
                 priority=5,
             ),
-
             # Allow safe commands
             PermissionRule(
                 id="allow-safe-commands",

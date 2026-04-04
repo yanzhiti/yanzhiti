@@ -32,10 +32,16 @@ class TeamCreateTool(Tool):
                 "description": {"type": "string", "description": "Team description"},
                 "agents": {
                     "type": "array",
-                    "items": {"type": "object", "properties": {"name": {"type": "string"}, "role": {"type": "string"}}},
+                    "items": {
+                        "type": "object",
+                        "properties": {"name": {"type": "string"}, "role": {"type": "string"}},
+                    },
                     "description": "List of agents in the team",
                 },
-                "workflow": {"type": "string", "description": "Workflow type: parallel, sequential, hierarchical"},
+                "workflow": {
+                    "type": "string",
+                    "description": "Workflow type: parallel, sequential, hierarchical",
+                },
             },
             "required": ["team_name"],
         }
@@ -89,14 +95,22 @@ class TeamDeleteTool(Tool):
         team_name = input_data.get("team_name")
 
         if not self._team_create_tool:
-            return ToolResult(status=ToolResultStatus.ERROR, error="Team management not initialized")
+            return ToolResult(
+                status=ToolResultStatus.ERROR, error="Team management not initialized"
+            )
 
         if team_id and team_id in self._team_create_tool._teams:
             team = self._team_create_tool._teams[team_id]
             del self._team_create_tool._teams[team_id]
-            return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Deleted team '{team['name']}'", metadata={"deleted_team": team})
+            return ToolResult(
+                status=ToolResultStatus.SUCCESS,
+                output=f"Deleted team '{team['name']}'",
+                metadata={"deleted_team": team},
+            )
 
-        return ToolResult(status=ToolResultStatus.ERROR, error=f"Team not found: {team_id or team_name}")
+        return ToolResult(
+            status=ToolResultStatus.ERROR, error=f"Team not found: {team_id or team_name}"
+        )
 
 
 class BriefTool(Tool):
@@ -112,8 +126,17 @@ class BriefTool(Tool):
             "type": "object",
             "properties": {
                 "message": {"type": "string", "description": "Brief message to show"},
-                "type": {"type": "string", "enum": ["info", "success", "warning", "error", "progress"], "description": "Type of message"},
-                "progress": {"type": "number", "minimum": 0, "maximum": 100, "description": "Progress percentage"},
+                "type": {
+                    "type": "string",
+                    "enum": ["info", "success", "warning", "error", "progress"],
+                    "description": "Type of message",
+                },
+                "progress": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "Progress percentage",
+                },
             },
             "required": ["message"],
         }
@@ -129,7 +152,11 @@ class BriefTool(Tool):
         if progress is not None:
             output += f" ({progress}%)"
 
-        return ToolResult(status=ToolResultStatus.SUCCESS, output=output, metadata={"message": message, "type": msg_type, "progress": progress})
+        return ToolResult(
+            status=ToolResultStatus.SUCCESS,
+            output=output,
+            metadata={"message": message, "type": msg_type, "progress": progress},
+        )
 
 
 class ScheduleCronTool(Tool):
@@ -144,7 +171,11 @@ class ScheduleCronTool(Tool):
         return {
             "type": "object",
             "properties": {
-                "action": {"type": "string", "enum": ["schedule", "list", "cancel", "run"], "description": "Action to perform"},
+                "action": {
+                    "type": "string",
+                    "enum": ["schedule", "list", "cancel", "run"],
+                    "description": "Action to perform",
+                },
                 "task_id": {"type": "string", "description": "Task ID"},
                 "cron": {"type": "string", "description": "Cron expression"},
                 "command": {"type": "string", "description": "Command to execute"},
@@ -160,7 +191,9 @@ class ScheduleCronTool(Tool):
             cron_expr = input_data.get("cron")
             command = input_data.get("command")
             if not cron_expr or not command:
-                return ToolResult(status=ToolResultStatus.ERROR, error="cron and command are required")
+                return ToolResult(
+                    status=ToolResultStatus.ERROR, error="cron and command are required"
+                )
 
             task_id = f"cron_{len(self._scheduled_tasks) + 1}"
             task = {
@@ -172,16 +205,24 @@ class ScheduleCronTool(Tool):
                 "status": "scheduled",
             }
             self._scheduled_tasks[task_id] = task
-            return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Scheduled task '{task_id}'", metadata=task)
+            return ToolResult(
+                status=ToolResultStatus.SUCCESS, output=f"Scheduled task '{task_id}'", metadata=task
+            )
 
         elif action == "list":
-            return ToolResult(status=ToolResultStatus.SUCCESS, output=json.dumps(list(self._scheduled_tasks.values()), indent=2), metadata={"count": len(self._scheduled_tasks)})
+            return ToolResult(
+                status=ToolResultStatus.SUCCESS,
+                output=json.dumps(list(self._scheduled_tasks.values()), indent=2),
+                metadata={"count": len(self._scheduled_tasks)},
+            )
 
         elif action == "cancel":
             task_id = input_data.get("task_id")
             if task_id in self._scheduled_tasks:
                 del self._scheduled_tasks[task_id]
-                return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Cancelled task '{task_id}'")
+                return ToolResult(
+                    status=ToolResultStatus.SUCCESS, output=f"Cancelled task '{task_id}'"
+                )
             return ToolResult(status=ToolResultStatus.ERROR, error=f"Task not found: {task_id}")
 
         return ToolResult(status=ToolResultStatus.ERROR, error=f"Unknown action: {action}")
@@ -198,8 +239,15 @@ class SleepTool(Tool):
         return {
             "type": "object",
             "properties": {
-                "seconds": {"type": "number", "minimum": 0, "description": "Number of seconds to sleep"},
-                "message": {"type": "string", "description": "Optional message to show during sleep"},
+                "seconds": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Number of seconds to sleep",
+                },
+                "message": {
+                    "type": "string",
+                    "description": "Optional message to show during sleep",
+                },
             },
             "required": ["seconds"],
         }
@@ -210,14 +258,20 @@ class SleepTool(Tool):
             return ToolResult(status=ToolResultStatus.ERROR, error="Seconds must be non-negative")
 
         await asyncio.sleep(seconds)
-        return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Slept for {seconds} seconds", metadata={"seconds": seconds})
+        return ToolResult(
+            status=ToolResultStatus.SUCCESS,
+            output=f"Slept for {seconds} seconds",
+            metadata={"seconds": seconds},
+        )
 
 
 class EnterWorktreeTool(Tool):
     """进入Git worktree"""
 
     def __init__(self):
-        super().__init__(name="enter_worktree", description="Enter a git worktree for isolated work")
+        super().__init__(
+            name="enter_worktree", description="Enter a git worktree for isolated work"
+        )
         self._current_worktree: str | None = None
 
     @property
@@ -227,7 +281,10 @@ class EnterWorktreeTool(Tool):
             "properties": {
                 "branch": {"type": "string", "description": "Branch name for the worktree"},
                 "path": {"type": "string", "description": "Path for the worktree"},
-                "create": {"type": "boolean", "description": "Create new worktree if it doesn't exist"},
+                "create": {
+                    "type": "boolean",
+                    "description": "Create new worktree if it doesn't exist",
+                },
             },
             "required": ["branch"],
         }
@@ -239,13 +296,22 @@ class EnterWorktreeTool(Tool):
 
         if create:
             cmd = f"git worktree add {path} {branch}"
-            proc = await asyncio.create_subprocess_shell(cmd, cwd=context.cwd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            proc = await asyncio.create_subprocess_shell(
+                cmd, cwd=context.cwd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            )
             stdout, stderr = await proc.communicate()
             if proc.returncode != 0:
-                return ToolResult(status=ToolResultStatus.ERROR, error=f"Failed to create worktree: {stderr.decode()}")
+                return ToolResult(
+                    status=ToolResultStatus.ERROR,
+                    error=f"Failed to create worktree: {stderr.decode()}",
+                )
 
         self._current_worktree = path
-        return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Entered worktree at {path} for branch {branch}", metadata={"branch": branch, "path": path})
+        return ToolResult(
+            status=ToolResultStatus.SUCCESS,
+            output=f"Entered worktree at {path} for branch {branch}",
+            metadata={"branch": branch, "path": path},
+        )
 
 
 class ExitWorktreeTool(Tool):
@@ -261,7 +327,10 @@ class ExitWorktreeTool(Tool):
             "type": "object",
             "properties": {
                 "remove": {"type": "boolean", "description": "Remove the worktree after exiting"},
-                "force": {"type": "boolean", "description": "Force removal even with uncommitted changes"},
+                "force": {
+                    "type": "boolean",
+                    "description": "Force removal even with uncommitted changes",
+                },
             },
         }
 
@@ -278,13 +347,22 @@ class ExitWorktreeTool(Tool):
             cmd = f"git worktree remove {worktree_path}"
             if force:
                 cmd += " --force"
-            proc = await asyncio.create_subprocess_shell(cmd, cwd=context.cwd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            proc = await asyncio.create_subprocess_shell(
+                cmd, cwd=context.cwd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            )
             stdout, stderr = await proc.communicate()
             if proc.returncode != 0:
-                return ToolResult(status=ToolResultStatus.ERROR, error=f"Failed to remove worktree: {stderr.decode()}")
+                return ToolResult(
+                    status=ToolResultStatus.ERROR,
+                    error=f"Failed to remove worktree: {stderr.decode()}",
+                )
 
         self._enter_worktree_tool._current_worktree = None
-        return ToolResult(status=ToolResultStatus.SUCCESS, output=f"Exited worktree at {worktree_path}" + (" and removed it" if remove else ""), metadata={"path": worktree_path, "removed": remove})
+        return ToolResult(
+            status=ToolResultStatus.SUCCESS,
+            output=f"Exited worktree at {worktree_path}" + (" and removed it" if remove else ""),
+            metadata={"path": worktree_path, "removed": remove},
+        )
 
 
 class ListMcpResourcesTool(Tool):
@@ -296,19 +374,33 @@ class ListMcpResourcesTool(Tool):
 
     @property
     def input_schema(self) -> dict[str, Any]:
-        return {"type": "object", "properties": {"server": {"type": "string", "description": "Filter by server name"}}}
+        return {
+            "type": "object",
+            "properties": {"server": {"type": "string", "description": "Filter by server name"}},
+        }
 
     async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         if not self._mcp_manager:
-            return ToolResult(status=ToolResultStatus.SUCCESS, output="No MCP manager configured", metadata={"resources": []})
+            return ToolResult(
+                status=ToolResultStatus.SUCCESS,
+                output="No MCP manager configured",
+                metadata={"resources": []},
+            )
 
         resources = self._mcp_manager.list_resources()
         server_filter = input_data.get("server")
         if server_filter:
             resources = [r for r in resources if server_filter in r.uri]
 
-        resource_list = [{"uri": r.uri, "name": r.name, "description": r.description, "mime_type": r.mime_type} for r in resources]
-        return ToolResult(status=ToolResultStatus.SUCCESS, output=json.dumps(resource_list, indent=2), metadata={"count": len(resource_list)})
+        resource_list = [
+            {"uri": r.uri, "name": r.name, "description": r.description, "mime_type": r.mime_type}
+            for r in resources
+        ]
+        return ToolResult(
+            status=ToolResultStatus.SUCCESS,
+            output=json.dumps(resource_list, indent=2),
+            metadata={"count": len(resource_list)},
+        )
 
 
 class ReadMcpResourceTool(Tool):
@@ -320,7 +412,11 @@ class ReadMcpResourceTool(Tool):
 
     @property
     def input_schema(self) -> dict[str, Any]:
-        return {"type": "object", "properties": {"uri": {"type": "string", "description": "URI of the resource to read"}}, "required": ["uri"]}
+        return {
+            "type": "object",
+            "properties": {"uri": {"type": "string", "description": "URI of the resource to read"}},
+            "required": ["uri"],
+        }
 
     async def execute(self, input_data: dict[str, Any], context: ToolContext) -> ToolResult:
         uri = input_data["uri"]
@@ -330,6 +426,8 @@ class ReadMcpResourceTool(Tool):
 
         try:
             content = await self._mcp_manager.read_resource(uri)
-            return ToolResult(status=ToolResultStatus.SUCCESS, output=str(content), metadata={"uri": uri})
+            return ToolResult(
+                status=ToolResultStatus.SUCCESS, output=str(content), metadata={"uri": uri}
+            )
         except Exception as e:
             return ToolResult(status=ToolResultStatus.ERROR, error=f"Failed to read resource: {e}")

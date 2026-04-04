@@ -51,14 +51,16 @@ from yanzhiti.tools import (  # noqa: E402
 )
 
 # Custom theme
-custom_theme = Theme({
-    "info": "cyan",
-    "warning": "yellow",
-    "error": "red",
-    "success": "green",
-    "user": "blue",
-    "assistant": "magenta",
-})
+custom_theme = Theme(
+    {
+        "info": "cyan",
+        "warning": "yellow",
+        "error": "red",
+        "success": "green",
+        "user": "blue",
+        "assistant": "magenta",
+    }
+)
 
 console = Console(theme=custom_theme)
 
@@ -126,12 +128,14 @@ def create_tool_registry() -> ToolRegistry:
 
 async def run_interactive(engine: QueryEngine) -> None:
     """Run interactive REPL"""
-    console.print(Panel.fit(
-        "[bold]衍智体 (YANZHITI) - Python Edition[/bold]\n"
-        f"Version: {__version__}\n"
-        "Type your query and press Enter. Use Ctrl+C to exit.",
-        style="info",
-    ))
+    console.print(
+        Panel.fit(
+            "[bold]衍智体 (YANZHITI) - Python Edition[/bold]\n"
+            f"Version: {__version__}\n"
+            "Type your query and press Enter. Use Ctrl+C to exit.",
+            style="info",
+        )
+    )
 
     while True:
         try:
@@ -150,17 +154,19 @@ async def run_interactive(engine: QueryEngine) -> None:
                 continue
             elif user_input == "/stats":
                 stats = engine.get_stats()
-                console.print(Panel(
-                    f"Session ID: {stats['session_id']}\n"
-                    f"Messages: {stats['message_count']}\n"
-                    f"Turns: {stats['turn_count']}\n"
-                    f"Input tokens: {stats['usage']['input_tokens']}\n"
-                    f"Output tokens: {stats['usage']['output_tokens']}\n"
-                    f"Total tokens: {stats['usage']['total_tokens']}\n"
-                    f"Tools available: {stats['tool_count']}",
-                    title="Session Statistics",
-                    style="info",
-                ))
+                console.print(
+                    Panel(
+                        f"Session ID: {stats['session_id']}\n"
+                        f"Messages: {stats['message_count']}\n"
+                        f"Turns: {stats['turn_count']}\n"
+                        f"Input tokens: {stats['usage']['input_tokens']}\n"
+                        f"Output tokens: {stats['usage']['output_tokens']}\n"
+                        f"Total tokens: {stats['usage']['total_tokens']}\n"
+                        f"Tools available: {stats['tool_count']}",
+                        title="Session Statistics",
+                        style="info",
+                    )
+                )
                 continue
             elif user_input == "/reset":
                 engine.reset()
@@ -261,8 +267,8 @@ def show_help() -> None:
 @click.option(
     "--lang",
     "-l",
-    type=click.Choice(['zh', 'en']),
-    default='zh',
+    type=click.Choice(["zh", "en"]),
+    default="zh",
     help="Language (zh/en)",
 )
 @click.option(
@@ -316,36 +322,42 @@ def main(
     # 显示项目信息 | Show project information
     if info:
         from yanzhiti.cli.extended_commands import show_info
+
         show_info()
         return
 
     # 显示工具列表 | Show tools list
     if tools:
         from yanzhiti.cli.extended_commands import show_tools
+
         show_tools()
         return
 
     # 显示示例库 | Show examples
     if examples:
         from yanzhiti.cli.extended_commands import show_examples
+
         show_examples()
         return
 
     # 检查更新 | Check for updates
     if update:
         from yanzhiti.cli.extended_commands import check_update
+
         check_update()
         return
 
     # Run setup wizard
     if setup:
         from yanzhiti.cli.setup_wizard import main as setup_main
+
         setup_main(standalone_mode=False)
         return
 
     # Run diagnostic tool
     if diagnose:
         from yanzhiti.cli.diagnose import main as diagnose_main
+
         diagnose_main(standalone_mode=False)
         return
 

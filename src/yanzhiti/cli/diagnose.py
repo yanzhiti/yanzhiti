@@ -33,18 +33,22 @@ class DiagnosticChecker:
         required = (3, 10)
 
         if version >= required:
-            console.print(f"[green]✓ Python {version.major}.{version.minor}.{version.micro} (满足要求 | Required: 3.10+)[/green]")
+            console.print(
+                f"[green]✓ Python {version.major}.{version.minor}.{version.micro} (满足要求 | Required: 3.10+)[/green]"
+            )
             return True
         else:
             error_msg = f"✗ Python {version.major}.{version.minor}.{version.micro} (需要 3.10+ | Required: 3.10+)"
             console.print(f"[red]{error_msg}[/red]")
 
-            self.issues.append({
-                "type": "python_version",
-                "severity": "error",
-                "message": error_msg,
-                "fix": "upgrade_python"
-            })
+            self.issues.append(
+                {
+                    "type": "python_version",
+                    "severity": "error",
+                    "message": error_msg,
+                    "fix": "upgrade_python",
+                }
+            )
             return False
 
     def check_dependencies(self) -> bool:
@@ -52,8 +56,14 @@ class DiagnosticChecker:
         console.print("\n[cyan]检查依赖包 | Checking dependencies...[/cyan]")
 
         required_packages = [
-            "anthropic", "click", "rich", "pydantic",
-            "httpx", "python-dotenv", "fastapi", "uvicorn"
+            "anthropic",
+            "click",
+            "rich",
+            "pydantic",
+            "httpx",
+            "python-dotenv",
+            "fastapi",
+            "uvicorn",
         ]
 
         missing = []
@@ -66,13 +76,15 @@ class DiagnosticChecker:
                 missing.append(pkg)
 
         if missing:
-            self.issues.append({
-                "type": "missing_dependencies",
-                "severity": "error",
-                "message": f"Missing packages: {', '.join(missing)}",
-                "fix": "install_dependencies",
-                "packages": missing
-            })
+            self.issues.append(
+                {
+                    "type": "missing_dependencies",
+                    "severity": "error",
+                    "message": f"Missing packages: {', '.join(missing)}",
+                    "fix": "install_dependencies",
+                    "packages": missing,
+                }
+            )
             return False
 
         console.print("[green]✓ 所有依赖已安装 | All dependencies installed[/green]")
@@ -86,12 +98,14 @@ class DiagnosticChecker:
 
         if not env_file.exists():
             console.print(f"[red]✗ .env file not found at {env_file}[/red]")
-            self.issues.append({
-                "type": "missing_env",
-                "severity": "error",
-                "message": "Configuration file (.env) not found",
-                "fix": "create_env"
-            })
+            self.issues.append(
+                {
+                    "type": "missing_env",
+                    "severity": "error",
+                    "message": "Configuration file (.env) not found",
+                    "fix": "create_env",
+                }
+            )
             return False
 
         console.print(f"[green]✓ .env file exists: {env_file}[/green]")
@@ -99,20 +113,25 @@ class DiagnosticChecker:
         # 检查关键配置 | Check critical configs
         try:
             from dotenv import load_dotenv
+
             load_dotenv(env_file)
 
             api_key = os.getenv("YANZHITI_API_KEY")
             if not api_key:
                 console.print("[red]✗ YANZHITI_API_KEY not set[/red]")
-                self.issues.append({
-                    "type": "missing_api_key",
-                    "severity": "error",
-                    "message": "API key not configured",
-                    "fix": "configure_api_key"
-                })
+                self.issues.append(
+                    {
+                        "type": "missing_api_key",
+                        "severity": "error",
+                        "message": "API key not configured",
+                        "fix": "configure_api_key",
+                    }
+                )
                 return False
 
-            console.print(f"[green]✓ API key configured (****{api_key[-4:] if len(api_key) > 4 else '****'})[/green]")
+            console.print(
+                f"[green]✓ API key configured (****{api_key[-4:] if len(api_key) > 4 else '****'})[/green]"
+            )
 
             base_url = os.getenv("YANZHITI_BASE_URL")
             if base_url:
@@ -126,12 +145,14 @@ class DiagnosticChecker:
 
         except Exception as e:
             console.print(f"[red]✗ Error reading .env: {e}[/red]")
-            self.issues.append({
-                "type": "env_read_error",
-                "severity": "error",
-                "message": f"Failed to read .env file: {e}",
-                "fix": "fix_env_file"
-            })
+            self.issues.append(
+                {
+                    "type": "env_read_error",
+                    "severity": "error",
+                    "message": f"Failed to read .env file: {e}",
+                    "fix": "fix_env_file",
+                }
+            )
             return False
 
     def check_api_connection(self) -> bool:
@@ -141,13 +162,16 @@ class DiagnosticChecker:
         try:
             import httpx
             from dotenv import load_dotenv
+
             load_dotenv()
 
             api_key = os.getenv("YANZHITI_API_KEY")
             base_url = os.getenv("YANZHITI_BASE_URL", "https://openrouter.ai/api/v1")
 
             if not api_key:
-                console.print("[yellow]⚠ 跳过测试 (API key 未配置) | Skip test (no API key)[/yellow]")
+                console.print(
+                    "[yellow]⚠ 跳过测试 (API key 未配置) | Skip test (no API key)[/yellow]"
+                )
                 return True
 
             import asyncio
@@ -167,22 +191,26 @@ class DiagnosticChecker:
                 return True
             else:
                 console.print("[red]✗ API connection failed[/red]")
-                self.issues.append({
-                    "type": "api_connection_error",
-                    "severity": "warning",
-                    "message": "Failed to connect to API",
-                    "fix": "check_api_credentials"
-                })
+                self.issues.append(
+                    {
+                        "type": "api_connection_error",
+                        "severity": "warning",
+                        "message": "Failed to connect to API",
+                        "fix": "check_api_credentials",
+                    }
+                )
                 return False
 
         except Exception as e:
             console.print(f"[red]✗ Connection error: {e}[/red]")
-            self.issues.append({
-                "type": "api_connection_error",
-                "severity": "error",
-                "message": f"API connection error: {e}",
-                "fix": "check_network"
-            })
+            self.issues.append(
+                {
+                    "type": "api_connection_error",
+                    "severity": "error",
+                    "message": f"API connection error: {e}",
+                    "fix": "check_network",
+                }
+            )
             return False
 
     def check_permissions(self) -> bool:
@@ -198,12 +226,14 @@ class DiagnosticChecker:
             return True
         except Exception as e:
             console.print(f"[red]✗ Permission error: {e}[/red]")
-            self.issues.append({
-                "type": "permission_error",
-                "severity": "warning",
-                "message": f"Permission error: {e}",
-                "fix": "fix_permissions"
-            })
+            self.issues.append(
+                {
+                    "type": "permission_error",
+                    "severity": "warning",
+                    "message": f"Permission error: {e}",
+                    "fix": "fix_permissions",
+                }
+            )
             return False
 
     def check_system_info(self) -> dict:
@@ -215,7 +245,7 @@ class DiagnosticChecker:
             "os_version": platform.version(),
             "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
             "platform": platform.platform(),
-            "cwd": str(Path.cwd())
+            "cwd": str(Path.cwd()),
         }
 
         table = Table(show_header=False)
@@ -235,7 +265,9 @@ def auto_fix(issue: dict) -> bool:
 
     if fix_type == "install_dependencies":
         packages = issue.get("packages", [])
-        console.print(f"\n[cyan]正在安装缺失的依赖包 | Installing missing packages: {', '.join(packages)}[/cyan]")
+        console.print(
+            f"\n[cyan]正在安装缺失的依赖包 | Installing missing packages: {', '.join(packages)}[/cyan]"
+        )
 
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install"] + packages)
@@ -271,7 +303,9 @@ YANZHITI_MAX_TURNS=100
                 f.write(env_content)
 
             console.print(f"[green]✓ .env file created: {env_file}[/green]")
-            console.print("[yellow]请编辑 .env 文件并填入您的 API 密钥 | Please edit .env file and add your API key[/yellow]")
+            console.print(
+                "[yellow]请编辑 .env 文件并填入您的 API 密钥 | Please edit .env file and add your API key[/yellow]"
+            )
             return True
         except Exception as e:
             console.print(f"[red]✗ 创建失败 | Creation failed: {e}[/red]")
@@ -291,12 +325,14 @@ YANZHITI_MAX_TURNS=100
 
 def run_diagnosis(auto_fix_enabled: bool = False) -> tuple[bool, list[dict]]:
     """运行完整诊断 | Run full diagnosis"""
-    console.print(Panel.fit(
-        "[bold]衍智体 (YANZHITI) 诊断工具 | Diagnostic Tool[/bold]\n"
-        "正在检查系统配置... | Checking system configuration...",
-        style="cyan",
-        border_style="green"
-    ))
+    console.print(
+        Panel.fit(
+            "[bold]衍智体 (YANZHITI) 诊断工具 | Diagnostic Tool[/bold]\n"
+            "正在检查系统配置... | Checking system configuration...",
+            style="cyan",
+            border_style="green",
+        )
+    )
 
     checker = DiagnosticChecker()
 
@@ -322,9 +358,9 @@ def run_diagnosis(auto_fix_enabled: bool = False) -> tuple[bool, list[dict]]:
             results.append((name, False))
 
     # 显示摘要 | Show summary
-    console.print("\n" + "="*60)
+    console.print("\n" + "=" * 60)
     console.print("[bold]诊断摘要 | Diagnostic Summary[/bold]")
-    console.print("="*60)
+    console.print("=" * 60)
 
     passed = sum(1 for _, result in results if result)
     total = len(results)
@@ -337,13 +373,19 @@ def run_diagnosis(auto_fix_enabled: bool = False) -> tuple[bool, list[dict]]:
 
     # 显示问题列表 | Show issues
     if checker.issues:
-        console.print(f"\n[bold red]发现 {len(checker.issues)} 个问题 | {len(checker.issues)} issues found:[/bold red]\n")
+        console.print(
+            f"\n[bold red]发现 {len(checker.issues)} 个问题 | {len(checker.issues)} issues found:[/bold red]\n"
+        )
 
         for i, issue in enumerate(checker.issues, 1):
             severity_icon = "🔴" if issue["severity"] == "error" else "🟡"
             console.print(f"{i}. {severity_icon} {issue['message']}")
 
-            if auto_fix_enabled and issue.get("fix") and Confirm.ask("   自动修复？| Auto-fix?", default=True):
+            if (
+                auto_fix_enabled
+                and issue.get("fix")
+                and Confirm.ask("   自动修复？| Auto-fix?", default=True)
+            ):
                 if auto_fix(issue):
                     console.print("   [green]✓ 修复成功 | Fixed successfully[/green]\n")
                 else:
@@ -356,8 +398,8 @@ def run_diagnosis(auto_fix_enabled: bool = False) -> tuple[bool, list[dict]]:
 
 
 @click.command()
-@click.option('--auto-fix', '-f', is_flag=True, help='自动修复问题 | Auto-fix issues')
-@click.option('--verbose', '-v', is_flag=True, help='详细输出 | Verbose output')
+@click.option("--auto-fix", "-f", is_flag=True, help="自动修复问题 | Auto-fix issues")
+@click.option("--verbose", "-v", is_flag=True, help="详细输出 | Verbose output")
 def main(auto_fix: bool, verbose: bool):
     """
     诊断工具 - 检查并修复常见问题
@@ -381,6 +423,7 @@ def main(auto_fix: bool, verbose: bool):
     except Exception as e:
         console.print(f"\n[red]诊断过程出错 | Diagnostic error: {e}[/red]")
         import traceback
+
         if verbose:
             traceback.print_exc()
         sys.exit(1)

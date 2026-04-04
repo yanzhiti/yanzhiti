@@ -14,6 +14,7 @@ from yanzhiti.types import ToolResultStatus
 
 class Task(BaseModel):
     """Task model"""
+
     id: str = Field(default_factory=lambda: str(uuid4()))
     title: str
     description: str | None = None
@@ -175,14 +176,16 @@ class TaskListTool(Tool):
 
         output = ["Tasks:", ""]
         for task in tasks:
-            output.extend([
-                f"ID: {task.id}",
-                f"Title: {task.title}",
-                f"Status: {task.status}",
-                f"Priority: {task.priority}",
-                f"Created: {task.created_at.strftime('%Y-%m-%d %H:%M:%S')}",
-                "",
-            ])
+            output.extend(
+                [
+                    f"ID: {task.id}",
+                    f"Title: {task.title}",
+                    f"Status: {task.status}",
+                    f"Priority: {task.priority}",
+                    f"Created: {task.created_at.strftime('%Y-%m-%d %H:%M:%S')}",
+                    "",
+                ]
+            )
 
         return ToolResult(
             status=ToolResultStatus.SUCCESS,

@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 class MCPTransport(str, Enum):
     """MCP transport types"""
+
     STDIO = "stdio"
     HTTP = "http"
     WEBSOCKET = "websocket"
@@ -22,6 +23,7 @@ class MCPTransport(str, Enum):
 
 class MCPServerConfig(BaseModel):
     """Configuration for an MCP server"""
+
     name: str
     command: str | None = None  # For stdio transport
     url: str | None = None  # For http/ws transport
@@ -33,6 +35,7 @@ class MCPServerConfig(BaseModel):
 
 class MCPTool(BaseModel):
     """An MCP tool definition"""
+
     name: str
     description: str
     input_schema: dict[str, Any]
@@ -40,6 +43,7 @@ class MCPTool(BaseModel):
 
 class MCPResource(BaseModel):
     """An MCP resource"""
+
     uri: str
     name: str
     description: str | None = None
@@ -102,24 +106,29 @@ class MCPClient:
     async def _initialize(self):
         """Initialize MCP connection and get capabilities"""
         # Send initialize request
-        await self._send_request("initialize", {
-            "protocolVersion": "2024-11-05",
-            "capabilities": {},
-            "clientInfo": {
-                "name": "yanzhiti",
-                "version": "1.0.0",
-            }
-        })
+        await self._send_request(
+            "initialize",
+            {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {},
+                "clientInfo": {
+                    "name": "yanzhiti",
+                    "version": "1.0.0",
+                },
+            },
+        )
 
         # List tools
         try:
             tools_response = await self._send_request("tools/list", {})
             for tool_data in tools_response.get("tools", []):
-                self.tools.append(MCPTool(
-                    name=tool_data["name"],
-                    description=tool_data.get("description", ""),
-                    input_schema=tool_data.get("inputSchema", {}),
-                ))
+                self.tools.append(
+                    MCPTool(
+                        name=tool_data["name"],
+                        description=tool_data.get("description", ""),
+                        input_schema=tool_data.get("inputSchema", {}),
+                    )
+                )
         except Exception:
             pass
 
@@ -127,12 +136,14 @@ class MCPClient:
         try:
             resources_response = await self._send_request("resources/list", {})
             for resource_data in resources_response.get("resources", []):
-                self.resources.append(MCPResource(
-                    uri=resource_data["uri"],
-                    name=resource_data["name"],
-                    description=resource_data.get("description"),
-                    mime_type=resource_data.get("mimeType"),
-                ))
+                self.resources.append(
+                    MCPResource(
+                        uri=resource_data["uri"],
+                        name=resource_data["name"],
+                        description=resource_data.get("description"),
+                        mime_type=resource_data.get("mimeType"),
+                    )
+                )
         except Exception:
             pass
 
@@ -190,10 +201,13 @@ class MCPClient:
         if not self._initialized:
             await self.connect()
 
-        response = await self._send_request("tools/call", {
-            "name": tool_name,
-            "arguments": arguments,
-        })
+        response = await self._send_request(
+            "tools/call",
+            {
+                "name": tool_name,
+                "arguments": arguments,
+            },
+        )
 
         return response.get("content", [])
 
@@ -202,9 +216,12 @@ class MCPClient:
         if not self._initialized:
             await self.connect()
 
-        response = await self._send_request("resources/read", {
-            "uri": uri,
-        })
+        response = await self._send_request(
+            "resources/read",
+            {
+                "uri": uri,
+            },
+        )
 
         return response.get("contents", [])
 
@@ -248,9 +265,7 @@ class MCPManager:
             del self.clients[name]
 
             # Remove tool mappings
-            self._tool_to_server = {
-                k: v for k, v in self._tool_to_server.items() if v != name
-            }
+            self._tool_to_server = {k: v for k, v in self._tool_to_server.items() if v != name}
 
     async def call_tool(self, tool_name: str, arguments: dict[str, Any]) -> Any:
         """Call a tool on the appropriate MCP server"""
@@ -319,10 +334,7 @@ def create_mcp_tool_wrapper(mcp_manager: MCPManager, tool: MCPTool):
             context: ToolContext,
         ) -> ToolResult:
             try:
-                result = await self.manager.call_tool(
-                    self.mcp_tool.name,
-                    input_data
-                )
+                result = await self.manager.call_tool(self.mcp_tool.name, input_data)
 
                 return ToolResult(
                     status=ToolResultStatus.SUCCESS,

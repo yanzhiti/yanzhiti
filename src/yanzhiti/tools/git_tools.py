@@ -68,7 +68,9 @@ class GitTool(Tool):
                 output.append(stderr.decode("utf-8", errors="replace"))
 
             return ToolResult(
-                status=ToolResultStatus.SUCCESS if process.returncode == 0 else ToolResultStatus.ERROR,
+                status=ToolResultStatus.SUCCESS
+                if process.returncode == 0
+                else ToolResultStatus.ERROR,
                 output="\n".join(output),
                 metadata={
                     "command": f"git {command}",
@@ -438,7 +440,9 @@ class GitBranchTool(Tool):
                 output.append(stderr.decode("utf-8", errors="replace"))
 
             return ToolResult(
-                status=ToolResultStatus.SUCCESS if process.returncode == 0 else ToolResultStatus.ERROR,
+                status=ToolResultStatus.SUCCESS
+                if process.returncode == 0
+                else ToolResultStatus.ERROR,
                 output="\n".join(output),
                 metadata={"action": action, "branch": branch},
             )

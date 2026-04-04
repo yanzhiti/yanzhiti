@@ -46,14 +46,17 @@ logger = logging.getLogger(__name__)
 # 📦 Pydantic 数据模型 | Data Models
 # ============================================================
 
+
 class Message(BaseModel):
     """消息数据 | Message data"""
+
     role: str = "user"
     content: str = ""
 
 
 class ChatRequest(BaseModel):
     """聊天请求 | Chat request"""
+
     message: str
     session_id: str | None = None
     provider: str | None = None  # 供应商 ID，如 "openrouter"、"ollama" 等
@@ -64,6 +67,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     """聊天响应 | Chat response"""
+
     response: str
     session_id: str
     provider: str = ""
@@ -72,6 +76,7 @@ class ChatResponse(BaseModel):
 
 class ProviderConfigRequest(BaseModel):
     """供应商配置请求 | Provider config request"""
+
     provider_id: str
     api_key: str | None = None
     base_url: str | None = None
@@ -79,6 +84,7 @@ class ProviderConfigRequest(BaseModel):
 
 class SettingsUpdate(BaseModel):
     """设置更新 | Settings update"""
+
     primary_backend: str | None = None
     priority: str | None = None  # "cloud", "local", "builtin", "auto"
     temperature: float | None = None
@@ -163,6 +169,7 @@ def _get_or_create_engine(
 # 📡 API 路由 - 首页和静态文件 | Routes - Home & Static
 # ============================================================
 
+
 @app.get("/")
 async def root():
     """提供主页面 | Serve main HTML page"""
@@ -188,6 +195,7 @@ async def health_check():
 # 🤖 API 路由 - 供应商管理 | Routes - Providers
 # ============================================================
 
+
 @app.get("/api/providers")
 async def list_providers():
     """
@@ -198,18 +206,20 @@ async def list_providers():
     providers_list = []
     for provider in get_all_providers():
         has_key = provider.name in api_keys and bool(api_keys[provider.name])
-        providers_list.append({
-            "id": provider.name,
-            "display_name": provider.display_name,
-            "description": provider.description,
-            "type": provider.provider_type.value,
-            "has_free_tier": provider.has_free_tier,
-            "recommended": provider.recommended,
-            "configured": has_key or provider.provider_type != ProviderType.CLOUD,
-            "model_count": len(provider.models),
-            "features": provider.features,
-            "signup_url": provider.signup_url,
-        })
+        providers_list.append(
+            {
+                "id": provider.name,
+                "display_name": provider.display_name,
+                "description": provider.description,
+                "type": provider.provider_type.value,
+                "has_free_tier": provider.has_free_tier,
+                "recommended": provider.recommended,
+                "configured": has_key or provider.provider_type != ProviderType.CLOUD,
+                "model_count": len(provider.models),
+                "features": provider.features,
+                "signup_url": provider.signup_url,
+            }
+        )
 
     return {
         "total": len(providers_list),
@@ -230,18 +240,20 @@ async def list_provider_models(provider_id: str):
 
     models_list = []
     for model in provider.models:
-        models_list.append({
-            "name": model.name,
-            "display_name": model.display_name,
-            "description": model.description,
-            "context_window": model.context_window,
-            "max_output": model.max_output,
-            "is_free": model.is_free,
-            "requires_api_key": model.requires_api_key,
-            "input_price": model.input_price,
-            "output_price": model.output_price,
-            "capabilities": model.capabilities,
-        })
+        models_list.append(
+            {
+                "name": model.name,
+                "display_name": model.display_name,
+                "description": model.description,
+                "context_window": model.context_window,
+                "max_output": model.max_output,
+                "is_free": model.is_free,
+                "requires_api_key": model.requires_api_key,
+                "input_price": model.input_price,
+                "output_price": model.output_price,
+                "capabilities": model.capabilities,
+            }
+        )
 
     return {"provider": provider.display_name, "models": models_list}
 
@@ -282,14 +294,16 @@ async def search_models_endpoint(q: str):
     results = search_models(q)
     matched = []
     for provider, model in results[:20]:  # 限制返回数量
-        matched.append({
-            "provider_name": provider.name,
-            "provider_display": provider.display_name,
-            "model_name": model.name,
-            "model_display": model.display_name,
-            "is_free": model.is_free,
-            "context_window": model.context_window,
-        })
+        matched.append(
+            {
+                "provider_name": provider.name,
+                "provider_display": provider.display_name,
+                "model_name": model.name,
+                "model_display": model.display_name,
+                "is_free": model.is_free,
+                "context_window": model.context_window,
+            }
+        )
     return {"query": q, "count": len(matched), "results": matched}
 
 
@@ -302,18 +316,22 @@ async def get_recommendations():
     for provider in get_recommended_providers():
         models_info = []
         for model in provider.models[:2]:  # 只取前两个推荐模型
-            models_info.append({
-                "name": model.name,
-                "display_name": model.display_name,
-                "is_free": model.is_free,
-            })
-        recommended.append({
-            "id": provider.name,
-            "display_name": provider.display_name,
-            "description": provider.description,
-            "has_free_tier": provider.has_free_tier,
-            "top_models": models_info,
-        })
+            models_info.append(
+                {
+                    "name": model.name,
+                    "display_name": model.display_name,
+                    "is_free": model.is_free,
+                }
+            )
+        recommended.append(
+            {
+                "id": provider.name,
+                "display_name": provider.display_name,
+                "description": provider.description,
+                "has_free_tier": provider.has_free_tier,
+                "top_models": models_info,
+            }
+        )
 
     return {"recommended": recommended}
 
@@ -321,6 +339,7 @@ async def get_recommendations():
 # ============================================================
 # 💬 API 路由 - 聊天功能 | Routes - Chat
 # ============================================================
+
 
 @app.get("/api/models")
 async def get_all_models():
@@ -332,24 +351,28 @@ async def get_all_models():
     all_models = []
     for provider in get_all_providers():
         for model in provider.models:
-            all_models.append({
-                "id": f"{provider.name}/{model.name}",
-                "name": model.name,
-                "display_name": model.display_name,
-                "provider": provider.name,
-                "provider_type": provider.provider_type.value,
-                "description": model.description,
-                "is_free": model.is_free,
-                "context_window": model.context_window,
-                "max_output": model.max_output,
-                "capabilities": model.capabilities,
-            })
+            all_models.append(
+                {
+                    "id": f"{provider.name}/{model.name}",
+                    "name": model.name,
+                    "display_name": model.display_name,
+                    "provider": provider.name,
+                    "provider_type": provider.provider_type.value,
+                    "description": model.description,
+                    "is_free": model.is_free,
+                    "context_window": model.context_window,
+                    "max_output": model.max_output,
+                    "capabilities": model.capabilities,
+                }
+            )
 
     # 按：推荐 > 免费 > 付费 排序 | Sort by: recommended > free > paid
-    all_models.sort(key=lambda m: (
-        0 if m["provider"] in ["openrouter", "groq", "google", "deepseek"] else 1,
-        0 if m["is_free"] else 1,
-    ))
+    all_models.sort(
+        key=lambda m: (
+            0 if m["provider"] in ["openrouter", "groq", "google", "deepseek"] else 1,
+            0 if m["is_free"] else 1,
+        )
+    )
 
     return {
         "total": len(all_models),
@@ -431,11 +454,13 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
                 continue
 
             # 发送思考状态 | Send thinking status
-            await websocket.send_json({
-                "type": "status",
-                "status": "thinking",
-                "message": "正在思考中...",
-            })
+            await websocket.send_json(
+                {
+                    "type": "status",
+                    "status": "thinking",
+                    "message": "正在思考中...",
+                }
+            )
 
             try:
                 # 配置临时参数 | Configure temporary parameters
@@ -456,25 +481,31 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
                 ):
                     full_response += chunk
                     # 发送文本块 | Send text chunk
-                    await websocket.send_json({
-                        "type": "chunk",
-                        "content": chunk,
-                    })
+                    await websocket.send_json(
+                        {
+                            "type": "chunk",
+                            "content": chunk,
+                        }
+                    )
 
                 # 发送完成信号 | Send completion signal
-                await websocket.send_json({
-                    "type": "complete",
-                    "content": full_response,
-                    "provider": engine.config.primary_backend,
-                    "model": engine.config.model or "",
-                })
+                await websocket.send_json(
+                    {
+                        "type": "complete",
+                        "content": full_response,
+                        "provider": engine.config.primary_backend,
+                        "model": engine.config.model or "",
+                    }
+                )
 
             except Exception as e:
                 logger.error(f"WebSocket 处理消息失败: {e}")
-                await websocket.send_json({
-                    "type": "error",
-                    "detail": str(e),
-                })
+                await websocket.send_json(
+                    {
+                        "type": "error",
+                        "detail": str(e),
+                    }
+                )
 
     except WebSocketDisconnect:
         # 清理会话资源 | Clean up session resources
@@ -487,18 +518,21 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
 # 📊 API 路由 - 会话和统计 | Routes - Sessions & Stats
 # ============================================================
 
+
 @app.get("/api/sessions")
 async def list_sessions():
     """列出活跃会话 | List active sessions"""
     sessions = []
     for sid, engine in engines.items():
         info = engine.get_info()
-        sessions.append({
-            "id": sid,
-            "primary_backend": info["config"]["primary_backend"],
-            "model": info["config"]["model"],
-            "backends": info["backends"],
-        })
+        sessions.append(
+            {
+                "id": sid,
+                "primary_backend": info["config"]["primary_backend"],
+                "model": info["config"]["model"],
+                "backends": info["backends"],
+            }
+        )
     return {"sessions": sessions, "total": len(sessions)}
 
 
@@ -525,6 +559,7 @@ async def delete_session(session_id: str):
 # ============================================================
 # ⚙️ API 路由 - 设置管理 | Routes - Settings
 # ============================================================
+
 
 @app.get("/api/settings")
 async def get_settings():
@@ -570,6 +605,7 @@ async def update_settings(settings: SettingsUpdate):
 # ============================================================
 # 🔧 默认 HTML 页面 | Default HTML Fallback
 # ============================================================
+
 
 def _get_default_html() -> str:
     """
@@ -699,6 +735,7 @@ if static_path.exists():
 
 if __name__ == "__main__":
     import uvicorn
+
     print("=" * 60)
     print("🤖 衍智体 (YANZHITI) Web UI 启动中...")
     print(f"📋 版本: {__version__}")

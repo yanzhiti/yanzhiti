@@ -56,35 +56,25 @@ This wizard will help you complete the initial setup:
 
 def select_service_type() -> str:
     """选择服务类型 | Select service type"""
-    console.print("\n[bold cyan]步骤 1/6: 选择服务类型 | Step 1/6: Select Service Type[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]步骤 1/6: 选择服务类型 | Step 1/6: Select Service Type[/bold cyan]\n"
+    )
 
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("类型", style="cyan", width=15)
     table.add_column("描述", style="green")
     table.add_column("特点", style="yellow")
 
-    table.add_row(
-        "☁️  云端 API",
-        "使用在线 AI 服务",
-        "强大、快速、需网络"
-    )
-    table.add_row(
-        "🏠 本地模型",
-        "在电脑上运行模型",
-        "隐私、离线、免费"
-    )
-    table.add_row(
-        "🔧 内置模型",
-        "使用项目自带的小模型",
-        "开箱即用、无需配置"
-    )
+    table.add_row("☁️  云端 API", "使用在线 AI 服务", "强大、快速、需网络")
+    table.add_row("🏠 本地模型", "在电脑上运行模型", "隐私、离线、免费")
+    table.add_row("🔧 内置模型", "使用项目自带的小模型", "开箱即用、无需配置")
 
     console.print(table)
 
     choice = Prompt.ask(
         "\n请选择服务类型 (cloud/local/builtin)",
         choices=["cloud", "local", "builtin"],
-        default="cloud"
+        default="cloud",
     )
 
     return choice
@@ -92,7 +82,9 @@ def select_service_type() -> str:
 
 def select_cloud_provider() -> dict:
     """选择云端供应商 | Select cloud provider"""
-    console.print("\n[bold cyan]步骤 2/6: 选择云端 AI 供应商 | Step 2/6: Select Cloud AI Provider[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]步骤 2/6: 选择云端 AI 供应商 | Step 2/6: Select Cloud AI Provider[/bold cyan]\n"
+    )
 
     # 分类显示 | Display by category
     console.print("[bold]⭐ 推荐给新手 (Recommended for beginners):[/bold]")
@@ -112,7 +104,9 @@ def select_cloud_provider() -> dict:
             provider.display_name,
             provider.description[:40],
             free_marker,
-            provider.signup_url[:35] + "..." if len(provider.signup_url) > 35 else provider.signup_url
+            provider.signup_url[:35] + "..."
+            if len(provider.signup_url) > 35
+            else provider.signup_url,
         )
 
     console.print(rec_table)
@@ -142,15 +136,14 @@ def select_cloud_provider() -> dict:
 
     console.print(f"\n✅ 已选择: [bold]{selected_provider.display_name}[/bold]")
 
-    return {
-        "provider_id": selected_provider.name,
-        "provider": selected_provider
-    }
+    return {"provider_id": selected_provider.name, "provider": selected_provider}
 
 
 def select_local_provider() -> dict:
     """选择本地模型供应商 | Select local model provider"""
-    console.print("\n[bold cyan]步骤 2/6: 选择本地模型运行器 | Step 2/6: Select Local Model Runner[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]步骤 2/6: 选择本地模型运行器 | Step 2/6: Select Local Model Runner[/bold cyan]\n"
+    )
 
     local_providers = get_local_providers()
 
@@ -165,7 +158,9 @@ def select_local_provider() -> dict:
             str(i),
             provider.display_name,
             provider.description[:45],
-            provider.signup_url[:30] + "..." if len(provider.signup_url) > 30 else provider.signup_url
+            provider.signup_url[:30] + "..."
+            if len(provider.signup_url) > 30
+            else provider.signup_url,
         )
 
     console.print(table)
@@ -177,15 +172,14 @@ def select_local_provider() -> dict:
 
     selected = local_providers[int(choice) - 1]
 
-    return {
-        "provider_id": selected.name,
-        "provider": selected
-    }
+    return {"provider_id": selected.name, "provider": selected}
 
 
 def select_builtin_model() -> dict:
     """选择内置模型 | Select built-in model"""
-    console.print("\n[bold cyan]步骤 2/6: 选择内置模型 | Step 2/6: Select Built-in Model[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]步骤 2/6: 选择内置模型 | Step 2/6: Select Built-in Model[/bold cyan]\n"
+    )
 
     table = Table(show_header=True, header_style="bold magenta")
     table.add_column("#", style="dim", width=4)
@@ -195,20 +189,13 @@ def select_builtin_model() -> dict:
 
     for i, (_name, config) in enumerate(BUILTIN_MODELS.items(), 1):
         capabilities = ", ".join(config.capabilities[:3])
-        table.add_row(
-            str(i),
-            config.display_name,
-            f"{config.model_size_mb} MB",
-            capabilities
-        )
+        table.add_row(str(i), config.display_name, f"{config.model_size_mb} MB", capabilities)
 
     console.print(table)
 
     options = list(BUILTIN_MODELS.keys())
     choice = Prompt.ask(
-        "\n请选择模型",
-        choices=[str(i + 1) for i in range(len(options))],
-        default="1"
+        "\n请选择模型", choices=[str(i + 1) for i in range(len(options))], default="1"
     )
 
     selected_name = options[int(choice) - 1]
@@ -216,15 +203,14 @@ def select_builtin_model() -> dict:
 
     console.print(f"\n✅ 已选择: [bold]{selected_config.display_name}[/bold]")
 
-    return {
-        "model_name": selected_name,
-        "config": selected_config
-    }
+    return {"model_name": selected_name, "config": selected_config}
 
 
 def configure_api_key(provider_info: dict) -> str:
     """配置 API 密钥 | Configure API key"""
-    console.print("\n[bold cyan]步骤 3/6: 配置 API 密钥 | Step 3/6: Configure API Key[/bold cyan]\n")
+    console.print(
+        "\n[bold cyan]步骤 3/6: 配置 API 密钥 | Step 3/6: Configure API Key[/bold cyan]\n"
+    )
 
     provider = provider_info["provider"]
 
@@ -276,7 +262,7 @@ def select_model(provider_info: dict) -> str:
             model.display_name,
             model.description[:35],
             str(model.context_window),
-            free_marker
+            free_marker,
         )
 
     console.print(table)
@@ -288,7 +274,7 @@ def select_model(provider_info: dict) -> str:
     choice = Prompt.ask(
         "\n请选择模型编号 (直接回车选默认)",
         default="1",
-        choices=[str(i + 1) for i in range(min(len(options), 10))]
+        choices=[str(i + 1) for i in range(min(len(options), 10))],
     )
 
     selected_model = options[int(choice) - 1]
@@ -317,8 +303,7 @@ async def test_connection(config: dict) -> bool:
 
                 engine = LocalInferenceEngine()
                 success = await engine.initialize(
-                    backend="builtin",
-                    model_name=config.get("model_name", "tinyllama")
+                    backend="builtin", model_name=config.get("model_name", "tinyllama")
                 )
 
                 if success:
@@ -411,26 +396,26 @@ def save_configuration(config: dict) -> Path:
 
     # 构建 TOML 内容 | Build TOML content
     toml_content = f"""# 衍智体 (YANZHITI) 配置文件
-# Generated by setup wizard on {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+# Generated by setup wizard on {__import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
 [api]
-provider = "{config.get('provider_id', 'openrouter')}"
-model = "{config.get('model', 'default')}"
-api_key = "{config.get('api_key', '')}"
-base_url = "{config.get('base_url', '')}"
+provider = "{config.get("provider_id", "openrouter")}"
+model = "{config.get("model", "default")}"
+api_key = "{config.get("api_key", "")}"
+base_url = "{config.get("base_url", "")}"
 
 [general]
-max_tokens = {config.get('max_tokens', 4096)}
-temperature = {config.get('temperature', 0.7)}
+max_tokens = {config.get("max_tokens", 4096)}
+temperature = {config.get("temperature", 0.7)}
 verbose = false
 
 [builtin]
-enabled = {str(config.get('service_type', '') == 'builtin').lower()}
-model = "{config.get('model_name', 'tinyllama')}"
+enabled = {str(config.get("service_type", "") == "builtin").lower()}
+model = "{config.get("model_name", "tinyllama")}"
 
 [local]
-enabled = {str(config.get('service_type', '') == 'local').lower()}
-provider = "{config.get('local_provider', 'ollama')}"
+enabled = {str(config.get("service_type", "") == "local").lower()}
+provider = "{config.get("local_provider", "ollama")}"
 
 [features]
 auto_fallback = true
@@ -438,7 +423,7 @@ stream_output = true
 save_history = true
 """
 
-    with open(config_file, 'w', encoding='utf-8') as f:
+    with open(config_file, "w", encoding="utf-8") as f:
         f.write(toml_content)
 
     console.print(f"\n✅ 配置已保存到: [cyan]{config_file}[/cyan]")
@@ -521,7 +506,9 @@ yzt --diagnose  # 运行诊断工具
 
 @click.command()
 @click.option("--quick", "-q", is_flag=True, help="Quick setup with defaults")
-@click.option("--type", "-t", type=click.Choice(['cloud', 'local', 'builtin']), help="Skip type selection")
+@click.option(
+    "--type", "-t", type=click.Choice(["cloud", "local", "builtin"]), help="Skip type selection"
+)
 def main(quick: bool = False, type: str | None = None):
     """运行配置向导 | Run configuration wizard"""
     display_welcome()
@@ -549,7 +536,11 @@ def main(quick: bool = False, type: str | None = None):
             model = select_model(provider_info)
             config["model"] = model
         else:
-            config["model"] = provider_info["provider"].models[0].name if provider_info["provider"].models else "default"
+            config["model"] = (
+                provider_info["provider"].models[0].name
+                if provider_info["provider"].models
+                else "default"
+            )
 
     elif config["service_type"] == "local":
         # 本地模型配置 | Local model configuration
@@ -562,7 +553,11 @@ def main(quick: bool = False, type: str | None = None):
             model = select_model(local_info)
             config["model"] = model
         else:
-            config["model"] = local_info["provider"].models[0].name if local_info["provider"].models else "default"
+            config["model"] = (
+                local_info["provider"].models[0].name
+                if local_info["provider"].models
+                else "default"
+            )
 
     else:  # builtin
         # 内置模型配置 | Built-in model configuration
@@ -576,7 +571,7 @@ def main(quick: bool = False, type: str | None = None):
 
     # 测试连接 | Test connection
     if not quick:
-        asyncio = __import__('asyncio')
+        asyncio = __import__("asyncio")
         success = asyncio.run(test_connection(config))
 
         if not success and not Confirm.ask("\n是否继续保存配置？"):

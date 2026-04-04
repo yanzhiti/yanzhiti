@@ -22,6 +22,7 @@ from yanzhiti.types import (
 
 class QueryEngineConfig(BaseModel):
     """Configuration for QueryEngine"""
+
     cwd: str = "."
     model: str = "default-model"
     max_tokens: int = 4096
@@ -156,10 +157,12 @@ class QueryEngine:
 
         for block in response.content:
             if block.type == "text":
-                content_blocks.append({
-                    "type": "text",
-                    "text": block.text,
-                })
+                content_blocks.append(
+                    {
+                        "type": "text",
+                        "text": block.text,
+                    }
+                )
             elif block.type == "tool_use":
                 # Execute tool
                 tool_result = await self._execute_tool(
@@ -173,12 +176,14 @@ class QueryEngine:
         assistant_content = content_blocks.copy()
         for block in response.content:
             if block.type == "tool_use":
-                assistant_content.append({
-                    "type": "tool_use",
-                    "id": block.id,
-                    "name": block.name,
-                    "input": block.input,
-                })
+                assistant_content.append(
+                    {
+                        "type": "tool_use",
+                        "id": block.id,
+                        "name": block.name,
+                        "input": block.input,
+                    }
+                )
 
         assistant_message = AssistantMessage(content=assistant_content)
         self.messages.append(assistant_message)
@@ -259,15 +264,19 @@ class QueryEngine:
 
         for msg in self.messages:
             if isinstance(msg.content, str):
-                api_messages.append({
-                    "role": msg.role.value,
-                    "content": msg.content,
-                })
+                api_messages.append(
+                    {
+                        "role": msg.role.value,
+                        "content": msg.content,
+                    }
+                )
             else:
-                api_messages.append({
-                    "role": msg.role.value,
-                    "content": msg.content,
-                })
+                api_messages.append(
+                    {
+                        "role": msg.role.value,
+                        "content": msg.content,
+                    }
+                )
 
         return api_messages
 

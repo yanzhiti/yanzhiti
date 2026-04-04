@@ -346,7 +346,7 @@ class GrepTool(Tool):
 
                     for i, line in enumerate(lines):
                         if regex.search(line):
-                            results.append(f"{file_path}:{i+1}: {line.rstrip()}")
+                            results.append(f"{file_path}:{i + 1}: {line.rstrip()}")
 
                 except Exception:
                     continue

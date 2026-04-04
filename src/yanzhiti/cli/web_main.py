@@ -36,7 +36,9 @@ def main(host: str, port: int, reload: bool):
 
     Access the web interface at http://localhost:PORT
     """
-    console.print(f"[bold cyan]🚀 Starting 衍智体 (YANZHITI) Local Web UI v{__version__}[/bold cyan]")
+    console.print(
+        f"[bold cyan]🚀 Starting 衍智体 (YANZHITI) Local Web UI v{__version__}[/bold cyan]"
+    )
     console.print(f"[green]📍 Server running at: http://localhost:{port}[/green]")
     console.print("[yellow]💡 Open this URL in your browser[/yellow]")
     console.print("[dim]Press Ctrl+C to stop[/dim]")

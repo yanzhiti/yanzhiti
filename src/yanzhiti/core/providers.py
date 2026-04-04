@@ -9,6 +9,7 @@ from enum import Enum
 
 class ProviderType(str, Enum):
     """供应商类型 | Provider type"""
+
     CLOUD = "cloud"  # 云端 API
     LOCAL = "local"  # 本地模型
     BUILTIN = "builtin"  # 内置模型
@@ -17,6 +18,7 @@ class ProviderType(str, Enum):
 @dataclass
 class ModelInfo:
     """模型信息 | Model information"""
+
     name: str  # 模型名称
     display_name: str  # 显示名称
     description: str  # 描述
@@ -32,6 +34,7 @@ class ModelInfo:
 @dataclass
 class AIProvider:
     """AI 提供商 | AI provider"""
+
     name: str  # 名称
     display_name: str  # 显示名称
     description: str  # 描述
@@ -60,13 +63,7 @@ OPENROUTER = AIProvider(
     docs_url="https://openrouter.ai/docs",
     has_free_tier=True,
     recommended=True,
-    features=[
-        "100+ 模型支持",
-        "统一 API 格式",
-        "按量付费",
-        "免费额度",
-        "无速率限制"
-    ],
+    features=["100+ 模型支持", "统一 API 格式", "按量付费", "免费额度", "无速率限制"],
     models=[
         ModelInfo(
             name="anthropic/claude-3.5-sonnet",
@@ -77,7 +74,7 @@ OPENROUTER = AIProvider(
             is_free=False,
             input_price=3.0,
             output_price=15.0,
-            capabilities=["代码生成", "推理", "长文本"]
+            capabilities=["代码生成", "推理", "长文本"],
         ),
         ModelInfo(
             name="openai/gpt-4o",
@@ -88,7 +85,7 @@ OPENROUTER = AIProvider(
             is_free=False,
             input_price=2.5,
             output_price=10.0,
-            capabilities=["多模态", "代码", "推理"]
+            capabilities=["多模态", "代码", "推理"],
         ),
         ModelInfo(
             name="deepseek/deepseek-chat-v3-0324",
@@ -99,7 +96,7 @@ OPENROUTER = AIProvider(
             is_free=True,
             input_price=0.14,
             output_price=0.28,
-            capabilities=["中文优化", "代码", "数学"]
+            capabilities=["中文优化", "代码", "数学"],
         ),
         ModelInfo(
             name="google/gemini-pro-1.5",
@@ -110,7 +107,7 @@ OPENROUTER = AIProvider(
             is_free=True,
             input_price=0.0,
             output_price=0.0,
-            capabilities=["超长上下文", "多模态", "免费"]
+            capabilities=["超长上下文", "多模态", "免费"],
         ),
         ModelInfo(
             name="meta-llama/llama-3.1-70b-instruct",
@@ -121,7 +118,7 @@ OPENROUTER = AIProvider(
             is_free=False,
             input_price=0.52,
             output_price=0.75,
-            capabilities=["开源", "多语言", "长文本"]
+            capabilities=["开源", "多语言", "长文本"],
         ),
         ModelInfo(
             name="qwen/qwen-2.5-72b-instruct",
@@ -132,7 +129,7 @@ OPENROUTER = AIProvider(
             is_free=False,
             input_price=0.36,
             output_price=0.72,
-            capabilities=["中文优化", "数学", "代码"]
+            capabilities=["中文优化", "数学", "代码"],
         ),
         ModelInfo(
             name="mistralai/mistral-large-2407",
@@ -143,9 +140,9 @@ OPENROUTER = AIProvider(
             is_free=False,
             input_price=2.0,
             output_price=6.0,
-            capabilities=["多语言", "代码", "推理"]
-        )
-    ]
+            capabilities=["多语言", "代码", "推理"],
+        ),
+    ],
 )
 
 # OpenAI 官方
@@ -164,7 +161,7 @@ OPENAI = AIProvider(
         "DALL-E 图像生成",
         "Whisper 语音识别",
         "TTS 文字转语音",
-        "Function Calling"
+        "Function Calling",
     ],
     models=[
         ModelInfo(
@@ -175,7 +172,7 @@ OPENAI = AIProvider(
             max_output=16384,
             is_free=False,
             input_price=2.5,
-            output_price=10.0
+            output_price=10.0,
         ),
         ModelInfo(
             name="gpt-4-turbo",
@@ -185,7 +182,7 @@ OPENAI = AIProvider(
             max_output=4096,
             is_free=False,
             input_price=1.0,
-            output_price=3.0
+            output_price=3.0,
         ),
         ModelInfo(
             name="gpt-3.5-turbo",
@@ -195,7 +192,7 @@ OPENAI = AIProvider(
             max_output=4096,
             is_free=False,
             input_price=0.35,
-            output_price=1.05
+            output_price=1.05,
         ),
         ModelInfo(
             name="o1-mini",
@@ -206,9 +203,9 @@ OPENAI = AIProvider(
             is_free=False,
             input_price=1.1,
             output_price=4.4,
-            capabilities=["推理", "数学", "编程"]
-        )
-    ]
+            capabilities=["推理", "数学", "编程"],
+        ),
+    ],
 )
 
 # Anthropic 官方
@@ -227,7 +224,7 @@ ANTHROPIC = AIProvider(
         "Claude 3 Opus/Haiku",
         "200K 上下文窗口",
         "安全对齐",
-        "工具使用能力"
+        "工具使用能力",
     ],
     models=[
         ModelInfo(
@@ -238,7 +235,7 @@ ANTHROPIC = AIProvider(
             max_output=8192,
             is_free=False,
             input_price=3.0,
-            output_price=15.0
+            output_price=15.0,
         ),
         ModelInfo(
             name="claude-3-opus-20240229",
@@ -248,7 +245,7 @@ ANTHROPIC = AIProvider(
             max_output=4096,
             is_free=False,
             input_price=15.0,
-            output_price=75.0
+            output_price=75.0,
         ),
         ModelInfo(
             name="claude-3-haiku-20240307",
@@ -258,9 +255,9 @@ ANTHROPIC = AIProvider(
             max_output=4096,
             is_free=True,
             input_price=0.25,
-            output_price=1.25
-        )
-    ]
+            output_price=1.25,
+        ),
+    ],
 )
 
 # Google (Gemini)
@@ -279,7 +276,7 @@ GOOGLE = AIProvider(
         "280万 token 超长上下文",
         "完全免费使用",
         "原生多模态",
-        "Grounding 功能"
+        "Grounding 功能",
     ],
     models=[
         ModelInfo(
@@ -290,7 +287,7 @@ GOOGLE = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
+            output_price=0.0,
         ),
         ModelInfo(
             name="gemini-1.5-flash",
@@ -300,7 +297,7 @@ GOOGLE = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
+            output_price=0.0,
         ),
         ModelInfo(
             name="gemini-2.0-flash-exp",
@@ -310,9 +307,9 @@ GOOGLE = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
-        )
-    ]
+            output_price=0.0,
+        ),
+    ],
 )
 
 # DeepSeek (深度求索)
@@ -331,7 +328,7 @@ DEEPSEEK = AIProvider(
         "极低价格 ($0.14/M tokens)",
         "中文理解优秀",
         "数学/代码能力强",
-        "开源可商用"
+        "开源可商用",
     ],
     models=[
         ModelInfo(
@@ -342,7 +339,7 @@ DEEPSEEK = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.14,
-            output_price=0.28
+            output_price=0.28,
         ),
         ModelInfo(
             name="deepseek-reasoner",
@@ -353,9 +350,9 @@ DEEPSEEK = AIProvider(
             is_free=True,
             input_price=0.55,
             output_price=2.19,
-            capabilities=["推理", "思维链", "数学证明"]
-        )
-    ]
+            capabilities=["推理", "思维链", "数学证明"],
+        ),
+    ],
 )
 
 # 阿里通义千问 (Qwen)
@@ -368,13 +365,7 @@ QWEN = AIProvider(
     signup_url="https://dashscope.console.aliyun.com/apiKey",
     docs_url="https://help.aliyun.com/zh/dashscope/",
     has_free_tier=True,
-    features=[
-        "Qwen 2.5 系列",
-        "中文理解顶级",
-        "视觉理解",
-        "语音合成",
-        "国产合规"
-    ],
+    features=["Qwen 2.5 系列", "中文理解顶级", "视觉理解", "语音合成", "国产合规"],
     models=[
         ModelInfo(
             name="qwen-max",
@@ -384,7 +375,7 @@ QWEN = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.36,
-            output_price=0.72
+            output_price=0.72,
         ),
         ModelInfo(
             name="qwen-plus",
@@ -394,7 +385,7 @@ QWEN = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.24,
-            output_price=0.48
+            output_price=0.48,
         ),
         ModelInfo(
             name="qwen-turbo",
@@ -404,9 +395,9 @@ QWEN = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.12,
-            output_price=0.24
-        )
-    ]
+            output_price=0.24,
+        ),
+    ],
 )
 
 # 百度文心一言 (ERNIE)
@@ -419,13 +410,7 @@ BAIDU = AIProvider(
     signup_url="https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application",
     docs_url="https://cloud.baidu.com/doc/WENXINWORKSHOP/index.html",
     has_free_tier=True,
-    features=[
-        "ERNIE 4.0 系列",
-        "中文理解强",
-        "知识增强",
-        "搜索集成",
-        "国产合规"
-    ],
+    features=["ERNIE 4.0 系列", "中文理解强", "知识增强", "搜索集成", "国产合规"],
     models=[
         ModelInfo(
             name="ernie-4.0-8k",
@@ -435,7 +420,7 @@ BAIDU = AIProvider(
             max_output=2048,
             is_free=True,
             input_price=0.24,
-            output_price=0.96
+            output_price=0.96,
         ),
         ModelInfo(
             name="ernie-speed-8k",
@@ -445,9 +430,9 @@ BAIDU = AIProvider(
             max_output=2048,
             is_free=True,
             input_price=0.08,
-            output_price=0.32
-        )
-    ]
+            output_price=0.32,
+        ),
+    ],
 )
 
 # Mistral AI
@@ -460,12 +445,7 @@ MISTRAL = AIProvider(
     signup_url="https://console.mistral.ai/api-keys/",
     docs_url="https://docs.mistral.ai/",
     has_free_tier=True,
-    features=[
-        "Mistral Large 2407",
-        "Mixtral MoE 架构",
-        "Codestral 代码模型",
-        "欧洲数据合规"
-    ],
+    features=["Mistral Large 2407", "Mixtral MoE 架构", "Codestral 代码模型", "欧洲数据合规"],
     models=[
         ModelInfo(
             name="mistral-large-latest",
@@ -475,7 +455,7 @@ MISTRAL = AIProvider(
             max_output=8192,
             is_free=False,
             input_price=2.0,
-            output_price=6.0
+            output_price=6.0,
         ),
         ModelInfo(
             name="codestral-latest",
@@ -486,9 +466,9 @@ MISTRAL = AIProvider(
             is_free=False,
             input_price=1.0,
             output_price=3.0,
-            capabilities=["80+ 语言", "代码补全", "Fill-Middle"]
-        )
-    ]
+            capabilities=["80+ 语言", "代码补全", "Fill-Middle"],
+        ),
+    ],
 )
 
 # Groq (超快推理)
@@ -507,7 +487,7 @@ GROQ = AIProvider(
         "完全免费使用",
         "Llama 3.1/Mixtral",
         "实时流式输出",
-        "低延迟 API"
+        "低延迟 API",
     ],
     models=[
         ModelInfo(
@@ -518,7 +498,7 @@ GROQ = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
+            output_price=0.0,
         ),
         ModelInfo(
             name="mixtral-8x7b-32768",
@@ -528,9 +508,9 @@ GROQ = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
-        )
-    ]
+            output_price=0.0,
+        ),
+    ],
 )
 
 # Together AI
@@ -543,12 +523,7 @@ TOGETHER = AIProvider(
     signup_url="https://api.together.xyz/settings/api-keys",
     docs_url="https://docs.together.xyz/",
     has_free_tier=True,
-    features=[
-        "开源模型托管",
-        "按量付费",
-        "GPU 加速推理",
-        "企业级可靠性"
-    ],
+    features=["开源模型托管", "按量付费", "GPU 加速推理", "企业级可靠性"],
     models=[
         ModelInfo(
             name="meta-llama/Llama-V3-Free-Instruct-80B",
@@ -558,9 +533,9 @@ TOGETHER = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
+            output_price=0.0,
         )
-    ]
+    ],
 )
 
 # Fireworks AI
@@ -573,12 +548,7 @@ FIREWORKS = AIProvider(
     signup_url="https://fireworks.ai/account/api-keys",
     docs_url="https://fireworks.ai/docs",
     has_free_tier=True,
-    features=[
-        "超低延迟",
-        "微批处理优化",
-        "函数调用加速",
-        "企业 SLA"
-    ],
+    features=["超低延迟", "微批处理优化", "函数调用加速", "企业 SLA"],
     models=[
         ModelInfo(
             name="accounts/fireworks/models/llama-v3p1-70b-instruct",
@@ -588,9 +558,9 @@ FIREWORKS = AIProvider(
             max_output=8192,
             is_free=True,
             input_price=0.0,
-            output_price=0.0
+            output_price=0.0,
         )
-    ]
+    ],
 )
 
 
@@ -609,13 +579,7 @@ OLLAMA = AIProvider(
     docs_url="https://github.com/ollama/ollama",
     has_free_tier=True,
     recommended=True,
-    features=[
-        "完全离线运行",
-        "隐私保护",
-        "无 API 费用",
-        "一键安装",
-        "100+ 模型库"
-    ],
+    features=["完全离线运行", "隐私保护", "无 API 费用", "一键安装", "100+ 模型库"],
     models=[
         ModelInfo(
             name="llama3.1:70b",
@@ -624,7 +588,7 @@ OLLAMA = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="llama3.1:8b",
@@ -633,7 +597,7 @@ OLLAMA = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="qwen2.5:72b",
@@ -642,7 +606,7 @@ OLLAMA = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="deepseek-r1:32b",
@@ -652,7 +616,7 @@ OLLAMA = AIProvider(
             max_output=8192,
             is_free=True,
             requires_api_key=False,
-            capabilities=["推理", "思维链"]
+            capabilities=["推理", "思维链"],
         ),
         ModelInfo(
             name="codellama:34b",
@@ -662,7 +626,7 @@ OLLAMA = AIProvider(
             max_output=4096,
             is_free=True,
             requires_api_key=False,
-            capabilities=["代码", "补全"]
+            capabilities=["代码", "补全"],
         ),
         ModelInfo(
             name="mistral:7b",
@@ -671,7 +635,7 @@ OLLAMA = AIProvider(
             context_window=32768,
             max_output=4096,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="phi3:14b",
@@ -680,7 +644,7 @@ OLLAMA = AIProvider(
             context_window=127072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="gemma2:27b",
@@ -689,7 +653,7 @@ OLLAMA = AIProvider(
             context_window=9216,
             max_output=8192,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         ),
         ModelInfo(
             name="yi:34b",
@@ -699,9 +663,9 @@ OLLAMA = AIProvider(
             max_output=4096,
             is_free=True,
             requires_api_key=False,
-            capabilities=["中文", "长文本"]
-        )
-    ]
+            capabilities=["中文", "长文本"],
+        ),
+    ],
 )
 
 # LM Studio
@@ -714,13 +678,7 @@ LM_STUDIO = AIProvider(
     signup_url="https://lmstudio.ai/",
     docs_url="https://lmstudio.ai/docs",
     has_free_tier=True,
-    features=[
-        "图形化界面",
-        "GGUF 模型支持",
-        "自动下载模型",
-        "聊天界面内置",
-        "兼容 OpenAI API"
-    ],
+    features=["图形化界面", "GGUF 模型支持", "自动下载模型", "聊天界面内置", "兼容 OpenAI API"],
     models=[
         ModelInfo(
             name="lm-studio-community/Meta-Llama-3.1-8B-Instruct-GGUF",
@@ -729,9 +687,9 @@ LM_STUDIO = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         )
-    ]
+    ],
 )
 
 # MLX (Apple Silicon)
@@ -744,13 +702,7 @@ MLX_PROVIDER = AIProvider(
     signup_url="https://github.com/ml-explore/mlx",
     docs_url="https://ml-explore.github.io/mlx/",
     has_free_tier=True,
-    features=[
-        "Metal GPU 加速",
-        "内存映射加载",
-        "统一内存架构",
-        "Mac 原生性能",
-        "Python API 友好"
-    ],
+    features=["Metal GPU 加速", "内存映射加载", "统一内存架构", "Mac 原生性能", "Python API 友好"],
     models=[
         ModelInfo(
             name="mlx-community/Meta-Llama-3.1-8B-Instruct-4bit",
@@ -759,9 +711,9 @@ MLX_PROVIDER = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         )
-    ]
+    ],
 )
 
 # llama.cpp
@@ -774,13 +726,7 @@ LLAMA_CPP = AIProvider(
     signup_url="https://github.com/ggerganov/llama.cpp",
     docs_url="https://github.com/ggerganov/llama.cpp/blob/master/examples/server/README",
     has_free_tier=True,
-    features=[
-        "纯 C++ 实现",
-        "CPU/GPU 支持",
-        "量化模型支持",
-        "服务器模式",
-        "极端轻量"
-    ],
+    features=["纯 C++ 实现", "CPU/GPU 支持", "量化模型支持", "服务器模式", "极端轻量"],
     models=[
         ModelInfo(
             name="llama-3-8b-q4_0.gguf",
@@ -789,9 +735,9 @@ LLAMA_CPP = AIProvider(
             context_window=8192,
             max_output=1024,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         )
-    ]
+    ],
 )
 
 # vLLM (高性能推理)
@@ -804,13 +750,7 @@ VLLM = AIProvider(
     signup_url="https://github.com/vllm-project/vllm",
     docs_url="https://docs.vllm.ai/",
     has_free_tier=True,
-    features=[
-        "PagedAttention 技术",
-        "多 GPU 并行",
-        "高吞吐量",
-        "连续批处理",
-        "生产级部署"
-    ],
+    features=["PagedAttention 技术", "多 GPU 并行", "高吞吐量", "连续批处理", "生产级部署"],
     models=[
         ModelInfo(
             name="meta-llama/Llama-3.1-8B-Instruct",
@@ -819,9 +759,9 @@ VLLM = AIProvider(
             context_window=131072,
             max_output=2048,
             is_free=True,
-            requires_api_key=False
+            requires_api_key=False,
         )
-    ]
+    ],
 )
 
 
@@ -840,13 +780,7 @@ BUILTIN_MODEL = AIProvider(
     docs_url="",
     has_free_tier=True,
     recommended=True,
-    features=[
-        "开箱即用",
-        "无需配置",
-        "隐私保护",
-        "引导用户配置",
-        "基础对话功能"
-    ],
+    features=["开箱即用", "无需配置", "隐私保护", "引导用户配置", "基础对话功能"],
     models=[
         ModelInfo(
             name="tinyllama-1.1b",
@@ -856,7 +790,7 @@ BUILTIN_MODEL = AIProvider(
             max_output=512,
             is_free=True,
             requires_api_key=False,
-            capabilities=["引导配置", "简单对话", "代码提示"]
+            capabilities=["引导配置", "简单对话", "代码提示"],
         ),
         ModelInfo(
             name="phi-2:2.7b",
@@ -866,7 +800,7 @@ BUILTIN_MODEL = AIProvider(
             max_output=512,
             is_free=True,
             requires_api_key=False,
-            capabilities=["知识问答", "推理", "教育"]
+            capabilities=["知识问答", "推理", "教育"],
         ),
         ModelInfo(
             name="stablelm-zephyr-3b",
@@ -876,9 +810,9 @@ BUILTIN_MODEL = AIProvider(
             max_output=512,
             is_free=True,
             requires_api_key=False,
-            capabilities=["对话", "指令遵循", "创意写作"]
-        )
-    ]
+            capabilities=["对话", "指令遵循", "创意写作"],
+        ),
+    ],
 )
 
 
@@ -899,14 +833,12 @@ ALL_PROVIDERS: dict[str, AIProvider] = {
     "groq": GROQ,
     "together": TOGETHER,
     "fireworks": FIREWORKS,
-
     # 本地模型供应商 | Local model providers
     "ollama": OLLAMA,
     "lmstudio": LM_STUDIO,
     "mlx": MLX_PROVIDER,
     "llamacpp": LLAMA_CPP,
     "vllm": VLLM,
-
     # 内置模型 | Built-in model
     "builtin": BUILTIN_MODEL,
 }
@@ -949,9 +881,11 @@ def search_models(query: str) -> list[tuple[AIProvider, ModelInfo]]:
 
     for provider in ALL_PROVIDERS.values():
         for model in provider.models:
-            if (query_lower in model.name.lower() or
-                query_lower in model.display_name.lower() or
-                query_lower in model.description.lower()):
+            if (
+                query_lower in model.name.lower()
+                or query_lower in model.display_name.lower()
+                or query_lower in model.description.lower()
+            ):
                 results.append((provider, model))
 
     return results
@@ -975,5 +909,9 @@ if __name__ == "__main__":
 
     print("\n💰 有免费额度的供应商:")
     for provider in get_free_providers():
-        free_marker = "🆓" if not any(not m.is_free and m.requires_api_key for m in provider.models[:3]) else "💵"
+        free_marker = (
+            "🆓"
+            if not any(not m.is_free and m.requires_api_key for m in provider.models[:3])
+            else "💵"
+        )
         print(f"  {free_marker} {provider.display_name} ({provider.name})")

@@ -15,6 +15,7 @@ from yanzhiti.types import AssistantMessage, Message, UserMessage
 
 class AgentState(str, Enum):
     """Agent state"""
+
     IDLE = "idle"
     RUNNING = "running"
     PAUSED = "paused"
@@ -24,6 +25,7 @@ class AgentState(str, Enum):
 
 class AgentConfig(BaseModel):
     """Configuration for an agent"""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str = "sub-agent"
     description: str = ""

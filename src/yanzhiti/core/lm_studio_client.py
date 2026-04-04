@@ -12,6 +12,7 @@ from pydantic import BaseModel
 
 class LMStudioConfig(BaseModel):
     """Configuration for LM Studio"""
+
     base_url: str = "http://localhost:1234/v1"  # LM Studio default port
     model: str = "local-model"  # LM Studio uses this as placeholder
     max_tokens: int = 4096
@@ -32,9 +33,7 @@ class LMStudioClient:
     async def check_server(self) -> bool:
         """Check if LM Studio server is running"""
         try:
-            response = await self.client.get(
-                f"{self.config.base_url}/models"
-            )
+            response = await self.client.get(f"{self.config.base_url}/models")
             return response.status_code == 200
         except Exception:
             return False
@@ -136,6 +135,7 @@ class LMStudioClient:
                             break
                         try:
                             import json
+
                             data = json.loads(data_str)
                             delta = data["choices"][0]["delta"]
                             if "content" in delta:
@@ -149,9 +149,7 @@ class LMStudioClient:
     async def get_models(self) -> list[dict[str, Any]]:
         """Get available models"""
         try:
-            response = await self.client.get(
-                f"{self.config.base_url}/models"
-            )
+            response = await self.client.get(f"{self.config.base_url}/models")
             response.raise_for_status()
             data = response.json()
             return data.get("data", [])
@@ -176,20 +174,12 @@ class SimpleLMStudioClient:
         self.config = LMStudioConfig(base_url=base_url, model=model)
         self.client = LMStudioClient(self.config)
 
-    async def chat(
-        self,
-        messages: list[dict[str, str]],
-        **kwargs
-    ) -> str:
+    async def chat(self, messages: list[dict[str, str]], **kwargs) -> str:
         """Simple chat - returns just the content"""
         response = await self.client.chat(messages, **kwargs)
         return response["content"]
 
-    async def generate(
-        self,
-        prompt: str,
-        **kwargs
-    ) -> str:
+    async def generate(self, prompt: str, **kwargs) -> str:
         """Generate from a single prompt"""
         messages = [{"role": "user", "content": prompt}]
         return await self.chat(messages, **kwargs)

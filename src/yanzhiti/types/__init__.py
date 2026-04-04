@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 class PermissionMode(str, Enum):
     """Permission modes for tool execution"""
+
     DEFAULT = "default"
     AUTO = "auto"
     PLAN = "plan"
@@ -19,6 +20,7 @@ class PermissionMode(str, Enum):
 
 class MessageRole(str, Enum):
     """Message roles in conversation"""
+
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
@@ -26,6 +28,7 @@ class MessageRole(str, Enum):
 
 class ToolResultStatus(str, Enum):
     """Status of tool execution result"""
+
     SUCCESS = "success"
     ERROR = "error"
     PERMISSION_DENIED = "permission_denied"
@@ -33,6 +36,7 @@ class ToolResultStatus(str, Enum):
 
 class Message(BaseModel):
     """Base message type"""
+
     role: MessageRole
     content: str | list[dict[str, Any]]
     metadata: dict[str, Any] | None = None
@@ -40,21 +44,25 @@ class Message(BaseModel):
 
 class UserMessage(Message):
     """User message"""
+
     role: MessageRole = MessageRole.USER
 
 
 class AssistantMessage(Message):
     """Assistant message"""
+
     role: MessageRole = MessageRole.ASSISTANT
 
 
 class SystemMessage(Message):
     """System message"""
+
     role: MessageRole = MessageRole.SYSTEM
 
 
 class ToolUseBlock(BaseModel):
     """Tool use block in assistant message"""
+
     type: str = "tool_use"
     id: str
     name: str
@@ -63,6 +71,7 @@ class ToolUseBlock(BaseModel):
 
 class ToolResultBlock(BaseModel):
     """Tool result block"""
+
     type: str = "tool_result"
     tool_use_id: str
     content: str | dict[str, Any]
@@ -71,6 +80,7 @@ class ToolResultBlock(BaseModel):
 
 class PermissionResult(BaseModel):
     """Result of permission check"""
+
     granted: bool
     reason: str | None = None
     mode: PermissionMode = PermissionMode.DEFAULT
@@ -78,6 +88,7 @@ class PermissionResult(BaseModel):
 
 class ValidationResult(BaseModel):
     """Result of input validation"""
+
     valid: bool
     message: str | None = None
     error_code: int | None = None
@@ -85,6 +96,7 @@ class ValidationResult(BaseModel):
 
 class ToolProgress(BaseModel):
     """Progress information for tool execution"""
+
     tool_name: str
     tool_use_id: str
     status: str
@@ -94,6 +106,7 @@ class ToolProgress(BaseModel):
 
 class Usage(BaseModel):
     """API usage statistics"""
+
     input_tokens: int = 0
     output_tokens: int = 0
     total_tokens: int = 0
@@ -102,6 +115,7 @@ class Usage(BaseModel):
 
 class SessionInfo(BaseModel):
     """Session information"""
+
     session_id: UUID
     created_at: float
     updated_at: float
@@ -111,6 +125,7 @@ class SessionInfo(BaseModel):
 
 class AppState(BaseModel):
     """Application state"""
+
     session_id: UUID | None = None
     cwd: str = "."
     messages: list[Message] = Field(default_factory=list)
@@ -121,6 +136,7 @@ class AppState(BaseModel):
 
 class Config(BaseModel):
     """Application configuration"""
+
     api_key: str | None = None
     model: str = "default-model"
     max_tokens: int = 4096

@@ -34,11 +34,17 @@ def show_info() -> None:
     info_table.add_row("Python 路径", sys.executable)
 
     # 检测虚拟环境 | Detect virtual environment
-    venv = "是" if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix) else "否"
+    venv = (
+        "是"
+        if hasattr(sys, "real_prefix")
+        or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix)
+        else "否"
+    )
     info_table.add_row("虚拟环境", venv)
 
     # 工具统计 | Tool statistics
     from yanzhiti.core import ToolRegistry
+
     registry = ToolRegistry()
     tool_count = len(registry.list_tools())
     info_table.add_row("可用工具数", str(tool_count))
@@ -239,7 +245,7 @@ def show_examples() -> None:
                 console.print(f"\n[bold magenta]📂 {category_dir.name}[/bold magenta]")
 
                 try:
-                    content = readme_file.read_text(encoding='utf-8')
+                    content = readme_file.read_text(encoding="utf-8")
                     console.print(Markdown(content))
                 except Exception as e:
                     console.print(f"[red]读取失败: {e}[/red]")
@@ -254,18 +260,17 @@ def check_update() -> None:
     import httpx
 
     try:
+
         async def get_latest_version():
             async with httpx.AsyncClient(timeout=10) as client:
-                response = await client.get(
-                    "https://pypi.org/pypi/yanzhiti/json"
-                )
+                response = await client.get("https://pypi.org/pypi/yanzhiti/json")
                 data = response.json()
                 return data["info"]["version"]
 
         latest_version = asyncio.run(get_latest_version())
 
-        current = __version__.split('.')
-        latest = latest_version.split('.')
+        current = __version__.split(".")
+        latest = latest_version.split(".")
 
         # 简单版本比较 | Simple version comparison
         needs_update = False
@@ -277,14 +282,16 @@ def check_update() -> None:
                 break
 
         if needs_update:
-            console.print(Panel(
-                f"[yellow]发现新版本！| New version available!\n\n"
-                f"当前版本: {__version__}\n"
-                f"最新版本: {latest_version}\n\n"
-                f"升级命令: pip install --upgrade yanzhiti[/yellow]",
-                title="更新可用",
-                border_style="yellow",
-            ))
+            console.print(
+                Panel(
+                    f"[yellow]发现新版本！| New version available!\n\n"
+                    f"当前版本: {__version__}\n"
+                    f"最新版本: {latest_version}\n\n"
+                    f"升级命令: pip install --upgrade yanzhiti[/yellow]",
+                    title="更新可用",
+                    border_style="yellow",
+                )
+            )
         else:
             console.print("[green]✓ 已是最新版本 | Already up to date[/green]")
             console.print(f"当前版本: {__version__}")

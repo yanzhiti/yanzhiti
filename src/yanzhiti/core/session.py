@@ -15,6 +15,7 @@ from yanzhiti.types import AssistantMessage, Message, UserMessage
 
 class SessionMetadata(BaseModel):
     """Session metadata"""
+
     session_id: str
     created_at: datetime
     updated_at: datetime
@@ -27,6 +28,7 @@ class SessionMetadata(BaseModel):
 
 class Session(BaseModel):
     """A complete session with messages and metadata"""
+
     metadata: SessionMetadata
     messages: list[dict[str, Any]] = Field(default_factory=list)
     config: dict[str, Any] = Field(default_factory=dict)
@@ -63,9 +65,9 @@ class SessionStorage:
 
         # Save messages in JSONL format
         session_file = self._get_session_file(session.metadata.session_id)
-        with open(session_file, 'w') as f:
+        with open(session_file, "w") as f:
             for msg in session.messages:
-                f.write(json.dumps(msg) + '\n')
+                f.write(json.dumps(msg) + "\n")
 
     async def load_session(self, session_id: str) -> Session | None:
         """Load a session by ID"""
@@ -97,13 +99,15 @@ class SessionStorage:
         # Convert message to dict
         msg_dict = {
             "role": message.role.value,
-            "content": message.content if isinstance(message.content, str) else str(message.content),
+            "content": message.content
+            if isinstance(message.content, str)
+            else str(message.content),
             "timestamp": datetime.now().isoformat(),
         }
 
         # Append to file
-        with open(session_file, 'a') as f:
-            f.write(json.dumps(msg_dict) + '\n')
+        with open(session_file, "a") as f:
+            f.write(json.dumps(msg_dict) + "\n")
 
         # Update metadata
         meta_file = self._get_metadata_file(session_id)
@@ -131,7 +135,7 @@ class SessionStorage:
         # Sort by updated_at (most recent first)
         sessions.sort(key=lambda s: s.updated_at, reverse=True)
 
-        return sessions[offset:offset + limit]
+        return sessions[offset : offset + limit]
 
     async def delete_session(self, session_id: str) -> bool:
         """Delete a session"""
@@ -228,16 +232,15 @@ class SessionManager:
         # Add to session
         msg_dict = {
             "role": message.role.value,
-            "content": message.content if isinstance(message.content, str) else str(message.content),
+            "content": message.content
+            if isinstance(message.content, str)
+            else str(message.content),
             "timestamp": datetime.now().isoformat(),
         }
         self.current_session.messages.append(msg_dict)
 
         # Persist
-        await self.storage.append_message(
-            self.current_session.metadata.session_id,
-            message
-        )
+        await self.storage.append_message(self.current_session.metadata.session_id, message)
 
     async def save_current_session(self):
         """Save the current session"""

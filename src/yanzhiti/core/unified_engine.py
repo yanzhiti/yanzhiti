@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 
 class BackendPriority(str, Enum):
     """后端优先级 | Backend priority"""
+
     CLOUD = "cloud"  # 云端 API 优先
     LOCAL = "local"  # 本地模型优先
     BUILTIN = "builtin"  # 仅使用内置模型
@@ -42,6 +43,7 @@ class BackendPriority(str, Enum):
 @dataclass
 class EngineConfig:
     """引擎配置 | Engine configuration"""
+
     primary_backend: str = "openrouter"  # 主后端 (provider ID)
     fallback_backends: list[str] = field(default_factory=lambda: ["builtin"])  # 后备后端
     api_key: str | None = None  # API 密钥
@@ -55,7 +57,7 @@ class EngineConfig:
 class UnifiedAIEngine:
     """
     统一 AI 引擎 | Unified AI engine
-    
+
     特点：
     - 统一调用接口，支持所有供应商和本地模型
     - 自动故障转移（failover）
@@ -75,7 +77,7 @@ class UnifiedAIEngine:
     async def initialize(self) -> bool:
         """
         初始化引擎 | Initialize engine
-        
+
         尝试初始化配置的后端，并检查可用性。
         Try to initialize configured backends and check availability.
         """
@@ -152,18 +154,18 @@ class UnifiedAIEngine:
         system_prompt: str | None = None,
         max_tokens: int | None = None,
         temperature: float | None = None,
-        preferred_backend: str | None = None
+        preferred_backend: str | None = None,
     ) -> str:
         """
         执行查询 | Execute query
-        
+
         Args:
             prompt: 用户提示词
             system_prompt: 系统提示词
             max_tokens: 最大输出 token 数
             temperature: 温度参数
             preferred_backend: 首选后端
-            
+
         Returns:
             生成的回复文本
         """
@@ -181,11 +183,7 @@ class UnifiedAIEngine:
                 logger.info(f"尝试使用后端: {backend_name}")
 
                 result = await self._query_with_backend(
-                    backend_name,
-                    prompt,
-                    system_prompt,
-                    max_tokens,
-                    temperature
+                    backend_name, prompt, system_prompt, max_tokens, temperature
                 )
 
                 return result
@@ -231,8 +229,12 @@ class UnifiedAIEngine:
         else:  # AUTO
             # 自动选择 | Auto select
             # 有 API Key 时优先云端 | Prefer cloud when has API key
-            if self.config.api_key and self.config.primary_backend != "builtin" and self.config.primary_backend not in order:
-                    order.append(self.config.primary_backend)
+            if (
+                self.config.api_key
+                and self.config.primary_backend != "builtin"
+                and self.config.primary_backend not in order
+            ):
+                order.append(self.config.primary_backend)
 
             # 然后尝试本地 | Then try local
             for local_backend in ["ollama", "lmstudio"]:
@@ -251,7 +253,7 @@ class UnifiedAIEngine:
         prompt: str,
         system_prompt: str | None,
         max_tokens: int,
-        temperature: float
+        temperature: float,
     ) -> str:
         """使用指定后端执行查询 | Execute query with specified backend"""
 
@@ -266,35 +268,20 @@ class UnifiedAIEngine:
 
         elif backend_name in ALL_PROVIDERS:
             return await self._query_cloud_api(
-                backend_name,
-                prompt,
-                system_prompt,
-                max_tokens,
-                temperature
+                backend_name, prompt, system_prompt, max_tokens, temperature
             )
 
         else:
             raise ValueError(f"未知的后端: {backend_name}")
 
-    async def _query_builtin(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int
-    ) -> str:
+    async def _query_builtin(self, prompt: str, system_prompt: str | None, max_tokens: int) -> str:
         """内置模型查询 | Built-in model query"""
         return await self._local_engine.generate(
-            prompt=prompt,
-            system_prompt=system_prompt,
-            max_tokens=max_tokens
+            prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens
         )
 
     async def _query_ollama(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int,
-        temperature: float
+        self, prompt: str, system_prompt: str | None, max_tokens: int, temperature: float
     ) -> str:
         """Ollama 查询 | Ollama query"""
         import httpx
@@ -304,10 +291,7 @@ class UnifiedAIEngine:
             "model": self.config.model or "llama3.1:8b",
             "prompt": prompt,
             "stream": False,
-            "options": {
-                "temperature": temperature,
-                "num_predict": min(max_tokens, 8192)
-            }
+            "options": {"temperature": temperature, "num_predict": min(max_tokens, 8192)},
         }
 
         if system_prompt:
@@ -320,11 +304,7 @@ class UnifiedAIEngine:
             return result.get("response", "")
 
     async def _query_lmstudio(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int,
-        temperature: float
+        self, prompt: str, system_prompt: str | None, max_tokens: int, temperature: float
     ) -> str:
         """LM Studio 查询 | LM Studio query"""
         import httpx
@@ -340,7 +320,7 @@ class UnifiedAIEngine:
             "model": self.config.model or "local-model",
             "messages": messages,
             "max_tokens": max_tokens,
-            "temperature": temperature
+            "temperature": temperature,
         }
 
         async with httpx.AsyncClient(timeout=120) as client:
@@ -355,7 +335,7 @@ class UnifiedAIEngine:
         prompt: str,
         system_prompt: str | None,
         max_tokens: int,
-        temperature: float
+        temperature: float,
     ) -> str:
         """云端 API 查询 | Cloud API query"""
         import httpx
@@ -369,7 +349,7 @@ class UnifiedAIEngine:
         # 构建请求 | Build request
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.config.api_key}"
+            "Authorization": f"Bearer {self.config.api_key}",
         }
 
         messages = []
@@ -381,7 +361,7 @@ class UnifiedAIEngine:
             "model": self.config.model or provider.models[0].name if provider.models else "default",
             "messages": messages,
             "max_tokens": max_tokens,
-            "temperature": temperature
+            "temperature": temperature,
         }
 
         # 根据供应商调整 URL | Adjust URL based on provider
@@ -404,15 +384,10 @@ class UnifiedAIEngine:
             else:
                 return result["choices"][0]["message"]["content"]
 
-    async def stream_query(
-        self,
-        prompt: str,
-        system_prompt: str | None = None,
-        **kwargs
-    ) -> Any:
+    async def stream_query(self, prompt: str, system_prompt: str | None = None, **kwargs) -> Any:
         """
         流式查询 | Streaming query
-        
+
         生成器形式返回文本块。
         Returns text chunks in generator form.
         """
@@ -433,10 +408,10 @@ class UnifiedAIEngine:
             "backends": self._backend_status,
             "available_providers": len(ALL_PROVIDERS),
             "builtin_models_downloaded": [
-                name for name, status in
-                self._builtin_manager.get_all_status().items()
+                name
+                for name, status in self._builtin_manager.get_all_status().items()
                 if status.value == "completed"
-            ]
+            ],
         }
 
 
@@ -463,7 +438,7 @@ async def quick_test() -> None:
     info = engine.get_info()
     print(f"\n🔧 引擎版本: {info['version']}")
     print("\n🌐 可用后端:")
-    for backend, available in info['backends'].items():
+    for backend, available in info["backends"].items():
         status = "✅" if available else "❌"
         print(f"  {status} {backend}")
 

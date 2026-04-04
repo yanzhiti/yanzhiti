@@ -18,6 +18,7 @@ from yanzhiti.types import (
 
 class ToolInputSchema(BaseModel):
     """JSON schema for tool input"""
+
     type: str = "object"
     properties: dict[str, Any] = Field(default_factory=dict)
     required: list[str] = Field(default_factory=list)
@@ -25,6 +26,7 @@ class ToolInputSchema(BaseModel):
 
 class ToolResult(BaseModel):
     """Result of tool execution"""
+
     status: ToolResultStatus = ToolResultStatus.SUCCESS
     output: str | None = None
     error: str | None = None
@@ -41,6 +43,7 @@ class ToolResult(BaseModel):
 
 class ToolContext(BaseModel):
     """Context passed to tool during execution"""
+
     tool_use_id: str = Field(default_factory=lambda: str(uuid4()))
     cwd: str = "."
     permission_mode: str = "default"

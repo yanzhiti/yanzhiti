@@ -101,7 +101,9 @@ class WebFetchTool(Tool):
                     output.append(f"\n... (truncated, {len(content)} total characters)")
 
                 return ToolResult(
-                    status=ToolResultStatus.SUCCESS if response.is_success else ToolResultStatus.ERROR,
+                    status=ToolResultStatus.SUCCESS
+                    if response.is_success
+                    else ToolResultStatus.ERROR,
                     output="\n".join(output),
                     metadata={
                         "url": url,
@@ -164,9 +166,9 @@ class WebSearchTool(Tool):
 
         mock_results = [
             {
-                "title": f"Result {i+1} for '{query}'",
-                "url": f"https://example.com/result{i+1}",
-                "snippet": f"This is a mock search result {i+1} for the query '{query}'. "
+                "title": f"Result {i + 1} for '{query}'",
+                "url": f"https://example.com/result{i + 1}",
+                "snippet": f"This is a mock search result {i + 1} for the query '{query}'. "
                 f"In production, this would be a real search result from a search API.",
             }
             for i in range(min(num_results, 5))
@@ -174,12 +176,14 @@ class WebSearchTool(Tool):
 
         output = [f"Search results for: {query}", ""]
         for i, result in enumerate(mock_results, 1):
-            output.extend([
-                f"{i}. {result['title']}",
-                f"   URL: {result['url']}",
-                f"   {result['snippet']}",
-                "",
-            ])
+            output.extend(
+                [
+                    f"{i}. {result['title']}",
+                    f"   URL: {result['url']}",
+                    f"   {result['snippet']}",
+                    "",
+                ]
+            )
 
         return ToolResult(
             status=ToolResultStatus.SUCCESS,
@@ -255,7 +259,9 @@ class WebScrapeTool(Tool):
                     content = "\n".join(links[:100])
                 elif extract == "images":
                     # Extract image URLs
-                    images = re.findall(r'src=["\']([^"\']+\.(?:jpg|jpeg|png|gif|webp))["\']', html, re.I)
+                    images = re.findall(
+                        r'src=["\']([^"\']+\.(?:jpg|jpeg|png|gif|webp))["\']', html, re.I
+                    )
                     content = "\n".join(images[:100])
                 else:
                     content = html[:5000]
@@ -350,12 +356,15 @@ class APITestTool(Tool):
                 # Check status if expected
                 if expected_status:
                     status_match = response.status_code == expected_status
-                    output.append(f"Expected Status: {expected_status} ({'✓' if status_match else '✗'})")
+                    output.append(
+                        f"Expected Status: {expected_status} ({'✓' if status_match else '✗'})"
+                    )
 
                 # Try to parse JSON
                 try:
                     json_response = response.json()
                     import json
+
                     output.append(f"\nResponse:\n{json.dumps(json_response, indent=2)}")
                 except Exception:
                     output.append(f"\nResponse:\n{response.text[:1000]}")

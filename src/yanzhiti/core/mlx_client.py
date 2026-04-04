@@ -13,6 +13,7 @@ from pydantic import BaseModel
 
 class MLXModelConfig(BaseModel):
     """Configuration for MLX model"""
+
     model_path: str
     model_name: str = "mlx-community/Llama-3.2-3B-Instruct-4bit"
     max_tokens: int = 4096
@@ -23,6 +24,7 @@ class MLXModelConfig(BaseModel):
 
 class MLXMessage(BaseModel):
     """Message for MLX model"""
+
     role: str  # system, user, assistant
     content: str
 
@@ -41,16 +43,11 @@ class MLXClient:
         """Check if MLX is installed"""
         try:
             result = subprocess.run(
-                ["python3", "-c", "import mlx_lm"],
-                capture_output=True,
-                text=True
+                ["python3", "-c", "import mlx_lm"], capture_output=True, text=True
             )
             if result.returncode != 0:
                 print("⚠️  MLX not found. Installing...")
-                subprocess.run(
-                    ["pip", "install", "mlx-lm"],
-                    check=True
-                )
+                subprocess.run(["pip", "install", "mlx-lm"], check=True)
         except Exception as e:
             raise RuntimeError(f"Failed to check/install MLX: {e}") from e
 
@@ -76,11 +73,17 @@ class MLXClient:
         try:
             # Use mlx-lm generate command
             cmd = [
-                "python3", "-m", "mlx_lm.generate",
-                "--model", self.config.model_name,
-                "--prompt", prompt,
-                "--max-tokens", str(self.config.max_tokens),
-                "--temp", str(self.config.temperature),
+                "python3",
+                "-m",
+                "mlx_lm.generate",
+                "--model",
+                self.config.model_name,
+                "--prompt",
+                prompt,
+                "--max-tokens",
+                str(self.config.max_tokens),
+                "--temp",
+                str(self.config.temperature),
             ]
 
             process = await asyncio.create_subprocess_exec(
@@ -104,7 +107,7 @@ class MLXClient:
                     "prompt_tokens": len(prompt.split()),
                     "completion_tokens": len(output.split()),
                     "total_tokens": len(prompt.split()) + len(output.split()),
-                }
+                },
             }
 
         except Exception as e:
@@ -177,9 +180,7 @@ class SimpleMLXClient:
                 print("✅ Model loaded successfully")
 
             except ImportError:
-                raise RuntimeError(
-                    "mlx-lm not installed. Run: pip install mlx-lm"
-                ) from None
+                raise RuntimeError("mlx-lm not installed. Run: pip install mlx-lm") from None
 
     async def generate(
         self,
@@ -202,7 +203,7 @@ class SimpleMLXClient:
                 prompt=prompt,
                 max_tokens=max_tokens,
                 temp=temperature,
-            )
+            ),
         )
 
         return response

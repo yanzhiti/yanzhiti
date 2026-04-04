@@ -48,14 +48,16 @@ from yanzhiti.tools import (
 )
 
 # Custom theme
-custom_theme = Theme({
-    "info": "cyan",
-    "warning": "yellow",
-    "error": "red",
-    "success": "green",
-    "user": "blue",
-    "assistant": "magenta",
-})
+custom_theme = Theme(
+    {
+        "info": "cyan",
+        "warning": "yellow",
+        "error": "red",
+        "success": "green",
+        "user": "blue",
+        "assistant": "magenta",
+    }
+)
 
 console = Console(theme=custom_theme)
 
@@ -107,14 +109,16 @@ def create_tool_registry(query_engine: LocalQueryEngine | None = None) -> ToolRe
 
 async def run_interactive(engine: LocalQueryEngine) -> None:
     """Run interactive REPL with local model"""
-    console.print(Panel.fit(
-        "[bold]衍智体 (YANZHITI) - Local MLX Edition[/bold]\n"
-        f"Version: {__version__}\n"
-        f"Model: {engine.config.model_name}\n"
-        "Running completely on your Mac - No API required!\n"
-        "Type your query and press Enter. Use Ctrl+C to exit.",
-        style="info",
-    ))
+    console.print(
+        Panel.fit(
+            "[bold]衍智体 (YANZHITI) - Local MLX Edition[/bold]\n"
+            f"Version: {__version__}\n"
+            f"Model: {engine.config.model_name}\n"
+            "Running completely on your Mac - No API required!\n"
+            "Type your query and press Enter. Use Ctrl+C to exit.",
+            style="info",
+        )
+    )
 
     while True:
         try:
@@ -133,16 +137,18 @@ async def run_interactive(engine: LocalQueryEngine) -> None:
                 continue
             elif user_input == "/stats":
                 stats = engine.get_stats()
-                console.print(Panel(
-                    f"Session ID: {stats['session_id']}\n"
-                    f"Messages: {stats['message_count']}\n"
-                    f"Turns: {stats['turn_count']}\n"
-                    f"Total tokens: {stats['usage']['total_tokens']}\n"
-                    f"Tools available: {stats['tool_count']}\n"
-                    f"Model: {stats['model']}",
-                    title="Session Statistics",
-                    style="info",
-                ))
+                console.print(
+                    Panel(
+                        f"Session ID: {stats['session_id']}\n"
+                        f"Messages: {stats['message_count']}\n"
+                        f"Turns: {stats['turn_count']}\n"
+                        f"Total tokens: {stats['usage']['total_tokens']}\n"
+                        f"Tools available: {stats['tool_count']}\n"
+                        f"Model: {stats['model']}",
+                        title="Session Statistics",
+                        style="info",
+                    )
+                )
                 continue
             elif user_input == "/reset":
                 engine.reset()

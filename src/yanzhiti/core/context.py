@@ -11,6 +11,7 @@ from yanzhiti.types import AssistantMessage, Message, UserMessage
 @dataclass
 class CompressionStats:
     """Statistics for compression operation"""
+
     original_messages: int
     compressed_messages: int
     original_tokens: int
@@ -96,7 +97,7 @@ class ContextCompressor:
         other_messages = [m for m in messages if m.role.value != "system"]
 
         # Keep recent messages
-        recent = other_messages[-self.preserve_recent:]
+        recent = other_messages[-self.preserve_recent :]
 
         # Add compression notice
         removed_count = len(other_messages) - len(recent)
@@ -186,9 +187,18 @@ class MessagePrioritizer:
 
     def __init__(self):
         self._important_keywords = {
-            "error", "exception", "fail", "bug", "fix",
-            "important", "critical", "warning", "note",
-            "todo", "fixme", "hack",
+            "error",
+            "exception",
+            "fail",
+            "bug",
+            "fix",
+            "important",
+            "critical",
+            "warning",
+            "note",
+            "todo",
+            "fixme",
+            "hack",
         }
 
     def calculate_importance(self, message: Message) -> float:
@@ -268,9 +278,7 @@ class ContextOptimizer:
             last_content = last.content if isinstance(last.content, str) else str(last.content)
             msg_content = msg.content if isinstance(msg.content, str) else str(msg.content)
 
-            if (msg.role == last.role and
-                len(last_content) < 100 and
-                len(msg_content) < 100):
+            if msg.role == last.role and len(last_content) < 100 and len(msg_content) < 100:
                 current_group.append(msg)
             else:
                 # Flush current group
@@ -282,7 +290,11 @@ class ContextOptimizer:
                         m.content if isinstance(m.content, str) else str(m.content)
                         for m in current_group
                     )
-                    merged = UserMessage(content=merged_content) if current_group[0].role.value == "user" else AssistantMessage(content=merged_content)
+                    merged = (
+                        UserMessage(content=merged_content)
+                        if current_group[0].role.value == "user"
+                        else AssistantMessage(content=merged_content)
+                    )
                     result.append(merged)
 
                 current_group = [msg]
@@ -292,10 +304,13 @@ class ContextOptimizer:
             result.append(current_group[0])
         else:
             merged_content = "\n".join(
-                m.content if isinstance(m.content, str) else str(m.content)
-                for m in current_group
+                m.content if isinstance(m.content, str) else str(m.content) for m in current_group
             )
-            merged = UserMessage(content=merged_content) if current_group[0].role.value == "user" else AssistantMessage(content=merged_content)
+            merged = (
+                UserMessage(content=merged_content)
+                if current_group[0].role.value == "user"
+                else AssistantMessage(content=merged_content)
+            )
             result.append(merged)
 
         return result

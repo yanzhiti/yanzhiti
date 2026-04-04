@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class BuiltInModelConfig:
     """内置模型配置 | Built-in model configuration"""
+
     name: str  # 模型名称
     display_name: str  # 显示名称
     description: str  # 描述
@@ -49,7 +50,7 @@ BUILTIN_MODELS: dict[str, BuiltInModelConfig] = {
         filename="pytorch_model.bin",
         context_length=2048,
         max_tokens=512,
-        capabilities=["引导配置", "简单对话", "代码提示", "快速响应"]
+        capabilities=["引导配置", "简单对话", "代码提示", "快速响应"],
     ),
     "phi2": BuiltInModelConfig(
         name="phi2",
@@ -60,7 +61,7 @@ BUILTIN_MODELS: dict[str, BuiltInModelConfig] = {
         filename="pytorch_model.bin",
         context_length=4096,
         max_tokens=512,
-        capabilities=["知识问答", "推理", "教育", "数学"]
+        capabilities=["知识问答", "推理", "教育", "数学"],
     ),
     "stablelm": BuiltInModelConfig(
         name="stablelm",
@@ -71,13 +72,14 @@ BUILTIN_MODELS: dict[str, BuiltInModelConfig] = {
         filename="pytorch_model.bin",
         context_length=4096,
         max_tokens=512,
-        capabilities=["对话", "指令遵循", "创意写作", "角色扮演"]
-    )
+        capabilities=["对话", "指令遵循", "创意写作", "角色扮演"],
+    ),
 }
 
 
 class DownloadStatus(str, Enum):
     """下载状态 | Download status"""
+
     PENDING = "pending"  # 等待中
     DOWNLOADING = "downloading"  # 下载中
     COMPLETED = "completed"  # 已完成
@@ -88,6 +90,7 @@ class DownloadStatus(str, Enum):
 @dataclass
 class DownloadProgress:
     """下载进度 | Download progress"""
+
     status: DownloadStatus = DownloadStatus.PENDING
     downloaded_bytes: int = 0
     total_bytes: int = 0
@@ -110,7 +113,7 @@ class DownloadProgress:
 class BuiltInModelManager:
     """
     内置模型管理器 | Built-in model manager
-    
+
     功能：
     - 管理内置模型的下载、存储和加载
     - 提供统一的推理接口
@@ -146,11 +149,7 @@ class BuiltInModelManager:
             return False
 
         # 检查关键文件是否完整 | Check if key files are complete
-        required_files = [
-            "config.json",
-            "pytorch_model.bin",
-            "tokenizer.json"
-        ]
+        required_files = ["config.json", "pytorch_model.bin", "tokenizer.json"]
 
         return all((model_path / file_name).exists() for file_name in required_files)
 
@@ -166,21 +165,19 @@ class BuiltInModelManager:
         if not model_path:
             return 0
 
-        total_size = sum(f.stat().st_size for f in model_path.rglob('*') if f.is_file())
+        total_size = sum(f.stat().st_size for f in model_path.rglob("*") if f.is_file())
         return total_size
 
     async def download_model(
-        self,
-        model_name: str,
-        progress_callback: Callable[[DownloadProgress], None] | None = None
+        self, model_name: str, progress_callback: Callable[[DownloadProgress], None] | None = None
     ) -> bool:
         """
         下载模型 | Download model
-        
+
         Args:
             model_name: 模型名称
             progress_callback: 进度回调函数
-            
+
         Returns:
             是否下载成功
         """
@@ -208,8 +205,7 @@ class BuiltInModelManager:
 
             # 初始化进度 | Initialize progress
             progress = DownloadProgress(
-                status=DownloadStatus.DOWNLOADING,
-                total_bytes=config.model_size_mb * 1024 * 1024
+                status=DownloadStatus.DOWNLOADING, total_bytes=config.model_size_mb * 1024 * 1024
             )
 
             await self._notify_progress(model_name, progress)
@@ -271,21 +267,27 @@ class BuiltInModelManager:
         # In actual implementation, these should be real model files
 
         files_to_create = [
-            ("config.json", json.dumps({
-                "model_type": "llama",
-                "hidden_size": 2048,
-                "num_attention_heads": 32,
-                "num_hidden_layers": 22,
-                "vocab_size": 32000,
-                "max_position_embeddings": config.context_length
-            }, indent=2)),
+            (
+                "config.json",
+                json.dumps(
+                    {
+                        "model_type": "llama",
+                        "hidden_size": 2048,
+                        "num_attention_heads": 32,
+                        "num_hidden_layers": 22,
+                        "vocab_size": 32000,
+                        "max_position_embeddings": config.context_length,
+                    },
+                    indent=2,
+                ),
+            ),
             ("tokenizer.json", "{}"),
             ("special_tokens_map.json", "{}"),
         ]
 
         for file_name, content in files_to_create:
             file_path = model_path / file_name
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
 
         # 创建空的模型权重文件（仅标记）| Create empty model weight file (marker only)
@@ -318,10 +320,7 @@ class BuiltInModelManager:
 
     def get_all_status(self) -> dict[str, DownloadStatus]:
         """获取所有模型状态 | Get all models status"""
-        return {
-            name: self.get_download_status(name)
-            for name in BUILTIN_MODELS
-        }
+        return {name: self.get_download_status(name) for name in BUILTIN_MODELS}
 
     def get_total_disk_usage(self) -> int:
         """获取总磁盘使用量 | Get total disk usage"""
@@ -335,7 +334,7 @@ class LocalInferenceEngine:
     """
     本地推理引擎 - 统一的本地模型调用接口
     Local Inference Engine - Unified local model calling interface
-    
+
     支持多种后端：
     - 内置模型 (Built-in)
     - Ollama
@@ -352,19 +351,16 @@ class LocalInferenceEngine:
         self.backend_type: str | None = None
 
     async def initialize(
-        self,
-        backend: str = "builtin",
-        model_name: str = "tinyllama",
-        **kwargs
+        self, backend: str = "builtin", model_name: str = "tinyllama", **kwargs
     ) -> bool:
         """
         初始化引擎 | Initialize engine
-        
+
         Args:
             backend: 后端类型 (builtin, ollama, lmstudio, mlx, llamacpp, vllm)
             model_name: 模型名称
             **kwargs: 其他参数
-            
+
         Returns:
             是否初始化成功
         """
@@ -386,6 +382,7 @@ class LocalInferenceEngine:
         elif backend == "ollama":
             # 使用 Ollama | Use Ollama
             from yanzhiti.core.lm_studio_client import LMStudioClient
+
             client = LMStudioClient()
             try:
                 models = await client.get_models()
@@ -405,6 +402,7 @@ class LocalInferenceEngine:
         elif backend == "lmstudio":
             # 使用 LM Studio | Use LM Studio
             from yanzhiti.core.lm_studio_client import LMStudioClient
+
             client = LMStudioClient(base_url="http://localhost:1234/v1")
             try:
                 models = await client.get_models()
@@ -431,18 +429,18 @@ class LocalInferenceEngine:
         system_prompt: str | None = None,
         max_tokens: int = 512,
         temperature: float = 0.7,
-        stream: bool = False
+        stream: bool = False,
     ) -> str:
         """
         生成文本 | Generate text
-        
+
         Args:
             prompt: 用户提示词
             system_prompt: 系统提示词
             max_tokens: 最大输出 token 数
             temperature: 温度参数
             stream: 是否流式输出
-            
+
         Returns:
             生成的文本
         """
@@ -456,10 +454,7 @@ class LocalInferenceEngine:
             raise ValueError(f"未知的后端类型: {self.backend_type}")
 
     async def _generate_builtin(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int
+        self, prompt: str, system_prompt: str | None, max_tokens: int
     ) -> str:
         """内置模型生成 | Built-in model generation"""
         # 注意：这是一个简化的实现
@@ -496,22 +491,15 @@ class LocalInferenceEngine:
                 f"{prompt[:40]}... 这是一个很好的问题！\n\n"
                 f"作为 StableLM Zephyr，我擅长对话交流。"
                 f"\n建议运行 `yzt --info` 了解更多选项。"
-            )
+            ),
         }
 
-        response = response_templates.get(
-            self.current_model,
-            response_templates["tinyllama"]
-        )
+        response = response_templates.get(self.current_model, response_templates["tinyllama"])
 
         return response
 
     async def _generate_ollama(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int,
-        temperature: float
+        self, prompt: str, system_prompt: str | None, max_tokens: int, temperature: float
     ) -> str:
         """Ollama 推理 | Ollama inference"""
 
@@ -520,10 +508,7 @@ class LocalInferenceEngine:
             "model": self.current_model,
             "prompt": prompt,
             "stream": False,
-            "options": {
-                "temperature": temperature,
-                "num_predict": max_tokens
-            }
+            "options": {"temperature": temperature, "num_predict": max_tokens},
         }
 
         if system_prompt:
@@ -535,11 +520,7 @@ class LocalInferenceEngine:
             return result.get("response", "")
 
     async def _generate_lmstudio(
-        self,
-        prompt: str,
-        system_prompt: str | None,
-        max_tokens: int,
-        temperature: float
+        self, prompt: str, system_prompt: str | None, max_tokens: int, temperature: float
     ) -> str:
         """LM Studio 推理 | LM Studio inference"""
 
@@ -548,7 +529,7 @@ class LocalInferenceEngine:
             "model": self.current_model or "local-model",
             "messages": [],
             "max_tokens": max_tokens,
-            "temperature": temperature
+            "temperature": temperature,
         }
 
         if system_prompt:
@@ -564,7 +545,7 @@ class LocalInferenceEngine:
 async def setup_builtin_model_guide() -> str:
     """
     设置内置模型引导 | Setup built-in model guide
-    
+
     当用户没有配置任何 AI 服务时，使用内置模型提供基础引导功能。
     When user hasn't configured any AI service, use built-in model for basic guidance.
     """
@@ -589,7 +570,7 @@ async def setup_builtin_model_guide() -> str:
             "你是衍智体 (YANZHITI) 的内置引导助手。"
             "你的职责是帮助新用户了解项目并完成初始配置。"
             "请友好、清晰地回答问题。"
-        )
+        ),
     )
 
     return response
@@ -597,12 +578,12 @@ async def setup_builtin_model_guide() -> str:
 
 # 导出主要类和函数 | Export main classes and functions
 __all__ = [
-    'BuiltInModelManager',
-    'LocalInferenceEngine',
-    'DownloadProgress',
-    'DownloadStatus',
-    'BUILTIN_MODELS',
-    'setup_builtin_model_guide'
+    "BuiltInModelManager",
+    "LocalInferenceEngine",
+    "DownloadProgress",
+    "DownloadStatus",
+    "BUILTIN_MODELS",
+    "setup_builtin_model_guide",
 ]
 
 

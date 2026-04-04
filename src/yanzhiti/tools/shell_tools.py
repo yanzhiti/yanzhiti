@@ -87,7 +87,9 @@ class BashTool(Tool):
             output.append(f"exit code: {process.returncode}")
 
             return ToolResult(
-                status=ToolResultStatus.SUCCESS if process.returncode == 0 else ToolResultStatus.ERROR,
+                status=ToolResultStatus.SUCCESS
+                if process.returncode == 0
+                else ToolResultStatus.ERROR,
                 output="\n".join(output),
                 metadata={
                     "command": command,
@@ -171,7 +173,9 @@ class PowerShellTool(Tool):
                 output.append(stderr.decode("utf-8", errors="replace"))
 
             return ToolResult(
-                status=ToolResultStatus.SUCCESS if process.returncode == 0 else ToolResultStatus.ERROR,
+                status=ToolResultStatus.SUCCESS
+                if process.returncode == 0
+                else ToolResultStatus.ERROR,
                 output="\n".join(output),
                 metadata={"command": command, "exit_code": process.returncode},
             )

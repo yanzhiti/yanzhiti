@@ -20,6 +20,7 @@ from yanzhiti.types import (
 
 class LocalQueryEngineConfig(BaseModel):
     """Configuration for Local QueryEngine"""
+
     cwd: str = "."
     model_name: str = "local-model"
     backend: str = "lm_studio"  # "lm_studio" or "mlx"
@@ -48,14 +49,13 @@ class LocalQueryEngine:
         # Initialize client based on backend
         if config.backend == "lm_studio":
             from yanzhiti.core.lm_studio_client import SimpleLMStudioClient
+
             print(f"🚀 Initializing LM Studio client: {config.base_url}")
-            self.client = SimpleLMStudioClient(
-                base_url=config.base_url,
-                model=config.model_name
-            )
+            self.client = SimpleLMStudioClient(base_url=config.base_url, model=config.model_name)
             self._backend_type = "lm_studio"
         else:
             from yanzhiti.core.mlx_client import SimpleMLXClient
+
             print(f"🚀 Initializing MLX model: {config.model_name}")
             self.client = SimpleMLXClient(model_name=config.model_name)
             self._backend_type = "mlx"
@@ -116,9 +116,7 @@ class LocalQueryEngine:
             return assistant_message
 
         # Max turns reached
-        return AssistantMessage(
-            content="Maximum turns reached. Please start a new query."
-        )
+        return AssistantMessage(content="Maximum turns reached. Please start a new query.")
 
     async def _generate_response(self) -> str:
         """Generate response from local model"""
@@ -127,17 +125,16 @@ class LocalQueryEngine:
 
         # Add system prompt
         if self.config.system_prompt:
-            mlx_messages.append({
-                "role": "system",
-                "content": self._build_system_prompt()
-            })
+            mlx_messages.append({"role": "system", "content": self._build_system_prompt()})
 
         # Add conversation history
         for msg in self.messages[-10:]:  # Keep last 10 messages for context
-            mlx_messages.append({
-                "role": msg.role.value,
-                "content": msg.content if isinstance(msg.content, str) else str(msg.content)
-            })
+            mlx_messages.append(
+                {
+                    "role": msg.role.value,
+                    "content": msg.content if isinstance(msg.content, str) else str(msg.content),
+                }
+            )
 
         # Generate response
         response = await self.client.chat(
@@ -182,17 +179,14 @@ class LocalQueryEngine:
 
                     # Look for params
                     params = {}
-                    if i + 1 < len(lines) and lines[i+1].strip().startswith("PARAMS:"):
+                    if i + 1 < len(lines) and lines[i + 1].strip().startswith("PARAMS:"):
                         try:
-                            params_str = lines[i+1].split("PARAMS:")[1].strip()
+                            params_str = lines[i + 1].split("PARAMS:")[1].strip()
                             params = json.loads(params_str)
                         except Exception:
                             pass
 
-                    tool_calls.append({
-                        "name": tool_name,
-                        "parameters": params
-                    })
+                    tool_calls.append({"name": tool_name, "parameters": params})
 
                     # Skip to END_TOOL
                     while i < len(lines) and "END_TOOL" not in lines[i]:
@@ -246,5 +240,3 @@ class LocalQueryEngine:
             "tool_count": len(self.tool_registry),
             "model": self.config.model_name,
         }
-
-

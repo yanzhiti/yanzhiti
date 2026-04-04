@@ -19,7 +19,7 @@ def find_free_port(start_port: int = 8080, max_tries: int = 10) -> int:
     for port in range(start_port, start_port + max_tries):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.bind(('127.0.0.1', port))
+                s.bind(("127.0.0.1", port))
                 return port
         except OSError:
             continue
@@ -37,6 +37,7 @@ def launch_web_gui(port: int) -> None:
         import uvicorn
 
         from yanzhiti.web.server import app
+
         uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
 
     # 启动服务器线程 | Start server thread
@@ -67,13 +68,8 @@ def main():
     """主入口 | Main entry point"""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="衍智体桌面客户端 | YANZHITI Desktop Client"
-    )
-    parser.add_argument(
-        "--port", "-p", type=int, default=8080,
-        help="端口 | Port (default: 8080)"
-    )
+    parser = argparse.ArgumentParser(description="衍智体桌面客户端 | YANZHITI Desktop Client")
+    parser.add_argument("--port", "-p", type=int, default=8080, help="端口 | Port (default: 8080)")
     args = parser.parse_args()
 
     port = find_free_port(args.port)

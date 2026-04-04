@@ -14,6 +14,7 @@ from yanzhiti.types import ToolResultStatus
 
 class PlanMode(str, Enum):
     """规划模式状态"""
+
     IDLE = "idle"
     PLANNING = "planning"
     EXECUTING = "executing"
@@ -121,10 +122,7 @@ class SkillTool(Tool):
 
     def list_skills(self) -> list[dict[str, Any]]:
         """列出所有可用技能"""
-        return [
-            {"name": name, **data}
-            for name, data in self._skills.items()
-        ]
+        return [{"name": name, **data} for name, data in self._skills.items()]
 
 
 class LSPTool(Tool):
@@ -297,7 +295,7 @@ class ExitPlanModeTool(Tool):
             self._plan_tool._plan_mode = PlanMode.IDLE
 
         if execute and plan_steps:
-            steps_str = "\n".join(f"{i+1}. {step}" for i, step in enumerate(plan_steps))
+            steps_str = "\n".join(f"{i + 1}. {step}" for i, step in enumerate(plan_steps))
             return ToolResult(
                 status=ToolResultStatus.SUCCESS,
                 output=f"Exiting planning mode. Plan to execute:\n\n{steps_str}",
@@ -357,7 +355,7 @@ class SendMessageTool(Tool):
             self._message_queue[recipient] = []
 
         msg = {
-            "from": context.session_id if hasattr(context, 'session_id') else "unknown",
+            "from": context.session_id if hasattr(context, "session_id") else "unknown",
             "to": recipient,
             "message": message,
             "type": message_type,
