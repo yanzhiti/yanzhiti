@@ -9,16 +9,13 @@ Desktop Client Launcher - Cross-platform desktop application
 - 自动检测可用端口
 """
 
-import os
-import sys
 import webbrowser
-from pathlib import Path
 
 
 def find_free_port(start_port: int = 8080, max_tries: int = 10) -> int:
     """查找可用端口 | Find available port"""
     import socket
-    
+
     for port in range(start_port, start_port + max_tries):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -26,68 +23,65 @@ def find_free_port(start_port: int = 8080, max_tries: int = 10) -> int:
                 return port
         except OSError:
             continue
-    
-    return start_port  # 如果都占用，返回默认端口
+
+    return start_port
 
 
 def launch_web_gui(port: int) -> None:
     """启动 Web GUI | Launch Web GUI"""
-    import subprocess
     import threading
     from urllib.request import urlopen
-    
+
     # 启动 FastAPI 服务器 | Start FastAPI server
     def run_server():
         import uvicorn
-        uvicorn.run(
-            "yanzhiti.web.server:app",
-            host="127.0.0.1",
-            port=port,
-            log_level="info",
-        )
-    
-    # 在后台线程中启动服务器 | Start server in background thread
+
+        from yanzhiti.web.server import app
+        uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
+
+    # 启动服务器线程 | Start server thread
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
-    
-    # 等待服务器启动 | Wait for server to start
-    import time
-    print(f"正在启动服务器... | Starting server...")
-    
-    for i in range(30):  # 最多等待 3 秒
-        try:
-            urlopen(f"http://127.0.0.1:{port}/")
-            break
-        except Exception:
-            time.sleep(0.1)
-    else:
-        print("❌ 服务器启动失败！| Server failed to start!")
-        sys.exit(1)
-    
+
+    # 等待服务器就绪 | Wait for server to be ready
+    def wait_for_server():
+        for _ in range(50):
+            try:
+                urlopen(f"http://127.0.0.1:{port}/health", timeout=1)
+                return True
+            except Exception:
+                pass
+        return False
+
+    if not wait_for_server():
+        print("错误：服务器启动失败 | Error: Server failed to start")
+        return
+
     # 打开浏览器 | Open browser
     url = f"http://127.0.0.1:{port}"
-    print(f"✅ 衍智体 Web GUI 已启动！")
-    print(f"🌐 浏览器地址: {url}")
-    print(f"\n按 Ctrl+C 停止服务 | Press Ctrl+C to stop")
-    
+    print(f"🌐 正在打开浏览器... | Opening browser at {url}")
     webbrowser.open(url)
 
 
 def main():
-    """主函数 | Main function"""
-    print("=" * 60)
-    print("🚀 衍智体 (YANZHITI) 桌面客户端 v2.1.88")
-    print("=" * 60)
-    
-    # 查找可用端口 | Find available port
-    port = find_free_port()
-    
-    # 显示启动信息 | Show startup info
-    print(f"\n📁 工作目录: {os.getcwd()}")
-    print(f"🔗 服务端口: {port}")
-    print(f"🐍 Python 版本: {sys.version.split()[0]}")
-    
-    # 启动 Web GUI | Launch Web GUI
+    """主入口 | Main entry point"""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="衍智体桌面客户端 | YANZHITI Desktop Client"
+    )
+    parser.add_argument(
+        "--port", "-p", type=int, default=8080,
+        help="端口 | Port (default: 8080)"
+    )
+    args = parser.parse_args()
+
+    port = find_free_port(args.port)
+
+    if port != args.port:
+        print(f"⚠️  端口 {args.port} 已被占用，使用 {port} | Port {args.port} in use, using {port}")
+
+    print("🚀 正在启动衍智体 Web GUI | Starting YANZHITI Web GUI...")
     launch_web_gui(port)
 
 

@@ -168,10 +168,7 @@ class PermissionEngine:
         if context.command and re.search(pattern, context.command):
             return True
 
-        if context.tool_name and re.search(pattern, context.tool_name):
-            return True
-
-        return False
+        return context.tool_name and re.search(pattern, context.tool_name)
 
     def _operation_to_scope(self, operation: str) -> PermissionScope:
         """Map operation string to scope"""

@@ -100,7 +100,7 @@ class LMStudioClient:
             }
 
         except httpx.HTTPError as e:
-            raise RuntimeError(f"LM Studio API error: {e}")
+            raise RuntimeError(f"LM Studio API error: {e}") from e
 
     async def stream_chat(
         self,
@@ -144,7 +144,7 @@ class LMStudioClient:
                             continue
 
         except httpx.HTTPError as e:
-            raise RuntimeError(f"LM Studio streaming error: {e}")
+            raise RuntimeError(f"LM Studio streaming error: {e}") from e
 
     async def get_models(self) -> list[dict[str, Any]]:
         """Get available models"""

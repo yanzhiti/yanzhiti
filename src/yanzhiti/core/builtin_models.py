@@ -12,13 +12,11 @@ Built-in Model Manager - Manage built-in small open-source models
 import asyncio
 import json
 import logging
-import os
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Optional
-from urllib.parse import urljoin
 
 import httpx
 
@@ -95,14 +93,14 @@ class DownloadProgress:
     total_bytes: int = 0
     speed_bytes_per_sec: float = 0.0
     error_message: str | None = None
-    
+
     @property
     def percentage(self) -> float:
         """获取下载百分比 | Get download percentage"""
         if self.total_bytes == 0:
             return 0.0
         return (self.downloaded_bytes / self.total_bytes) * 100
-    
+
     @property
     def size_display(self) -> str:
         """显示友好的文件大小 | Display friendly file size"""
@@ -118,68 +116,63 @@ class BuiltInModelManager:
     - 提供统一的推理接口
     - 跟踪下载进度和状态
     """
-    
-    def __init__(self, models_dir: Optional[Path] = None):
+
+    def __init__(self, models_dir: Path | None = None):
         """初始化模型管理器 | Initialize model manager"""
         self._models_dir = models_dir or Path.home() / ".yanzhiti" / "models"
         self._progress_callbacks: dict[str, list[Callable]] = {}
-        
+
         # 确保目录存在 | Ensure directory exists
         self._models_dir.mkdir(parents=True, exist_ok=True)
-    
+
     @property
     def models_dir(self) -> Path:
         """获取模型存储目录 | Get models storage directory"""
         return self._models_dir
-    
+
     def get_available_models(self) -> dict[str, BuiltInModelConfig]:
         """获取所有可用模型 | Get all available models"""
         return BUILTIN_MODELS.copy()
-    
+
     def is_model_downloaded(self, model_name: str) -> bool:
         """检查模型是否已下载 | Check if model is downloaded"""
         if model_name not in BUILTIN_MODELS:
             return False
-        
-        config = BUILTIN_MODELS[model_name]
+
         model_path = self._models_dir / model_name
-        
+
         # 检查模型文件是否存在 | Check if model file exists
         if not model_path.exists():
             return False
-        
+
         # 检查关键文件是否完整 | Check if key files are complete
         required_files = [
             "config.json",
             "pytorch_model.bin",
             "tokenizer.json"
         ]
-        
-        for file_name in required_files:
-            if not (model_path / file_name).exists():
-                return False
-        
-        return True
-    
-    def get_model_path(self, model_name: str) -> Optional[Path]:
+
+        return all((model_path / file_name).exists() for file_name in required_files)
+
+    def get_model_path(self, model_name: str) -> Path | None:
         """获取模型路径 | Get model path"""
         if not self.is_model_downloaded(model_name):
             return None
         return self._models_dir / model_name
-    
+
     def get_model_size(self, model_name: str) -> int:
         """获取已下载模型的大小 | Get downloaded model size"""
         model_path = self.get_model_path(model_name)
         if not model_path:
             return 0
-        
+
         total_size = sum(f.stat().st_size for f in model_path.rglob('*') if f.is_file())
         return total_size
-    
+
     async def download_model(
         self,
         model_name: str,
-        progress_callback: Optional[Callable[[DownloadProgress], None]] = None
+        progress_callback: Callable[[DownloadProgress], None] | None = None
     ) -> bool:
         """
         下载模型 | Download model
@@ -194,64 +187,64 @@ class BuiltInModelManager:
         if model_name not in BUILTIN_MODELS:
             logger.error(f"未知模型: {model_name}")
             return False
-        
+
         config = BUILTIN_MODELS[model_name]
         model_path = self._models_dir / model_name
-        
+
         # 如果已存在，跳过下载 | Skip if already exists
         if self.is_model_downloaded(model_name):
             logger.info(f"模型 {model_name} 已存在，跳过下载")
             return True
-        
+
         try:
             # 创建目标目录 | Create target directory
             model_path.mkdir(parents=True, exist_ok=True)
-            
+
             # 注册回调 | Register callback
             if progress_callback:
                 if model_name not in self._progress_callbacks:
                     self._progress_callbacks[model_name] = []
                 self._progress_callbacks[model_name].append(progress_callback)
-            
+
             # 初始化进度 | Initialize progress
             progress = DownloadProgress(
                 status=DownloadStatus.DOWNLOADING,
                 total_bytes=config.model_size_mb * 1024 * 1024
             )
-            
+
             await self._notify_progress(model_name, progress)
-            
+
             # 模拟下载过程（实际实现时替换为真实下载）
             # Simulate download process (replace with real download in actual implementation)
             logger.info(f"开始下载模型 {model_name}...")
-            
+
             # 这里应该实现真实的文件下载逻辑
             # This should implement real file download logic
             # 由于网络限制，这里使用模拟数据
             # Due to network limitations, using simulated data here
-            
+
             chunk_size = 1024 * 1024  # 1MB chunks
-            for i in range(10):  # 模拟 10 个分块
+            for _ in range(10):  # 模拟 10 个分块
                 await asyncio.sleep(0.1)  # 模拟网络延迟
-                
+
                 progress.downloaded_bytes += chunk_size
                 progress.speed_bytes_per_sec = chunk_size / 0.1
-                
+
                 await self._notify_progress(model_name, progress)
-                
+
                 if progress.downloaded_bytes >= progress.total_bytes:
                     break
-            
+
             # 标记下载完成 | Mark as completed
             progress.status = DownloadStatus.COMPLETED
             await self._notify_progress(model_name, progress)
-            
+
             # 创建占位文件（模拟）| Create placeholder files (simulation)
             self._create_placeholder_files(model_path, config)
-            
+
             logger.info(f"模型 {model_name} 下载完成")
             return True
-            
+
         except Exception as e:
             logger.error(f"下载模型失败: {e}")
             progress.status = DownloadStatus.FAILED
@@ -262,7 +255,7 @@ class BuiltInModelManager:
             # 清理回调 | Clean up callbacks
             if model_name in self._progress_callbacks and progress_callback:
                 self._progress_callbacks[model_name].remove(progress_callback)
-    
+
     async def _notify_progress(self, model_name: str, progress: DownloadProgress) -> None:
         """通知进度更新 | Notify progress update"""
         callbacks = self._progress_callbacks.get(model_name, [])
@@ -271,12 +264,12 @@ class BuiltInModelManager:
                 callback(progress)
             except Exception as e:
                 logger.warning(f"进度回调执行失败: {e}")
-    
+
     def _create_placeholder_files(self, model_path: Path, config: BuiltInModelConfig) -> None:
         """创建占位文件（用于测试）| Create placeholder files (for testing)"""
         # 在实际实现中，这些应该是真实的模型文件
         # In actual implementation, these should be real model files
-        
+
         files_to_create = [
             ("config.json", json.dumps({
                 "model_type": "llama",
@@ -289,26 +282,26 @@ class BuiltInModelManager:
             ("tokenizer.json", "{}"),
             ("special_tokens_map.json", "{}"),
         ]
-        
+
         for file_name, content in files_to_create:
             file_path = model_path / file_name
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(content)
-        
+
         # 创建空的模型权重文件（仅标记）| Create empty model weight file (marker only)
         weight_file = model_path / config.filename
         if not weight_file.exists():
             weight_file.touch()
-    
+
     async def delete_model(self, model_name: str) -> bool:
         """删除模型 | Delete model"""
         if model_name not in BUILTIN_MODELS:
             return False
-        
+
         model_path = self.get_model_path(model_name)
         if not model_path or not model_path.exists():
             return True
-        
+
         try:
             shutil.rmtree(model_path)
             logger.info(f"模型 {model_name} 已删除")
@@ -316,20 +309,20 @@ class BuiltInModelManager:
         except Exception as e:
             logger.error(f"删除模型失败: {e}")
             return False
-    
+
     def get_download_status(self, model_name: str) -> DownloadStatus:
         """获取下载状态 | Get download status"""
         if self.is_model_downloaded(model_name):
             return DownloadStatus.COMPLETED
         return DownloadStatus.PENDING
-    
+
     def get_all_status(self) -> dict[str, DownloadStatus]:
         """获取所有模型状态 | Get all models status"""
         return {
             name: self.get_download_status(name)
-            for name in BUILTIN_MODELS.keys()
+            for name in BUILTIN_MODELS
         }
-    
+
     def get_total_disk_usage(self) -> int:
         """获取总磁盘使用量 | Get total disk usage"""
         total = 0
@@ -351,13 +344,13 @@ class LocalInferenceEngine:
     - llama.cpp
     - vLLM
     """
-    
+
     def __init__(self):
         """初始化推理引擎 | Initialize inference engine"""
         self.model_manager = BuiltInModelManager()
-        self.current_model: Optional[str] = None
-        self.backend_type: Optional[str] = None
-    
+        self.current_model: str | None = None
+        self.backend_type: str | None = None
+
     async def initialize(
         self,
         backend: str = "builtin",
@@ -376,7 +369,7 @@ class LocalInferenceEngine:
             是否初始化成功
         """
         self.backend_type = backend
-        
+
         if backend == "builtin":
             # 使用内置模型 | Use built-in model
             if not self.model_manager.is_model_downloaded(model_name):
@@ -385,11 +378,11 @@ class LocalInferenceEngine:
                 if not success:
                     logger.error("内置模型下载失败")
                     return False
-            
+
             self.current_model = model_name
             logger.info(f"内置模型 {model_name} 初始化成功")
             return True
-        
+
         elif backend == "ollama":
             # 使用 Ollama | Use Ollama
             from yanzhiti.core.lm_studio_client import LMStudioClient
@@ -397,7 +390,7 @@ class LocalInferenceEngine:
             try:
                 models = await client.get_models()
                 await client.close()
-                
+
                 if any(model_name in m for m in models):
                     self.current_model = model_name
                     logger.info(f"Ollama 模型 {model_name} 可用")
@@ -408,7 +401,7 @@ class LocalInferenceEngine:
             except Exception as e:
                 logger.error(f"Ollama 连接失败: {e}")
                 return False
-        
+
         elif backend == "lmstudio":
             # 使用 LM Studio | Use LM Studio
             from yanzhiti.core.lm_studio_client import LMStudioClient
@@ -416,10 +409,10 @@ class LocalInferenceEngine:
             try:
                 models = await client.get_models()
                 await client.close()
-                
+
                 if any(m for m in models):  # LM Studio 通常只有一个模型
                     self.current_model = model_name
-                    logger.info(f"LM Studio 连接成功")
+                    logger.info("LM Studio 连接成功")
                     return True
                 else:
                     logger.error("LM Studio 未加载模型")
@@ -427,11 +420,11 @@ class LocalInferenceEngine:
             except Exception as e:
                 logger.error(f"LM Studio 连接失败: {e}")
                 return False
-        
+
         else:
             logger.error(f"不支持的后端类型: {backend}")
             return False
-    
+
     async def generate(
         self,
         prompt: str,
@@ -461,7 +454,7 @@ class LocalInferenceEngine:
             return await self._generate_lmstudio(prompt, system_prompt, max_tokens, temperature)
         else:
             raise ValueError(f"未知的后端类型: {self.backend_type}")
-    
+
     async def _generate_builtin(
         self,
         prompt: str,
@@ -473,17 +466,17 @@ class LocalInferenceEngine:
         # 实际应用中应该使用 transformers 或 llama.cpp 进行真正的推理
         # Note: This is a simplified implementation
         # In production, use transformers or llama.cpp for real inference
-        
+
         model_config = BUILTIN_MODELS.get(self.current_model)
         if not model_config:
             return "[错误：模型未加载]"
-        
+
         # 构建提示 | Build prompt
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
-        
+
         # 返回预设回复（实际实现中替换为真实推理）
         # Return preset response (replace with real inference in actual implementation)
         response_templates = {
@@ -505,14 +498,14 @@ class LocalInferenceEngine:
                 f"\n建议运行 `yzt --info` 了解更多选项。"
             )
         }
-        
+
         response = response_templates.get(
             self.current_model,
             response_templates["tinyllama"]
         )
-        
+
         return response
-    
+
     async def _generate_ollama(
         self,
         prompt: str,
@@ -521,8 +514,7 @@ class LocalInferenceEngine:
         temperature: float
     ) -> str:
         """Ollama 推理 | Ollama inference"""
-        import httpx
-        
+
         url = "http://localhost:11434/api/generate"
         payload = {
             "model": self.current_model,
@@ -533,15 +525,15 @@ class LocalInferenceEngine:
                 "num_predict": max_tokens
             }
         }
-        
+
         if system_prompt:
             payload["system"] = system_prompt
-        
+
         async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(url, json=payload)
             result = response.json()
             return result.get("response", "")
-    
+
     async def _generate_lmstudio(
         self,
         prompt: str,
@@ -550,8 +542,7 @@ class LocalInferenceEngine:
         temperature: float
     ) -> str:
         """LM Studio 推理 | LM Studio inference"""
-        import httpx
-        
+
         url = "http://localhost:1234/v1/chat/completions"
         payload = {
             "model": self.current_model or "local-model",
@@ -559,11 +550,11 @@ class LocalInferenceEngine:
             "max_tokens": max_tokens,
             "temperature": temperature
         }
-        
+
         if system_prompt:
             payload["messages"].append({"role": "system", "content": system_prompt})
         payload["messages"].append({"role": "user", "content": prompt})
-        
+
         async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(url, json=payload)
             result = response.json()
@@ -578,10 +569,10 @@ async def setup_builtin_model_guide() -> str:
     When user hasn't configured any AI service, use built-in model for basic guidance.
     """
     engine = LocalInferenceEngine()
-    
+
     # 尝试初始化内置模型 | Try to initialize built-in model
     success = await engine.initialize(backend="builtin", model_name="tinyllama")
-    
+
     if not success:
         return (
             "欢迎使用衍智体 (YANZHITI)！\n\n"
@@ -590,7 +581,7 @@ async def setup_builtin_model_guide() -> str:
             "或者访问文档了解更多选项：\n"
             "https://github.com/yanzhiti/yanzhiti"
         )
-    
+
     # 生成引导信息 | Generate guidance info
     response = await engine.generate(
         prompt="请用中文介绍如何配置和使用衍智体项目",
@@ -600,7 +591,7 @@ async def setup_builtin_model_guide() -> str:
             "请友好、清晰地回答问题。"
         )
     )
-    
+
     return response
 
 
@@ -620,14 +611,14 @@ if __name__ == "__main__":
     print("=" * 60)
     print("🤖 衍智体 (YANZHITI) - 内置模型管理系统")
     print("=" * 60)
-    
+
     manager = BuiltInModelManager()
-    
+
     print(f"\n📁 模型存储目录: {manager.models_dir}")
-    print(f"\n📋 可用的内置模型:")
+    print("\n📋 可用的内置模型:")
     for name, config in BUILTIN_MODELS.items():
         downloaded = manager.is_model_downloaded(name)
         status = "✅ 已下载" if downloaded else "⬇️ 未下载"
         print(f"  {status} {config.display_name} ({config.model_size_mb} MB)")
-    
+
     print(f"\n💾 总磁盘占用: {manager.get_total_disk_usage() / 1024 / 1024:.1f} MB")

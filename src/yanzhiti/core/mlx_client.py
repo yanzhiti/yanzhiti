@@ -52,7 +52,7 @@ class MLXClient:
                     check=True
                 )
         except Exception as e:
-            raise RuntimeError(f"Failed to check/install MLX: {e}")
+            raise RuntimeError(f"Failed to check/install MLX: {e}") from e
 
     async def generate(
         self,
@@ -92,7 +92,7 @@ class MLXClient:
             stdout, stderr = await process.communicate()
 
             if process.returncode != 0:
-                raise RuntimeError(f"MLX inference failed: {stderr.decode()}")
+                raise RuntimeError(f"MLX inference failed: {stderr.decode()}") from None
 
             output = stdout.decode()
 
@@ -108,7 +108,7 @@ class MLXClient:
             }
 
         except Exception as e:
-            raise RuntimeError(f"MLX generation error: {e}")
+            raise RuntimeError(f"MLX generation error: {e}") from e
 
     def _build_prompt(
         self,
@@ -170,7 +170,7 @@ class SimpleMLXClient:
         """Load model and tokenizer"""
         if self._model is None:
             try:
-                from mlx_lm import generate, load
+                from mlx_lm import load
 
                 print(f"Loading MLX model: {self.model_name}")
                 self._model, self._tokenizer = load(self.model_name)
@@ -179,7 +179,7 @@ class SimpleMLXClient:
             except ImportError:
                 raise RuntimeError(
                     "mlx-lm not installed. Run: pip install mlx-lm"
-                )
+                ) from None
 
     async def generate(
         self,

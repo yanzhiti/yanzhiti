@@ -3,7 +3,6 @@
 Extended CLI Commands - Provide more useful features
 """
 
-import json
 import platform
 import sys
 from pathlib import Path
@@ -13,7 +12,6 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.table import Table
-from rich.text import Text
 
 from yanzhiti import __version__
 
@@ -104,7 +102,6 @@ yzt --verbose
 
 def show_tools() -> None:
     """显示可用工具列表 | Show available tools list"""
-    from yanzhiti.core import ToolRegistry
     from yanzhiti.tools import (
         APITestTool,
         BashTool,
@@ -252,10 +249,11 @@ def check_update() -> None:
     """检查更新 | Check for updates"""
     console.print("\n[cyan]检查更新... | Checking for updates...[/cyan]\n")
 
-    try:
-        import httpx
-        import asyncio
+    import asyncio
 
+    import httpx
+
+    try:
         async def get_latest_version():
             async with httpx.AsyncClient(timeout=10) as client:
                 response = await client.get(
@@ -271,11 +269,11 @@ def check_update() -> None:
 
         # 简单版本比较 | Simple version comparison
         needs_update = False
-        for c, l in zip(current, latest):
-            if int(l) > int(c):
+        for cv, lv in zip(current, latest):
+            if int(lv) > int(cv):
                 needs_update = True
                 break
-            elif int(c) > int(l):
+            elif int(cv) > int(lv):
                 break
 
         if needs_update:

@@ -113,6 +113,8 @@ target-version = ["py310", "py311", "py312"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
 select = [
     "E", "W", "F", "I", "B", "C4", "UP", "ARG", "SIM",
 ]
@@ -120,9 +122,12 @@ ignore = [
     "E501",
     "B008",
     "B905",
+    "ARG002",  # 未使用的方法参数（工具接口签名必需）
+    "ARG001",  # 未使用的函数参数（Click CLI 参数）
+    "W293",  # 空白行包含空格（docstring 格式问题）
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["yanzhiti"]
 
 # ============================================================

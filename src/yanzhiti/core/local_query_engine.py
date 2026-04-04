@@ -3,6 +3,7 @@ Local Query Engine using local models (LM Studio or MLX)
 No API required - runs completely on your Mac
 """
 
+import json
 from typing import Any
 from uuid import uuid4
 
@@ -247,5 +248,3 @@ class LocalQueryEngine:
         }
 
 
-# Import json for tool parsing
-import json

@@ -8,18 +8,18 @@ import sys
 
 import click
 from dotenv import load_dotenv
-
-# 加载 .env 文件中的环境变量
-load_dotenv()
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.theme import Theme
 
-from yanzhiti import __version__
-from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
-from yanzhiti.tools import (
+# 加载 .env 文件中的环境变量（在所有导入之后）
+load_dotenv()  # noqa: E402
+
+from yanzhiti import __version__  # noqa: E402
+from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry  # noqa: E402
+from yanzhiti.tools import (  # noqa: E402
     APITestTool,
     # Shell tools
     BashTool,
@@ -299,7 +299,7 @@ def main(
     verbose: bool,
     version: bool,
     setup: bool,
-    lang: str,
+    lang: str,  # noqa: ARG001  # 保留参数，Click 选项
     query: str | None,
     diagnose: bool = False,
     info: bool = False,

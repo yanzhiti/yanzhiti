@@ -5,7 +5,6 @@ AI Provider Configuration - Including all mainstream and free providers
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
 
 
 class ProviderType(str, Enum):
@@ -900,14 +899,14 @@ ALL_PROVIDERS: dict[str, AIProvider] = {
     "groq": GROQ,
     "together": TOGETHER,
     "fireworks": FIREWORKS,
-    
+
     # 本地模型供应商 | Local model providers
     "ollama": OLLAMA,
     "lmstudio": LM_STUDIO,
     "mlx": MLX_PROVIDER,
     "llamacpp": LLAMA_CPP,
     "vllm": VLLM,
-    
+
     # 内置模型 | Built-in model
     "builtin": BUILTIN_MODEL,
 }
@@ -947,14 +946,14 @@ def search_models(query: str) -> list[tuple[AIProvider, ModelInfo]]:
     """搜索模型 | Search models by keyword"""
     results = []
     query_lower = query.lower()
-    
+
     for provider in ALL_PROVIDERS.values():
         for model in provider.models:
-            if (query_lower in model.name.lower() or 
+            if (query_lower in model.name.lower() or
                 query_lower in model.display_name.lower() or
                 query_lower in model.description.lower()):
                 results.append((provider, model))
-    
+
     return results
 
 
@@ -963,18 +962,18 @@ if __name__ == "__main__":
     print("=" * 60)
     print("🤖 衍智体 (YANZHITI) - AI 提供商配置")
     print("=" * 60)
-    
+
     print(f"\n📊 总计供应商数: {len(ALL_PROVIDERS)}")
     print(f"☁️  云端供应商: {len(get_cloud_providers())}")
     print(f"🏠 本地供应商: {len(get_local_providers())}")
     print(f"⭐ 推荐供应商: {len(get_recommended_providers())}")
     print(f"💰 免费供应商: {len(get_free_providers())}")
-    
+
     print("\n🌟 推荐给新手的供应商:")
     for provider in get_recommended_providers():
         print(f"  ✅ {provider.display_name} ({provider.name})")
-    
+
     print("\n💰 有免费额度的供应商:")
     for provider in get_free_providers():
-        free_marker = "🆓" if not any(m.is_free == False and m.requires_api_key for m in provider.models[:3]) else "💵"
+        free_marker = "🆓" if not any(not m.is_free and m.requires_api_key for m in provider.models[:3]) else "💵"
         print(f"  {free_marker} {provider.display_name} ({provider.name})")

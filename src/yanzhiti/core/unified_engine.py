@@ -13,19 +13,18 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from pathlib import Path
-from typing import Any, Optional
+from typing import Any
+
+from yanzhiti.core.builtin_models import (
+    BuiltInModelManager,
+    LocalInferenceEngine,
+)
 
 # 导入供应商配置 | Import provider configuration
 from yanzhiti.core.providers import (
     ALL_PROVIDERS,
     ProviderType,
     get_provider,
-    get_recommended_providers,
-)
-from yanzhiti.core.builtin_models import (
-    BuiltInModelManager,
-    LocalInferenceEngine,
 )
 
 # 配置日志 | Configure logging
@@ -63,16 +62,16 @@ class UnifiedAIEngine:
     - 内置模型作为最终后备
     - 配置简单，开箱即用
     """
-    
-    def __init__(self, config: Optional[EngineConfig] = None):
+
+    def __init__(self, config: EngineConfig | None = None):
         """初始化引擎 | Initialize engine"""
         self.config = config or EngineConfig()
         self._local_engine = LocalInferenceEngine()
         self._builtin_manager = BuiltInModelManager()
-        
+
         # 可用的后端状态 | Available backend status
         self._backend_status: dict[str, bool] = {}
-    
+
     async def initialize(self) -> bool:
         """
         初始化引擎 | Initialize engine
@@ -81,7 +80,7 @@ class UnifiedAIEngine:
         Try to initialize configured backends and check availability.
         """
         logger.info("正在初始化统一 AI 引擎...")
-        
+
         # 初始化本地推理引擎 | Initialize local inference engine
         try:
             await self._local_engine.initialize(backend="builtin", model_name="tinyllama")
@@ -90,7 +89,7 @@ class UnifiedAIEngine:
         except Exception as e:
             logger.warning(f"⚠️ 内置模型初始化失败: {e}")
             self._backend_status["builtin"] = False
-        
+
         # 检查 Ollama 是否可用 | Check if Ollama is available
         try:
             ollama_available = await self._check_ollama()
@@ -100,7 +99,7 @@ class UnifiedAIEngine:
         except Exception as e:
             logger.warning(f"⚠️ Ollama 检查失败: {e}")
             self._backend_status["ollama"] = False
-        
+
         # 检查 LM Studio 是否可用 | Check if LM Studio is available
         try:
             lmstudio_available = await self._check_lmstudio()
@@ -110,43 +109,43 @@ class UnifiedAIEngine:
         except Exception as e:
             logger.warning(f"⚠️ LM Studio 检查失败: {e}")
             self._backend_status["lmstudio"] = False
-        
+
         # 检查云端 API 配置 | Check cloud API configuration
         if self.config.api_key and self.config.primary_backend != "builtin":
             provider = get_provider(self.config.primary_backend)
             if provider and provider.provider_type == ProviderType.CLOUD:
                 self._backend_status[self.config.primary_backend] = True
                 logger.info(f"✅ {provider.display_name} 已配置")
-        
+
         logger.info("AI 引擎初始化完成")
         return True
-    
+
     async def _check_ollama(self) -> bool:
         """检查 Ollama 是否可用 | Check if Ollama is available"""
         import httpx
-        
+
         try:
             async with httpx.AsyncClient(timeout=5) as client:
                 response = await client.get("http://localhost:11434/api/tags")
                 return response.status_code == 200
         except Exception:
             return False
-    
+
     async def _check_lmstudio(self) -> bool:
         """检查 LM Studio 是否可用 | Check if LM Studio is available"""
         import httpx
-        
+
         try:
             async with httpx.AsyncClient(timeout=5) as client:
                 response = await client.get("http://localhost:1234/v1/models")
                 return response.status_code == 200
         except Exception:
             return False
-    
+
     def get_available_backends(self) -> dict[str, bool]:
         """获取可用后端列表 | Get available backends list"""
         return self._backend_status.copy()
-    
+
     async def query(
         self,
         prompt: str,
@@ -171,16 +170,16 @@ class UnifiedAIEngine:
         # 使用配置的默认值或传入的值 | Use config defaults or passed values
         max_tokens = max_tokens or self.config.max_tokens
         temperature = temperature or self.config.temperature
-        
+
         # 确定后端顺序 | Determine backend order
         backends_to_try = self._get_backend_order(preferred_backend)
-        
+
         errors = []
-        
+
         for backend_name in backends_to_try:
             try:
                 logger.info(f"尝试使用后端: {backend_name}")
-                
+
                 result = await self._query_with_backend(
                     backend_name,
                     prompt,
@@ -188,15 +187,15 @@ class UnifiedAIEngine:
                     max_tokens,
                     temperature
                 )
-                
+
                 return result
-                
+
             except Exception as e:
                 error_msg = f"{backend_name}: {str(e)}"
                 errors.append(error_msg)
                 logger.warning(f"后端 {backend_name} 失败: {e}")
                 continue
-        
+
         # 所有后端都失败 | All backends failed
         error_summary = "\n".join([f"  ❌ {err}" for err in errors])
         raise RuntimeError(
@@ -206,50 +205,46 @@ class UnifiedAIEngine:
             f"  2. 安装 Ollama 或 LM Studio\n"
             f"  3. 检查网络连接"
         )
-    
+
     def _get_backend_order(self, preferred: str | None) -> list[str]:
         """获取后端尝试顺序 | Get backend trial order"""
-        if preferred:
-            order = [preferred]
-        else:
-            order = []
-        
+        order = [preferred] if preferred else []
+
         # 根据优先级模式添加后端 | Add backends based on priority mode
         if self.config.priority == BackendPriority.CLOUD:
             # 云端优先 | Cloud first
             if self.config.primary_backend not in order:
                 order.append(self.config.primary_backend)
             order.extend(["ollama", "lmstudio", "builtin"])
-            
+
         elif self.config.priority == BackendPriority.LOCAL:
             # 本地优先 | Local first
             order.extend(["ollama", "lmstudio"])
             if self.config.primary_backend not in order:
                 order.append(self.config.primary_backend)
             order.append("builtin")
-            
+
         elif self.config.priority == BackendPriority.BUILTIN:
             # 仅内置模型 | Built-in only
             order = ["builtin"]
-            
+
         else:  # AUTO
             # 自动选择 | Auto select
             # 有 API Key 时优先云端 | Prefer cloud when has API key
-            if self.config.api_key and self.config.primary_backend != "builtin":
-                if self.config.primary_backend not in order:
+            if self.config.api_key and self.config.primary_backend != "builtin" and self.config.primary_backend not in order:
                     order.append(self.config.primary_backend)
-            
+
             # 然后尝试本地 | Then try local
             for local_backend in ["ollama", "lmstudio"]:
                 if local_backend not in order and self._backend_status.get(local_backend, False):
                     order.append(local_backend)
-            
+
             # 最后使用内置模型 | Finally use built-in
             if "builtin" not in order:
                 order.append("builtin")
-        
+
         return order
-    
+
     async def _query_with_backend(
         self,
         backend_name: str,
@@ -259,16 +254,16 @@ class UnifiedAIEngine:
         temperature: float
     ) -> str:
         """使用指定后端执行查询 | Execute query with specified backend"""
-        
+
         if backend_name == "builtin":
             return await self._query_builtin(prompt, system_prompt, max_tokens)
-        
+
         elif backend_name == "ollama":
             return await self._query_ollama(prompt, system_prompt, max_tokens, temperature)
-        
+
         elif backend_name == "lmstudio":
             return await self._query_lmstudio(prompt, system_prompt, max_tokens, temperature)
-        
+
         elif backend_name in ALL_PROVIDERS:
             return await self._query_cloud_api(
                 backend_name,
@@ -277,10 +272,10 @@ class UnifiedAIEngine:
                 max_tokens,
                 temperature
             )
-        
+
         else:
             raise ValueError(f"未知的后端: {backend_name}")
-    
+
     async def _query_builtin(
         self,
         prompt: str,
@@ -293,7 +288,7 @@ class UnifiedAIEngine:
             system_prompt=system_prompt,
             max_tokens=max_tokens
         )
-    
+
     async def _query_ollama(
         self,
         prompt: str,
@@ -303,7 +298,7 @@ class UnifiedAIEngine:
     ) -> str:
         """Ollama 查询 | Ollama query"""
         import httpx
-        
+
         url = "http://localhost:11434/api/generate"
         payload = {
             "model": self.config.model or "llama3.1:8b",
@@ -314,16 +309,16 @@ class UnifiedAIEngine:
                 "num_predict": min(max_tokens, 8192)
             }
         }
-        
+
         if system_prompt:
             payload["system"] = system_prompt
-        
+
         async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(url, json=payload)
             response.raise_for_status()
             result = response.json()
             return result.get("response", "")
-    
+
     async def _query_lmstudio(
         self,
         prompt: str,
@@ -333,27 +328,27 @@ class UnifiedAIEngine:
     ) -> str:
         """LM Studio 查询 | LM Studio query"""
         import httpx
-        
+
         url = "http://localhost:1234/v1/chat/completions"
         messages = []
-        
+
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
-        
+
         payload = {
             "model": self.config.model or "local-model",
             "messages": messages,
             "max_tokens": max_tokens,
             "temperature": temperature
         }
-        
+
         async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(url, json=payload)
             response.raise_for_status()
             result = response.json()
             return result["choices"][0]["message"]["content"]
-    
+
     async def _query_cloud_api(
         self,
         provider_id: str,
@@ -364,31 +359,31 @@ class UnifiedAIEngine:
     ) -> str:
         """云端 API 查询 | Cloud API query"""
         import httpx
-        
+
         provider = get_provider(provider_id)
         if not provider:
             raise ValueError(f"未知供应商: {provider_id}")
-        
+
         base_url = self.config.base_url or provider.base_url
-        
+
         # 构建请求 | Build request
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.config.api_key}"
         }
-        
+
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
-        
+
         payload = {
             "model": self.config.model or provider.models[0].name if provider.models else "default",
             "messages": messages,
             "max_tokens": max_tokens,
             "temperature": temperature
         }
-        
+
         # 根据供应商调整 URL | Adjust URL based on provider
         if provider_id == "anthropic":
             # Anthropic 使用不同的 API 格式 | Anthropic uses different API format
@@ -397,18 +392,18 @@ class UnifiedAIEngine:
         else:
             # OpenAI 兼容格式 | OpenAI compatible format
             url = f"{base_url}/chat/completions"
-        
+
         async with httpx.AsyncClient(timeout=120) as client:
             response = await client.post(url, headers=headers, json=payload)
             response.raise_for_status()
             result = response.json()
-            
+
             # 解析响应 | Parse response
             if provider_id == "anthropic":
                 return result.get("content", [{}])[0].get("text", "")
             else:
                 return result["choices"][0]["message"]["content"]
-    
+
     async def stream_query(
         self,
         prompt: str,
@@ -425,7 +420,7 @@ class UnifiedAIEngine:
         # TODO: Implement streaming output
         result = await self.query(prompt, system_prompt, **kwargs)
         yield result
-    
+
     def get_info(self) -> dict[str, Any]:
         """获取引擎信息 | Get engine information"""
         return {
@@ -438,8 +433,8 @@ class UnifiedAIEngine:
             "backends": self._backend_status,
             "available_providers": len(ALL_PROVIDERS),
             "builtin_models_downloaded": [
-                name for name, status in 
-                self._builtin_manager.get_all_status().items() 
+                name for name, status in
+                self._builtin_manager.get_all_status().items()
                 if status.value == "completed"
             ]
         }
@@ -457,21 +452,21 @@ async def quick_test() -> None:
     print("=" * 60)
     print("🤖 衍智体 (YANZHITI) - 统一 AI 引擎测试")
     print("=" * 60)
-    
+
     engine = create_engine()
-    
+
     # 初始化 | Initialize
     print("\n📦 正在初始化引擎...")
     await engine.initialize()
-    
+
     # 显示信息 | Show info
     info = engine.get_info()
     print(f"\n🔧 引擎版本: {info['version']}")
-    print(f"\n🌐 可用后端:")
+    print("\n🌐 可用后端:")
     for backend, available in info['backends'].items():
         status = "✅" if available else "❌"
         print(f"  {status} {backend}")
-    
+
     # 测试查询 | Test query
     print("\n💬 测试查询:")
     try:

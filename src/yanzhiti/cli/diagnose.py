@@ -343,12 +343,11 @@ def run_diagnosis(auto_fix_enabled: bool = False) -> tuple[bool, list[dict]]:
             severity_icon = "🔴" if issue["severity"] == "error" else "🟡"
             console.print(f"{i}. {severity_icon} {issue['message']}")
 
-            if auto_fix_enabled and issue.get("fix"):
-                if Confirm.ask("   自动修复？| Auto-fix?", default=True):
-                    if auto_fix(issue):
-                        console.print("   [green]✓ 修复成功 | Fixed successfully[/green]\n")
-                    else:
-                        console.print("   [red]✗ 修复失败 | Fix failed[/red]\n")
+            if auto_fix_enabled and issue.get("fix") and Confirm.ask("   自动修复？| Auto-fix?", default=True):
+                if auto_fix(issue):
+                    console.print("   [green]✓ 修复成功 | Fixed successfully[/green]\n")
+                else:
+                    console.print("   [red]✗ 修复失败 | Fix failed[/red]\n")
     else:
         console.print("\n[bold green]✓ 未发现任何问题 | No issues found![/bold green]")
 
