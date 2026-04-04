@@ -20,6 +20,17 @@
   <p><i>Interactive Demo - Coming Soon</i></p>
 </div>
 
+### 🏆 Elite Team
+
+> **Core team members from Huawei, BYD, and other leading companies**, with extensive enterprise software development and AI R&D experience.
+
+- 💼 **Former Huawei Core Engineers** - Bringing world-class software engineering practices
+- 🚗 **Former BYD Technical Experts** - Deep technical expertise and engineering excellence
+- 🎯 **Pursuit of Excellence** - Building with enterprise-grade standards
+- 🤝 **Open to Collaboration** - Welcoming talented developers to join
+
+---
+
 YANZHITI is a **completely open-source and free** AI-powered intelligent coding assistant, implemented in Python. Unlike closed-source alternatives like Claude Code, we provide:
 
 - ✅ **Fully Open-Source** (MIT License) - Free to view, modify, and distribute
@@ -28,6 +39,7 @@ YANZHITI is a **completely open-source and free** AI-powered intelligent coding 
 - ✅ **Python Native** - Seamless integration with Python ecosystem
 - ✅ **Customizable** - Modify the source code to fit your needs
 - ✅ **40+ Developer Tools** - File operations, Shell execution, Git management, Web operations, and more
+- ✅ **Elite Team** - Built by former engineers from Huawei, BYD, and other top companies
 
 ---
 

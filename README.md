@@ -19,6 +19,17 @@
   <img src="docs/images/demo-banner.gif" alt="YANZHITI Demo" width="800"/>
 </div>
 
+### 🏆 精英团队打造 | Elite Team
+
+> **核心团队成员来自华为、比亚迪等知名企业**，拥有丰富的企业级软件开发和 AI 研发经验。
+
+- 💼 **华为前核心工程师** - 带来世界级软件工程实践
+- 🚗 **比亚迪前技术专家** - 深厚的技术积累和工程经验
+- 🎯 **追求极致品质** - 以企业级标准打造开源项目
+- 🤝 **诚邀共建** - 期待更多优秀开发者加入
+
+---
+
 **中文**:
 衍智体 (YANZHITI) 是一个**完全开源免费**的 AI 智能编程助手，基于 Python 实现。与闭源的 Claude Code 不同，我们提供:
 
@@ -28,6 +39,7 @@
 - ✅ **Python 原生** - 无缝集成 Python 生态系统
 - ✅ **可定制扩展** - 根据需求自由修改源码
 - ✅ **40+ 开发工具** - 文件操作、Shell 执行、Git 管理、Web 操作等
+- ✅ **精英团队** - 华为、比亚迪前核心工程师倾力打造
 
 **English**:
 YANZHITI is a **completely open-source and free** AI-powered intelligent coding assistant, implemented in Python. Unlike closed-source alternatives like Claude Code, we provide:
@@ -38,6 +50,7 @@ YANZHITI is a **completely open-source and free** AI-powered intelligent coding 
 - ✅ **Python Native** - Seamless integration with Python ecosystem
 - ✅ **Customizable** - Modify the source code to fit your needs
 - ✅ **40+ Developer Tools** - File operations, Shell execution, Git management, Web operations, and more
+- ✅ **Elite Team** - Built by former engineers from Huawei, BYD, and other top companies
 
 ---
 
