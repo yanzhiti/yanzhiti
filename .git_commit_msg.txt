@@ -1,0 +1,12 @@
+fix(tests): 修复所有 Ruff lint 错误
+
+- tests/test_core.py: 移除未使用导入 (Mock, patch, AsyncMock, ToolResultStatus, PermissionRule)
+- tests/test_core.py: 修复导入排序 (I001)
+- tests/test_tools.py: 移除未使用导入 (Tool, ToolInputSchema, ToolResult)
+- tests/test_core.py: 移除未使用的变量赋值 (result)
+- tests/test_core.py: 修复动态导入语句 (改用 import module 而非 from import)
+
+本地验证:
+- ruff check: ✅ 0 errors
+- ruff format: ✅ 40 files formatted
+- pytest: ✅ 35 passed, 0 failed

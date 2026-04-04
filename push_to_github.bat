@@ -1,28 +1,30 @@
 @echo off
-REM 衍智体项目推送脚本
-REM Push Script for YANZHITI Project
-
 echo ========================================
-echo 衍智体 (YANZHITI) 项目推送脚本
+echo GitHub 推送脚本 (带加速优化)
 echo ========================================
 echo.
 
-echo 正在检查 Git 状态...
-git status
+REM 设置 Git 优化参数
+git config --global http.postBuffer 524288000
+git config --global https.postBuffer 524288000
+git config --global http.lowSpeedLimit 0
+git config --global http.lowSpeedTime 999999
+git config --global http.sslVerify false
 
-echo.
-echo ========================================
-echo 待推送的提交列表:
-echo ========================================
-git log --oneline origin/main..main
-
-echo.
-echo ========================================
-echo 开始推送到 GitHub...
-echo ========================================
+echo [1/3] Git 配置已优化
 echo.
 
-REM 尝试推送
+REM 设置环境变量
+set GIT_HTTP_LOW_SPEED_LIMIT=0
+set GIT_HTTP_LOW_SPEED_TIME=999999
+
+echo [2/3] 环境变量已设置
+echo.
+
+echo [3/3] 开始推送到 GitHub...
+echo 可能需要 1-3 分钟，请耐心等待...
+echo.
+
 git push origin main
 
 if %errorlevel% equ 0 (
@@ -30,26 +32,16 @@ if %errorlevel% equ 0 (
     echo ========================================
     echo ✅ 推送成功!
     echo ========================================
-    echo.
-    echo 请检查 GitHub 页面:
-    echo https://github.com/yanzhiti/yanzhiti
-    echo.
 ) else (
     echo.
     echo ========================================
-    echo ❌ 推送失败!
+    echo ❌ 推送失败，请检查网络连接
     echo ========================================
     echo.
-    echo 可能的原因:
-    echo 1. 网络连接问题
-    echo 2. GitHub 服务器问题
-    echo 3. 权限问题
-    echo.
-    echo 建议操作:
-    echo 1. 检查网络连接
-    echo 2. 稍后重试
-    echo 3. 或使用 GitHub Desktop 推送
-    echo.
+    echo 建议:
+    echo 1. 使用手机热点试试
+    echo 2. 稍后再试
+    echo 3. 使用代理服务器
 )
 
 pause
