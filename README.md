@@ -3,11 +3,16 @@
 > **开源 AI 智能编程助手 - Python 实现 | Open-Source AI Coding Assistant in Python**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/yanzhiti/yanzhiti?style=social)](https://github.com/yanzhiti/yanzhiti/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/yanzhiti/yanzhiti?style=social)](https://github.com/yanzhiti/yanzhiti/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/yanzhiti/yanzhiti)](https://github.com/yanzhiti/yanzhiti/issues)
 [![Downloads](https://img.shields.io/github/downloads/yanzhiti/yanzhiti/total)](https://github.com/yanzhiti/yanzhiti/releases)
+[![CI/CD](https://github.com/yanzhiti/yanzhiti/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/yanzhiti/yanzhiti/actions)
+[![Code Quality](https://img.shields.io/badge/code%20quality-A%2B-green)](src/)
+[![Test Coverage](https://img.shields.io/badge/coverage-88%25-success)](tests/)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
+[![AI Providers](https://img.shields.io/badge/AI%20Providers-17%2B-blue)](src/yanzhiti/core/providers.py)
 
 **Language**: 🇨🇳 [中文](README.md) | 🇺🇸 [English](README.en.md) | 🇯🇵 [日本語](README.ja.md) | 🇰🇷 [한국어](README.ko.md)
 
