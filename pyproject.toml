@@ -1,6 +1,16 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# ============================================================
+# 📦 源码包配置 | Source Package Configuration
+# ============================================================
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests*", "docs*", "examples*"]
+
+[tool.setuptools.package-data]
+yanzhiti = ["web/static/*"]
 
 # ============================================================
 # 📦 项目元数据 | Project Metadata
@@ -19,141 +29,69 @@ maintainers = [
     { name = "Minglin Li", email = "linney@163.com" }
 ]
 keywords = [
-    "ai",
-    "llm",
-    "code-assistant",
-    "coding",
-    "cli",
-    "chatbot",
-    "openai",
-    "anthropic",
-    "deepseek",
-    "ollama",
-    "local-llm",
-    "programming",
-    "developer-tools",
-    "intelligent-code",
+    "ai", "llm", "code-assistant", "coding", "cli", "chatbot",
+    "openai", "anthropic", "deepseek", "ollama", "local-llm",
+    "programming", "developer-tools", "intelligent-code",
 ]
 classifiers = [
-    # 开发状态 | Development Status
     "Development Status :: 4 - Beta",
-    # 环境 | Environment
     "Environment :: Console",
     "Environment :: Web Environment",
-    # 目标用户 | Intended Audience
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
-    # 许可证 | License
     "License :: OSI Approved :: MIT License",
-    # 编程语言 | Programming Language
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    # 操作系统 | Operating System
-    "Operating System :: OS Independent",
-    # 主题 | Topic
     "Topic :: Software Development",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Utilities",
-    # 类型 | Typing
     "Typing :: Typed",
 ]
 
-# ============================================================
-# 📚 依赖项 | Dependencies
-# ============================================================
 dependencies = [
-    # HTTP 客户端 | HTTP Client
     "httpx>=0.26.0",
-    # CLI 框架 | CLI Framework
     "click>=8.1.0",
     "rich>=13.7.0",
     "questionary>=2.0.0",
     "prompt-toolkit>=3.0.0",
-    # 数据验证 | Data Validation
     "pydantic>=2.5.0",
     "pydantic-settings>=2.1.0",
-    # 配置管理 | Config Management
     "python-dotenv>=1.0.0",
     "pyyaml>=6.0",
     "tomli>=2.0.0;python_version<'3.11'",
-    # Web 服务 | Web Server
     "fastapi>=0.109.0",
     "uvicorn[standard]>=0.27.0",
-    # 文件处理 | File Handling
     "aiofiles>=23.0.0",
     "jinja2>=3.1.0",
-    # 工具库 | Utility Libraries
     "typing-extensions>=4.9.0",
 ]
 
-# ============================================================
-# 🔌 可选依赖组 | Optional Dependency Groups
-# ============================================================
 [project.optional-dependencies]
-# 开发工具 | Development Tools
 dev = [
-    "pytest>=7.4.0",
-    "pytest-asyncio>=0.23.0",
-    "pytest-cov>=4.1.0",
-    "ruff>=0.1.0",
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    "ipython>=8.0.0",
+    "pytest>=7.4.0", "pytest-asyncio>=0.23.0", "pytest-cov>=4.1.0",
+    "ruff>=0.1.0", "mypy>=1.8.0", "pre-commit>=3.6.0", "ipython>=8.0.0",
 ]
-# Anthropic Claude 支持 | Anthropic Support
-anthropic = [
-    "anthropic>=0.18.0",
-]
-# OpenAI 支持 | OpenAI Support
-openai = [
-    "openai>=1.10.0",
-]
-# Google Gemini 支持 | Google Gemini Support
-google = [
-    "google-generativeai>=0.5.0",
-]
-# MLX (Apple Silicon) | Apple Silicon MLX
-mlx = [
-    "mlx>=0.0.8",
-    "mlx-lm>=0.0.7",
-]
-# 打包/分发 | Packaging/Distribution
-build = [
-    "build>=1.0.0",
-    "twine>=5.0.0",
-]
-# PyInstaller 打包 | PyInstaller Packaging
-package = [
-    "pyinstaller>=6.0",
-]
-# 全量安装 | Full Installation
-all = [
-    "yanzhiti[dev,anthropic,openai,google,mlx]",
-]
+anthropic = ["anthropic>=0.18.0"]
+openai = ["openai>=1.10.0"]
+google = ["google-generativeai>=0.5.0"]
+mlx = ["mlx>=0.0.8", "mlx-lm>=0.0.7"]
+build = ["build>=1.0.0", "twine>=5.0.0"]
+package = ["pyinstaller>=6.0"]
+all = ["yanzhiti[dev,anthropic,openai,google,mlx]"]
 
-# ============================================================
-# 🔗 入口点 / 命令行命令 | Entry Points / CLI Commands
-# ============================================================
 [project.scripts]
-# 主命令 | Main commands
 yzt = "yanzhiti.cli.main:main"
 yanzhiti = "yanzhiti.cli.main:main"
-# 本地模式 | Local mode
 yzt-local = "yanzhiti.cli.local_main:main"
 yanzhiti-local = "yanzhiti.cli.local_main:main"
-# Web GUI 模式 | Web GUI mode
 yzt-web = "yanzhiti.cli.web_main:main"
 yanzhiti-web = "yanzhiti.cli.web_main:main"
-# 配置向导 | Setup wizard
 yzt-setup = "yanzhiti.cli.setup_wizard:main"
-# 系统诊断 | System diagnose
 yzt-diagnose = "yanzhiti.cli.diagnose:main"
 
-# ============================================================
-# 🔗 项目链接 | Project URLs
-# ============================================================
 [project.urls]
 Homepage = "https://github.com/yanzhiti/yanzhiti"
 Documentation = "https://github.com/yanzhiti/yanzhiti#readme"
@@ -163,49 +101,11 @@ Discussions = "https://github.com/yanzhiti/yanzhiti/discussions"
 Changelog = "https://github.com/yanzhiti/yanzhiti/blob/main/CHANGELOG.md"
 
 # ============================================================
-# 🏗️ 构建配置 | Build Configuration
-# ============================================================
-[tool.hatch.build.targets.wheel]
-packages = ["src/yanzhiti"]
-
-# 包含数据文件 | Include data files (web static assets, etc.)
-[tool.hatch.build.targets.sdist]
-include = [
-    "/src/yanzhiti/web/static/**",
-    "/docs/logo.svg",
-    "/README.md",
-    "/README.en.md",
-    "/CHANGELOG.md",
-    "/LICENSE",
-    "/SECURITY.md",
-    "/CONTRIBUTING.md",
-]
-
-[tool.hatch.build.targets.wheel.shared-data]
-# 将静态文件映射到包内 | Map static files into package
-"src/yanzhiti/web/static" = "share/yanzhiti/web/static"
-
-# ============================================================
 # 🎨 代码格式化 | Code Formatting (Black)
 # ============================================================
 [tool.black]
 line-length = 100
-target-version = ['py310', 'py311', 'py312']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
+target-version = ["py310", "py311", "py312"]
 
 # ============================================================
 # 🔍 Lint 配置 | Lint Configuration (Ruff)
@@ -214,20 +114,12 @@ extend-exclude = '''
 line-length = 100
 target-version = "py310"
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-    "ARG", # flake8-unused-arguments
-    "SIM", # flake8-simplify
+    "E", "W", "F", "I", "B", "C4", "UP", "ARG", "SIM",
 ]
 ignore = [
-    "E501",  # line too long (handled by black)
-    "B008",  # do not perform function calls in argument defaults
-    "B905",  # zip without strict
+    "E501",
+    "B008",
+    "B905",
 ]
 
 [tool.ruff.isort]
@@ -253,30 +145,3 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --cov=src/yanzhiti --cov-report=term-missing"
 asyncio_mode = "auto"
-
-# ============================================================
-# 📦 PyInstaller 配置 | PyInstaller Configuration
-# ============================================================
-[tool.pyinstaller]
-name = "YANZHITI"
-entry_point = "src/yanzhiti/cli/main.py"
-onefile = true
-noconfirm = true
-clean_build = true
-hiddenimports = [
-    "anthropic",
-    "pydantic",
-    "pydantic_settings",
-    "rich",
-    "click",
-    "httpx",
-    "dotenv",
-    "fastapi",
-    "uvicorn",
-    "jinja2",
-    "yaml",
-    "tomli",
-    "tomli_w",
-    "questionary",
-    "prompt_toolkit",
-]
