@@ -350,7 +350,7 @@ class GrepTool(Tool):
             ".git", ".svn", "__pycache__", "node_modules",
             ".venv", "venv", ".tox", ".eggs", "*.egg-info",
             ".pytest_cache", ".mypy_cache", ".ruff_cache",
-            "dist", "build", ".tox", ".hypothesis",
+            "dist", "build", ".hypothesis",
         }
 
     @property
@@ -393,10 +393,7 @@ class GrepTool(Tool):
     def _should_ignore(self, path: Path, ignore_patterns: set[str]) -> bool:
         """Check if path matches any ignore pattern"""
         path_str = str(path)
-        for pattern in ignore_patterns:
-            if pattern in path_str or path.match(pattern):
-                return True
-        return False
+        return any(pattern in path_str or path.match(pattern) for pattern in ignore_patterns)
 
     async def execute(
         self,

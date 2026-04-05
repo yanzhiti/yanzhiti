@@ -4,6 +4,7 @@ Shell execution tools
 
 import asyncio
 import os
+import contextlib
 from datetime import datetime
 from typing import Any
 
@@ -92,10 +93,8 @@ class BashTool(Tool):
                 )
             except asyncio.TimeoutError:
                 process.kill()
-                try:
+                with contextlib.suppress(Exception):
                     await process.wait()
-                except Exception:
-                    pass
                 return ToolResult(
                     status=ToolResultStatus.ERROR,
                     error=f"Command timed out after {timeout} seconds",
@@ -299,10 +298,8 @@ class TaskTool(Tool):
                             }
                         except asyncio.TimeoutError:
                             process.kill()
-                            try:
+                            with contextlib.suppress(Exception):
                                 await process.wait()
-                            except Exception:
-                                pass
                             result = {
                                 "stdout": "",
                                 "stderr": f"Task timed out after {timeout} seconds",
