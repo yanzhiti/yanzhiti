@@ -21,7 +21,7 @@ console = Console()
 @click.option(
     "--port",
     "-p",
-    default=8000,
+    default=8500,
     help="Port to bind to",
 )
 @click.option(

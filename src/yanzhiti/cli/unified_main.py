@@ -91,7 +91,7 @@ async def run_console():
 @click.option(
     "--port",
     "-p",
-    default=8000,
+    default=8500,
     help="Web UI 端口",
 )
 @click.option(
@@ -130,7 +130,7 @@ def main(port: int, web_only: bool, console_only: bool, no_browser: bool):
 
     if web_only or (not console_only and not web_only):
         console.print(f"[green]🌐 Web UI: {web_url}[/green]")
-        console.print("[yellow]💡 浏览器将自动打开，或访问 http://localhost:8000[/yellow]")
+        console.print(f"[yellow]💡 浏览器将自动打开，或访问 {web_url}[/yellow]")
         console.print()
 
         if not no_browser:
