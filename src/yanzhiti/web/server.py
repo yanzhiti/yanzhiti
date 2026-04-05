@@ -132,7 +132,7 @@ global_settings = {
 }
 
 
-def _get_or_create_engine(
+async def _get_or_create_engine(
     session_id: str,
     preferred_provider: str | None = None,
 ) -> UnifiedAIEngine:
@@ -396,7 +396,7 @@ async def chat(request: ChatRequest):
 
     try:
         # 获取或创建引擎 | Get or create engine
-        engine = _get_or_create_engine(session_id, request.provider)
+        engine = await _get_or_create_engine(session_id, request.provider)
 
         # 如果指定了 API Key 且当前引擎未配置 | If API key specified but engine not configured
         if request.provider and request.provider in api_keys:
@@ -436,7 +436,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
     await websocket.accept()
 
     # 创建引擎 | Create engine
-    engine = _get_or_create_engine(session_id)
+    engine = await _get_or_create_engine(session_id)
 
     try:
         while True:
