@@ -125,7 +125,7 @@ api_keys: dict[str, str] = {}
 
 # 全局默认设置 | Global default settings
 global_settings = {
-    "primary_backend": "builtin",
+    "primary_backend": "openrouter",
     "priority": "auto",
     "temperature": 0.7,
     "max_tokens": 4096,

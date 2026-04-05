@@ -229,11 +229,7 @@ class UnifiedAIEngine:
         else:  # AUTO
             # 自动选择 | Auto select
             # 有 API Key 时优先云端 | Prefer cloud when has API key
-            if (
-                self.config.api_key
-                and self.config.primary_backend != "builtin"
-                and self.config.primary_backend not in order
-            ):
+            if self.config.api_key and self.config.primary_backend not in order:
                 order.append(self.config.primary_backend)
 
             # 然后尝试本地 | Then try local
