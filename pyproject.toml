@@ -84,8 +84,8 @@ package = ["pyinstaller>=6.0"]
 all = ["yanzhiti[dev,anthropic,openai,google,mlx]"]
 
 [project.scripts]
-yzt = "yanzhiti.cli.main:main"
-yanzhiti = "yanzhiti.cli.main:main"
+yzt = "yanzhiti.cli.unified_main:main"
+yanzhiti = "yanzhiti.cli.unified_main:main"
 yzt-local = "yanzhiti.cli.local_main:main"
 yanzhiti-local = "yanzhiti.cli.local_main:main"
 yzt-web = "yanzhiti.cli.web_main:main"
