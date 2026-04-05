@@ -19,6 +19,15 @@ class FileReadTool(Tool):
             name="file_read",
             description="Read the contents of a file from the local filesystem",
         )
+        self._binary_extensions = {
+            ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".ico", ".webp",
+            ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx",
+            ".zip", ".tar", ".gz", ".bz2", ".xz", ".7z", ".rar",
+            ".mp3", ".mp4", ".avi", ".mov", ".mkv", ".wav", ".flac",
+            ".exe", ".dll", ".so", ".dylib", ".app",
+            ".ttf", ".otf", ".woff", ".woff2", ".eot",
+            ".pyc", ".pyo", ".class", ".o", ".obj",
+        }
 
     @property
     def input_schema(self) -> ToolInputSchema:
@@ -36,17 +45,43 @@ class FileReadTool(Tool):
                     "type": "integer",
                     "description": "Maximum number of lines to read (optional)",
                 },
+                "encoding": {
+                    "type": "string",
+                    "description": "File encoding (default: auto-detect)",
+                },
             },
             required=["file_path"],
         )
+
+    def _is_binary_file(self, path: Path) -> bool:
+        """Check if file is likely binary based on extension or content"""
+        if path.suffix.lower() in self._binary_extensions:
+            return True
+        try:
+            with open(path, "rb") as f:
+                chunk = f.read(8192)
+                return b"\x00" in chunk
+        except Exception:
+            return False
+
+    def _detect_encoding(self, path: Path) -> str:
+        """Detect file encoding"""
+        try:
+            import chardet
+            with open(path, "rb") as f:
+                raw_data = f.read(32768)
+            result = chardet.detect(raw_data)
+            return result.get("encoding", "utf-8") or "utf-8"
+        except ImportError:
+            return "utf-8"
+        except Exception:
+            return "utf-8"
 
     async def check_permission(
         self,
         input_data: dict[str, Any],
         context: ToolContext,
     ) -> PermissionResult:
-        # Check if file is within allowed directories
-        # For now, allow all - implement proper permission checks later
         return PermissionResult(granted=True)
 
     async def execute(
@@ -57,6 +92,7 @@ class FileReadTool(Tool):
         file_path = input_data["file_path"]
         offset = input_data.get("offset", 0)
         limit = input_data.get("limit")
+        encoding = input_data.get("encoding")
 
         try:
             path = Path(file_path)
@@ -72,16 +108,24 @@ class FileReadTool(Tool):
                     error=f"Not a file: {file_path}",
                 )
 
-            async with aiofiles.open(file_path) as f:
+            if self._is_binary_file(path):
+                file_size = path.stat().st_size
+                return ToolResult(
+                    status=ToolResultStatus.SUCCESS,
+                    output=f"[Binary file: {path.suffix or 'unknown type'}, {file_size} bytes]",
+                    metadata={"file_path": file_path, "binary": True, "size": file_size},
+                )
+
+            detected_encoding = encoding or self._detect_encoding(path)
+
+            async with aiofiles.open(file_path, encoding=detected_encoding) as f:
                 lines = await f.readlines()
 
-            # Apply offset and limit
             if offset > 0:
                 lines = lines[offset:]
             if limit:
                 lines = lines[:limit]
 
-            # Format with line numbers
             output = []
             start_line = offset + 1
             for i, line in enumerate(lines):
@@ -90,9 +134,14 @@ class FileReadTool(Tool):
             return ToolResult(
                 status=ToolResultStatus.SUCCESS,
                 output="".join(output),
-                metadata={"file_path": file_path, "lines_read": len(lines)},
+                metadata={"file_path": file_path, "lines_read": len(lines), "encoding": detected_encoding},
             )
 
+        except UnicodeDecodeError as e:
+            return ToolResult(
+                status=ToolResultStatus.ERROR,
+                error=f"Encoding error reading file: {str(e)}. Try specifying encoding.",
+            )
         except Exception as e:
             return ToolResult(
                 status=ToolResultStatus.ERROR,
@@ -297,6 +346,12 @@ class GrepTool(Tool):
             name="grep",
             description="Search for text patterns in files",
         )
+        self._default_ignore_patterns = {
+            ".git", ".svn", "__pycache__", "node_modules",
+            ".venv", "venv", ".tox", ".eggs", "*.egg-info",
+            ".pytest_cache", ".mypy_cache", ".ruff_cache",
+            "dist", "build", ".tox", ".hypothesis",
+        }
 
     @property
     def input_schema(self) -> ToolInputSchema:
@@ -314,9 +369,34 @@ class GrepTool(Tool):
                     "type": "string",
                     "description": "File pattern to filter (e.g., '*.py')",
                 },
+                "ignore": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "Patterns to ignore (e.g., ['*.pyc', 'node_modules'])",
+                },
+                "case_sensitive": {
+                    "type": "boolean",
+                    "description": "Case sensitive search (default: true)",
+                },
+                "max_results": {
+                    "type": "integer",
+                    "description": "Maximum number of results to return (default: 1000)",
+                },
+                "line_number": {
+                    "type": "boolean",
+                    "description": "Include line numbers in output (default: true)",
+                },
             },
             required=["pattern"],
         )
+
+    def _should_ignore(self, path: Path, ignore_patterns: set[str]) -> bool:
+        """Check if path matches any ignore pattern"""
+        path_str = str(path)
+        for pattern in ignore_patterns:
+            if pattern in path_str or path.match(pattern):
+                return True
+        return False
 
     async def execute(
         self,
@@ -328,10 +408,16 @@ class GrepTool(Tool):
         pattern = input_data["pattern"]
         search_path = input_data.get("path", context.cwd)
         file_pattern = input_data.get("glob", "*")
+        ignore_patterns = set(input_data.get("ignore", []))
+        ignore_patterns.update(self._default_ignore_patterns)
+        case_sensitive = input_data.get("case_sensitive", True)
+        max_results = input_data.get("max_results", 1000)
+        show_line_number = input_data.get("line_number", True)
 
         try:
             path = Path(search_path)
-            regex = re.compile(pattern)
+            regex_flags = 0 if case_sensitive else re.IGNORECASE
+            regex = re.compile(pattern, regex_flags)
 
             results = []
             files_to_search = [path] if path.is_file() else list(path.rglob(file_pattern))
@@ -339,26 +425,39 @@ class GrepTool(Tool):
             for file_path in files_to_search:
                 if not file_path.is_file():
                     continue
-
+                if self._should_ignore(file_path, ignore_patterns):
+                    continue
                 try:
                     async with aiofiles.open(file_path) as f:
                         lines = await f.readlines()
 
                     for i, line in enumerate(lines):
                         if regex.search(line):
-                            results.append(f"{file_path}:{i + 1}: {line.rstrip()}")
-
-                except Exception:
+                            line_prefix = f"{file_path}:{i + 1}: " if show_line_number else ""
+                            results.append(f"{line_prefix}{line.rstrip()}")
+                            if len(results) >= max_results:
+                                break
+                except (UnicodeDecodeError, PermissionError, OSError):
                     continue
 
+                if len(results) >= max_results:
+                    break
+
             output = "\n".join(results)
+            if len(results) >= max_results:
+                output += f"\n... (truncated at {max_results} results)"
 
             return ToolResult(
                 status=ToolResultStatus.SUCCESS,
                 output=output,
-                metadata={"pattern": pattern, "matches": len(results)},
+                metadata={"pattern": pattern, "matches": len(results), "truncated": len(results) >= max_results},
             )
 
+        except re.error as e:
+            return ToolResult(
+                status=ToolResultStatus.ERROR,
+                error=f"Invalid regex pattern: {str(e)}",
+            )
         except Exception as e:
             return ToolResult(
                 status=ToolResultStatus.ERROR,
