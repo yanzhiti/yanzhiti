@@ -3,14 +3,25 @@
 """
 
 import asyncio
+import contextlib
 import threading
 import webbrowser
 
 import click
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.panel import Panel
+from rich.prompt import Prompt
 
 from yanzhiti import __version__
+from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
+from yanzhiti.tools import (
+    APITestTool, BashTool, FileEditTool, FileReadTool, FileWriteTool,
+    GitBranchTool, GitDiffTool, GitLogTool, GitStatusTool, GitTool,
+    GlobTool, GrepTool, PowerShellTool, TaskCreateTool, TaskDeleteTool,
+    TaskGetTool, TaskListTool, TaskTool, TaskUpdateTool, TodoWriteTool,
+    WebFetchTool, WebScrapeTool, WebSearchTool,
+)
 
 console = Console()
 
@@ -25,19 +36,6 @@ def start_web_server(port: int):
 
 async def run_console():
     """运行 Console 交互模式"""
-    from yanzhiti.core import QueryEngine, QueryEngineConfig, ToolRegistry
-    from yanzhiti.tools import (
-        BashTool, FileEditTool, FileReadTool, FileWriteTool,
-        GitBranchTool, GitDiffTool, GitLogTool, GitStatusTool,
-        GitTool, GlobTool, GrepTool, PowerShellTool,
-        TaskCreateTool, TaskDeleteTool, TaskGetTool, TaskListTool,
-        TaskTool, TaskUpdateTool, TodoWriteTool,
-        WebFetchTool, WebScrapeTool, WebSearchTool, APITestTool,
-    )
-    from yanzhiti.core.query_engine import AssistantMessage
-    from rich.markdown import Markdown
-    from rich.prompt import Prompt
-
     registry = ToolRegistry()
     for tool in [
         FileReadTool(), FileWriteTool(), FileEditTool(), GlobTool(), GrepTool(),
@@ -142,10 +140,8 @@ def main(port: int, web_only: bool, console_only: bool, no_browser: bool):
         console.print("[cyan]🖥️  Console 交互模式已启动[/cyan]")
         console.print("[dim]按 Ctrl+C 停止服务器[/dim]\n")
 
-        try:
+        with contextlib.suppress(KeyboardInterrupt):
             asyncio.run(run_console())
-        except KeyboardInterrupt:
-            pass
 
         console.print("\n[green]已停止[/green]")
 
