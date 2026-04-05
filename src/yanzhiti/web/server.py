@@ -125,7 +125,7 @@ api_keys: dict[str, str] = {}
 
 # 全局默认设置 | Global default settings
 global_settings = {
-    "primary_backend": "openrouter",
+    "primary_backend": "builtin",
     "priority": "auto",
     "temperature": 0.7,
     "max_tokens": 4096,
@@ -161,6 +161,7 @@ def _get_or_create_engine(
 
     config = EngineConfig(**config_kwargs)
     engine = UnifiedAIEngine(config)
+    await engine.initialize()
     engines[session_id] = engine
     return engine
 
